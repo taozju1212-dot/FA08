@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=800,height=600,initial-scale=1.0,user-scalable=no">
+<title>FA08 全自动荧光免疫分析仪</title>
+<style>
+/* ── RESET ── */
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:rgba(207,105,64,.12);}
+html,body{
+  width:800px;height:600px;overflow:hidden;
+  font-family:'Inter','Microsoft YaHei',system-ui,Arial,sans-serif;
+  background:#F5F3EF;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━ DESIGN TOKENS — Claude.com style ━━━━━━━━━ */
+:root{
+  /* Action / brand — Claude 珊瑚橙 */
+  --pri:#CF6940;
+  --pri-dk:#A8512E;
+  --pri-lt:#E89070;
+  --pri-pale:#FAEEE8;
+  /* Medical blue — 保留用于数据/状态指示 */
+  --blue:#4A78B5;
+  --blue-dk:#2D5A8E;
+  --blue-pale:#DCE8F5;
+  /* Accent (same as pri) */
+  --acc:#CF6940;
+  --acc-dk:#A8512E;
+  /* Semantic */
+  --grn:#2E9E68;
+  --red:#D94F4F;
+  /* Backgrounds — warm cream */
+  --bg:#F5F3EF;
+  --bg-lt:#FDFCFA;
+  --white:#FFFFFF;
+  /* Borders — warm beige */
+  --bdr:#DDD8D0;
+  --bdr-lt:#EAE6E0;
+  /* Typography */
+  --txt:#1A1A1A;
+  --txt-mid:#6B6B6B;
+  --txt-lt:#A8A3A0;
+  /* Shadows */
+  --shadow:0 1px 4px rgba(0,0,0,.07),0 4px 12px rgba(0,0,0,.05);
+  --shadow-md:0 2px 8px rgba(0,0,0,.08),0 8px 24px rgba(0,0,0,.06);
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━ LOGIN PAGE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+#loginPage{
+  width:800px;height:600px;
+  background:linear-gradient(150deg,#F5F0E8 0%,#FAF8F4 55%,#EEE8DF 100%);
+  display:flex;align-items:center;justify-content:center;
+}
+.lcard{
+  background:var(--white);border-radius:16px;padding:44px 52px 36px;
+  width:360px;
+  box-shadow:0 2px 8px rgba(0,0,0,.06),0 12px 36px rgba(0,0,0,.08);
+  border:1px solid var(--bdr-lt);
+}
+.lbrand{text-align:center;margin-bottom:32px;}
+.lbrand h1{font-size:19px;font-weight:700;color:var(--txt);letter-spacing:1.5px;line-height:1.5;}
+.lbrand .lbar{width:40px;height:3px;background:var(--pri);border-radius:2px;margin:12px auto 0;}
+.lf{margin-bottom:16px;}
+.lf label{display:block;font-size:12px;color:var(--txt-mid);margin-bottom:6px;font-weight:500;}
+.lf input{
+  width:100%;height:48px;border:1.5px solid var(--bdr);
+  border-radius:10px;padding:0 14px;font-size:14px;
+  color:var(--txt);outline:none;transition:border-color .2s,box-shadow .2s;
+  background:var(--bg);
+}
+.lf input:focus{border-color:var(--pri);background:var(--white);box-shadow:0 0 0 3px rgba(207,105,64,.12);}
+.lrow{display:flex;gap:20px;margin-top:4px;}
+.lchk{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--txt-mid);cursor:pointer;}
+.lchk input{width:14px;height:14px;accent-color:var(--pri);}
+.lsub{
+  width:100%;height:50px;background:var(--pri);color:#fff;
+  border:none;border-radius:10px;font-size:15px;font-weight:700;
+  cursor:pointer;margin-top:20px;letter-spacing:2px;
+  transition:background .15s,transform .08s,box-shadow .15s;
+  box-shadow:0 2px 8px rgba(207,105,64,.35);
+}
+.lsub:active{background:var(--pri-dk);transform:scale(.98);}
+.lpow{text-align:center;margin-top:22px;}
+.lpow-btn{
+  width:36px;height:36px;border-radius:50%;border:1.5px solid var(--bdr);
+  background:var(--bg);cursor:pointer;font-size:16px;color:var(--txt-mid);
+  display:inline-flex;align-items:center;justify-content:center;
+  transition:border-color .2s,color .2s;
+}
+.lpow-btn:hover{border-color:var(--pri);color:var(--pri);}
+.lver{font-size:11px;color:var(--txt-lt);margin-top:10px;}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━ MAIN APP ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+#mainApp{width:800px;height:600px;display:none;flex-direction:column;background:var(--bg);}
+
+/* ─── TOP BAR (54px) ─── */
+#topBar{
+  height:54px;flex-shrink:0;
+  background:var(--white);border-bottom:1px solid var(--bdr-lt);
+  display:flex;align-items:stretch;
+  box-shadow:0 1px 6px rgba(0,0,0,.06);
+  z-index:10;position:relative;
+}
+/* 左侧导航占满剩余空间，消除中间留白 */
+.tb-left{display:flex;align-items:stretch;flex:1;}
+.nav-tab{
+  height:54px;padding:0 28px;
+  display:flex;align-items:center;gap:7px;
+  font-size:14px;color:var(--txt-mid);font-weight:500;
+  cursor:pointer;border-bottom:3px solid transparent;
+  user-select:none;white-space:nowrap;transition:color .15s,background .12s;
+  position:relative;
+}
+.nav-tab svg{opacity:.55;flex-shrink:0;transition:opacity .15s;}
+.nav-tab:active{background:var(--pri-pale);}
+.nav-tab.active{color:var(--pri);border-bottom:3px solid var(--pri);font-weight:700;}
+.nav-tab.active svg{opacity:1;}
+.nav-tab.disabled{color:#C8C5C0;cursor:default;pointer-events:none;}
+
+/* Right controls — 紧凑对齐，无多余间距 */
+.tb-right{display:flex;align-items:center;gap:6px;padding:0 10px 0 0;flex-shrink:0;}
+.tb-sep{width:1px;background:var(--bdr-lt);height:28px;margin:0 6px;flex-shrink:0;}
+
+/* ── 顶栏圆形操作按钮（统一规格） ── */
+.ico-btn{
+  width:36px;height:36px;border-radius:50%;border:none;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:15px;transition:transform .1s,opacity .15s,box-shadow .15s;
+  flex-shrink:0;
+}
+.ico-btn:active{transform:scale(.90);}
+.ico-alarm{
+  background:var(--acc);color:#fff;position:relative;
+  box-shadow:0 2px 6px rgba(207,105,64,.40);
+}
+.ico-alarm:active{background:var(--acc-dk);}
+
+/* 启动 / 暂停 — 圆形图标 + 文字在下方 */
+.run-pause-group{
+  display:flex;align-items:center;gap:6px;
+  margin:0 4px;
+}
+.ctrl-btn{
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  background:none;border:none;cursor:pointer;
+  padding:4px 8px;border-radius:8px;flex-shrink:0;
+  transition:background .12s;
+}
+.ctrl-btn:active{background:var(--bdr-lt);}
+.ctrl-btn:active .ctrl-circle{transform:scale(.90);}
+.ctrl-circle{
+  width:32px;height:32px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;transition:transform .1s,box-shadow .15s;
+}
+.ctrl-label{
+  font-size:10px;font-weight:600;letter-spacing:.3px;line-height:1;
+}
+.ctrl-run .ctrl-circle{
+  background:var(--grn);color:#fff;
+  box-shadow:0 2px 6px rgba(46,158,104,.40);
+}
+.ctrl-run .ctrl-label{color:var(--grn);}
+.ctrl-pause .ctrl-circle{
+  background:var(--bg);color:var(--txt-mid);
+  border:1.5px solid var(--bdr);
+  box-shadow:0 1px 3px rgba(0,0,0,.08);
+}
+.ctrl-pause .ctrl-label{color:var(--txt-lt);}
+
+/* 运行状态芯片 */
+.run-status{
+  display:flex;align-items:center;gap:5px;
+  font-size:11px;font-weight:600;color:var(--grn);
+  background:#EBF7F1;border:1px solid #B6E2CB;
+  border-radius:20px;padding:4px 10px;white-space:nowrap;
+  margin-right:2px;
+}
+.abadge{
+  position:absolute;top:-2px;right:-2px;
+  background:var(--red);color:#fff;
+  border-radius:8px;padding:1px 5px;font-size:10px;font-weight:700;
+  border:1.5px solid #fff;
+}
+
+/* Status info chips */
+.si-wrap{display:flex;align-items:center;gap:8px;padding:0 10px;}
+.si-chip{
+  display:flex;align-items:center;gap:5px;
+  font-size:12px;color:var(--txt-mid);
+  background:var(--bg-lt);border:1px solid var(--bdr-lt);
+  border-radius:20px;padding:4px 11px;white-space:nowrap;
+}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.dot-green{background:#3ab876;box-shadow:0 0 5px #3ab87660;}
+.dot-red{background:var(--red);}
+.dot-gray{background:#c5cdd9;}
+
+/* User block */
+.user-block{
+  display:flex;align-items:center;gap:8px;
+  padding:0 0 0 10px;border-left:1px solid var(--bdr-lt);
+}
+.u-avatar{
+  width:30px;height:30px;border-radius:50%;flex-shrink:0;
+  background:var(--pri-pale);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;color:var(--pri);font-weight:700;
+  border:1.5px solid rgba(207,105,64,.22);
+}
+.u-info{display:flex;flex-direction:column;gap:3px;}
+.u-name{font-size:12px;color:var(--txt);font-weight:600;line-height:1;}
+/* 时间独立胶囊样式，与名称明显区分 */
+.u-time{
+  font-size:11px;color:var(--txt-mid);font-weight:500;line-height:1;
+  background:var(--bg);border:1px solid var(--bdr-lt);
+  border-radius:6px;padding:1px 6px;
+  font-variant-numeric:tabular-nums;letter-spacing:.3px;
+}
+
+/* ─── CONTENT AREA (flex row) ─── */
+#contentArea{
+  flex:1;display:flex;align-items:stretch;overflow:hidden;
+  min-height:0;
+}
+
+/* ─── MAIN LEFT ─── */
+#mainLeft{
+  flex:1;display:flex;flex-direction:column;
+  min-width:0;overflow:hidden;
+}
+
+/* Step progress removed */
+
+/* ─── VIEW AREA ─── */
+#viewArea{
+  flex:1;display:flex;flex-direction:column;
+  overflow:hidden;min-height:0;
+}
+.main-view{display:none;flex:1;flex-direction:column;overflow:hidden;}
+.main-view.active{display:flex;}
+
+/* ─── FORM VIEW ─── */
+#formView{padding:14px 16px 10px;gap:10px;}
+
+.form-header{
+  display:flex;align-items:center;gap:12px;flex-shrink:0;
+}
+.form-title{
+  font-size:14px;font-weight:700;color:var(--pri);
+  display:flex;align-items:center;gap:6px;
+}
+.form-slot-badge{
+  background:var(--pri);color:#fff;border-radius:20px;
+  padding:3px 12px;font-size:12px;font-weight:700;
+}
+
+.form-body{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:10px 16px;overflow:hidden;}
+.fg-full{grid-column:span 2;}
+.ff-group{display:flex;flex-direction:column;gap:4px;}
+.ff-label{font-size:11px;font-weight:600;color:var(--txt-mid);text-transform:uppercase;letter-spacing:.5px;}
+.ff-input{
+  width:100%;height:50px;border:1.5px solid var(--bdr);
+  border-radius:10px;padding:0 14px;font-size:14px;color:var(--txt);
+  background:var(--bg);outline:none;cursor:pointer;
+  transition:border-color .2s,background .2s,box-shadow .2s;
+}
+.ff-input:focus,.ff-input:hover{
+  border-color:var(--pri);background:var(--white);
+  box-shadow:0 0 0 3px rgba(207,105,64,.10);
+}
+.ff-select{
+  width:100%;height:50px;border:1.5px solid var(--bdr);
+  border-radius:10px;padding:0 14px;font-size:14px;color:var(--txt);
+  background:var(--bg);outline:none;cursor:pointer;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%236B6B6B' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;
+  transition:border-color .2s,box-shadow .2s;
+}
+.ff-select:focus{border-color:var(--pri);box-shadow:0 0 0 3px rgba(207,105,64,.10);}
+
+/* Gender toggle */
+.gender-row{display:flex;gap:8px;height:50px;}
+.gender-btn{
+  flex:1;height:50px;border:1.5px solid var(--bdr);
+  border-radius:8px;background:#f8fafc;font-size:13px;
+  color:var(--txt-mid);cursor:pointer;font-weight:500;
+  transition:all .15s;display:flex;align-items:center;justify-content:center;gap:4px;
+}
+.gender-btn:active,.gender-btn.sel{
+  background:var(--pri-pale);border-color:var(--pri);color:var(--pri);font-weight:700;
+}
+
+/* Age row */
+.age-row{display:flex;gap:8px;align-items:center;}
+.age-input{
+  flex:1;height:50px;border:1.5px solid var(--bdr);
+  border-radius:8px;padding:0 14px;font-size:14px;color:var(--txt);
+  background:#f8fafc;outline:none;cursor:pointer;
+  transition:border-color .2s;
+}
+.age-unit{
+  width:60px;height:50px;border:1.5px solid var(--bdr);
+  border-radius:8px;padding:0 8px;font-size:13px;color:var(--txt);
+  background:#f8fafc;outline:none;cursor:pointer;appearance:none;
+}
+
+/* Items grid */
+.items-section{display:flex;flex-direction:column;gap:6px;grid-column:span 2;}
+.items-label{font-size:11px;font-weight:600;color:var(--txt-mid);text-transform:uppercase;letter-spacing:.5px;}
+.items-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.item-chip{
+  height:54px;border:1.5px solid var(--bdr);border-radius:10px;
+  background:var(--bg);cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;transition:all .15s;position:relative;overflow:hidden;
+  user-select:none;
+}
+.item-chip:active{transform:scale(.96);}
+.item-chip.sel{
+  background:var(--pri-pale);border-color:var(--pri);
+  box-shadow:0 0 0 3px rgba(207,105,64,.12);
+}
+.item-chip.sel .ic-name{color:var(--pri);}
+.item-chip.sel .ic-sub{color:var(--pri-lt);}
+.ic-name{font-size:13px;font-weight:700;color:var(--txt);}
+.ic-sub{font-size:10px;color:var(--txt-lt);}
+.ic-ext{
+  position:absolute;top:3px;right:3px;width:18px;height:18px;
+  border-radius:4px;background:transparent;border:none;
+  font-size:12px;color:var(--txt-lt);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .15s,color .15s;
+}
+.ic-ext:hover{background:var(--bdr-lt);color:var(--txt-mid);}
+
+/* Form actions */
+.form-actions{
+  display:flex;justify-content:flex-end;gap:10px;
+  flex-shrink:0;padding-top:2px;
+}
+.btn-cancel{
+  height:46px;padding:0 24px;border:1.5px solid var(--bdr);
+  border-radius:8px;background:#fff;color:var(--txt-mid);font-size:13px;
+  font-weight:600;cursor:pointer;transition:all .15s;
+}
+.btn-cancel:active{background:var(--bg-lt);}
+.btn-confirm{
+  height:46px;padding:0 32px;border:none;
+  border-radius:8px;background:var(--pri);color:#fff;font-size:14px;
+  font-weight:700;cursor:pointer;transition:all .15s;letter-spacing:1px;
+}
+.btn-confirm:active{background:var(--pri-dk);}
+
+/* ─── LIST VIEW ─── */
+#listView{flex-direction:column;}
+
+.list-toolbar{
+  flex-shrink:0;height:46px;
+  background:#fff;border-bottom:1px solid var(--bdr-lt);
+  display:flex;align-items:center;padding:0 12px;gap:8px;
+}
+.toolbar-title{font-size:13px;font-weight:700;color:var(--txt);margin-right:4px;}
+.cnt-badge{
+  background:var(--blue-pale);color:var(--blue);
+  border-radius:12px;padding:2px 10px;font-size:12px;font-weight:700;
+}
+.tbl-action{
+  height:34px;padding:0 14px;border-radius:8px;font-size:12px;font-weight:600;
+  cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:5px;
+}
+.tbl-action:active{transform:scale(.96);}
+.ta-edit{background:var(--blue-pale);color:var(--blue);border:1px solid #A8C4E0;}
+.ta-del{background:#FDEAEA;color:var(--red);border:1px solid #F0AAAA;}
+.tbl-spacer{flex:1;}
+
+.list-body{flex:1;overflow:hidden;display:flex;flex-direction:column;}
+
+/* Empty state */
+#listEmpty{
+  flex:1;display:none;align-items:center;justify-content:center;
+  flex-direction:column;gap:12px;color:var(--txt-lt);
+}
+.empty-ico{font-size:40px;opacity:.35;}
+.empty-txt{font-size:14px;}
+
+/* Table */
+.arr-tbl-wrap{flex:1;overflow-y:auto;}
+#arrTbl{width:100%;border-collapse:collapse;display:none;}
+#arrTbl thead tr{background:var(--blue);color:#fff;}
+#arrTbl th{
+  padding:10px 8px;text-align:center;font-size:11px;font-weight:600;
+  white-space:nowrap;letter-spacing:.5px;
+}
+#arrTbl th:first-child{width:34px;}
+#arrTbl td{
+  padding:9px 8px;text-align:center;font-size:12px;color:var(--txt);
+  border-bottom:1px solid var(--bdr-lt);
+}
+#arrTbl tbody tr:nth-child(even){background:#f6f9fd;}
+#arrTbl tbody tr:hover{background:var(--pri-pale);}
+#arrTbl tbody tr.selrow{background:var(--blue-pale);}
+#arrTbl tbody tr.selrow td{color:var(--blue-dk);}
+input[type=checkbox].rowchk{width:16px;height:16px;accent-color:var(--pri);}
+.tbl-chk-all{width:16px;height:16px;accent-color:var(--acc);}
+
+/* Status badges */
+.sbadge{display:inline-block;border-radius:12px;padding:2px 10px;font-size:11px;font-weight:600;}
+.sb-arr{background:#dce8f5;color:var(--pri);}
+.sb-smp{background:#fff3dc;color:#d4880a;}
+.sb-inc{background:#e8f5ee;color:#2a9b60;}
+.sb-done{background:#e8edf5;color:#5a6d88;}
+
+/* ─── BOTTOM CONSUMABLES STRIP ─── */
+#consStrip{
+  flex-shrink:0;height:38px;
+  background:#fff;border-top:1px solid var(--bdr-lt);
+  display:flex;align-items:stretch;padding:0;gap:0;
+  overflow:hidden;
+}
+.cs-item{
+  flex:1;min-width:0;
+  display:flex;align-items:center;justify-content:center;gap:4px;
+  padding:0 4px;border-right:1px solid var(--bdr-lt);
+  overflow:hidden;
+}
+.cs-item:last-child{border-right:none;}
+.cs-lbl{font-size:11px;color:var(--txt-mid);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cs-val{font-size:11px;font-weight:700;padding:2px 6px;border-radius:10px;white-space:nowrap;}
+.cv-ok{background:#e8f5ee;color:#2a9b60;}
+.cv-low{background:#fde8e8;color:var(--red);}
+.cv-warn{background:#fff3dc;color:#d4880a;}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━ RIGHT SIDEBAR ━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+#rightSidebar{
+  width:140px;flex-shrink:0;
+  background:#fff;border-left:1px solid var(--bdr-lt);
+  display:flex;flex-direction:column;
+  box-shadow:-2px 0 10px rgba(45,90,142,.05);
+}
+
+/* Pending block — 2-row stacked layout */
+#pendBlock{
+  flex-shrink:0;
+  background:linear-gradient(135deg,var(--blue) 0%,var(--blue-dk) 100%);
+  padding:8px 10px;
+  display:flex;flex-direction:column;gap:6px;
+}
+.pend-row1{display:flex;align-items:center;gap:6px;}
+.pend-lbl{font-size:11px;color:rgba(255,255,255,.8);flex:1;white-space:nowrap;font-weight:500;}
+.pend-cnt{
+  font-size:18px;font-weight:800;color:#fff;
+  background:rgba(255,255,255,.18);
+  border-radius:6px;padding:1px 8px;min-width:30px;text-align:center;
+}
+.pend-add{
+  width:100%;height:38px;border-radius:8px;
+  background:var(--acc);color:#fff;border:none;
+  font-size:13px;font-weight:700;cursor:pointer;letter-spacing:1px;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .15s,transform .08s;
+}
+.pend-add:active{background:var(--acc-dk);transform:scale(.97);}
+
+/* Slots title */
+.slots-hdr{
+  flex-shrink:0;height:32px;
+  display:flex;align-items:center;
+  padding:0 12px;
+  border-bottom:1px solid var(--bdr-lt);
+  background:var(--bg-lt);
+}
+.slots-title-txt{font-size:11px;font-weight:700;color:var(--txt-mid);letter-spacing:.5px;flex:1;text-transform:uppercase;}
+.slots-selall{
+  font-size:11px;color:var(--blue);font-weight:700;
+  background:none;border:1px solid #A8C4E0;border-radius:10px;
+  padding:2px 10px;cursor:pointer;transition:all .15s;
+}
+.slots-selall:active{background:var(--blue-pale);}
+
+/* Slots list */
+#slotsList{
+  flex:1;display:flex;flex-direction:column;
+  padding:4px 8px;gap:3px;overflow:hidden;
+}
+
+/* ─── SAMPLE SLOT ROW ─── */
+.slot-row{
+  flex:1;min-height:44px;
+  display:flex;align-items:center;gap:8px;
+  padding:0 6px;border-radius:8px;
+  cursor:pointer;transition:background .15s,box-shadow .15s;
+  border:1.5px solid transparent;user-select:none;
+  position:relative;
+}
+.slot-row:active{transform:scale(.98);}
+.slot-row:hover{background:var(--pri-pale);}
+.slot-row.sel{background:var(--pri-pale);border-color:var(--pri);}
+.slot-row.arranged{background:#EEF4FC;border-color:#A8C4E0;}
+
+/* Tube icon */
+.tube-wrap{flex-shrink:0;display:flex;align-items:center;justify-content:center;width:34px;}
+.tube{
+  width:26px;height:42px;position:relative;
+  display:flex;align-items:center;justify-content:center;
+}
+.tube-body{
+  position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:22px;height:36px;
+  background:linear-gradient(to bottom,#dce8f5,#c8dcee);
+  border:2px solid #a8c0d8;border-radius:3px 3px 11px 11px;
+  transition:background .2s,border-color .2s;
+}
+.tube-cap{
+  position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:26px;height:8px;
+  background:#b8cce0;border-radius:3px 3px 0 0;
+  border:2px solid #a8c0d8;border-bottom:none;
+  transition:background .2s,border-color .2s;
+}
+.tube-plus{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-45%);
+  width:16px;height:16px;border-radius:50%;
+  background:rgba(255,255,255,.65);border:1.5px solid #9ab8d0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;color:#6b9ab8;line-height:1;
+  transition:all .2s;
+  z-index:1;
+}
+
+/* Tube states */
+.slot-row.sel .tube-body{background:linear-gradient(to bottom,#F0A070,var(--pri));border-color:var(--pri-dk);}
+.slot-row.sel .tube-cap{background:#D07040;border-color:var(--pri-dk);}
+.slot-row.sel .tube-plus{background:rgba(255,255,255,.35);border-color:rgba(255,255,255,.8);color:#fff;}
+
+.slot-row.arranged .tube-body{background:linear-gradient(to bottom,#7ba8d4,var(--blue));border-color:var(--blue-dk);}
+.slot-row.arranged .tube-cap{background:#6090C0;border-color:var(--blue-dk);}
+.slot-row.arranged .tube-plus{background:rgba(255,255,255,.25);border-color:rgba(255,255,255,.7);color:#fff;}
+.slot-row.arranged .tube-plus::before{content:'✓';}
+.slot-row.arranged .tube-plus .plus-txt{display:none;}
+
+/* Slot info */
+.slot-info{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0;}
+.slot-num{font-size:13px;font-weight:700;color:var(--txt);}
+.slot-stat{font-size:10px;color:var(--txt-lt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.slot-row.sel .slot-num{color:var(--pri-dk);}
+.slot-row.arranged .slot-num{color:var(--blue-dk);}
+.slot-row.arranged .slot-stat{color:var(--blue);}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━ RESULTS TAB ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+#resTab{flex:1;display:none;flex-direction:column;overflow:hidden;background:var(--bg);}
+#resTab.active{display:flex;}
+
+.res-toolbar{
+  flex-shrink:0;height:48px;
+  background:#fff;border-bottom:1px solid var(--bdr-lt);
+  display:flex;align-items:center;padding:0 14px;gap:10px;
+}
+.res-filter-btn{
+  height:34px;padding:0 14px;border-radius:6px;font-size:12px;font-weight:600;
+  background:var(--bg-lt);color:var(--txt-mid);
+  border:1px solid var(--bdr);cursor:pointer;display:flex;align-items:center;gap:5px;
+  transition:all .15s;
+}
+.res-filter-btn:active{background:var(--pri-pale);color:var(--pri);}
+.res-spacer{flex:1;}
+.res-act{
+  height:34px;padding:0 14px;border-radius:6px;font-size:12px;font-weight:600;
+  cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:5px;
+}
+.ra-print{background:var(--pri-pale);color:var(--pri);border:1px solid var(--pri-lt);}
+.ra-export{background:#e8f5ee;color:#2a9b60;border:1px solid #a5d8b5;}
+.ra-del{background:#fde8e8;color:var(--red);border:1px solid #f5a5a5;}
+
+.res-tbl-wrap{flex:1;overflow-y:auto;padding:0;}
+#resTbl{width:100%;border-collapse:collapse;}
+#resTbl thead tr{background:var(--blue);color:#fff;position:sticky;top:0;z-index:2;}
+#resTbl th{padding:10px 8px;font-size:11px;font-weight:600;letter-spacing:.5px;text-align:center;}
+#resTbl td{padding:9px 8px;font-size:12px;text-align:center;border-bottom:1px solid var(--bdr-lt);}
+#resTbl tbody tr:nth-child(even){background:#f6f9fd;}
+#resTbl tbody tr:hover{background:var(--pri-pale);}
+.rv-hi{color:var(--red);font-weight:700;}
+.rv-lo{color:var(--grn);font-weight:700;}
+.rv-no{color:var(--txt);}
+.rc-pos{background:#fde8e8;color:var(--red);border-radius:10px;padding:2px 10px;font-size:11px;font-weight:700;}
+.rc-neg{background:#e8f5ee;color:#2a9b60;border-radius:10px;padding:2px 10px;font-size:11px;font-weight:700;}
+.curve-btn{
+  height:28px;padding:0 12px;border-radius:6px;font-size:11px;
+  background:var(--pri-pale);color:var(--pri);border:1px solid var(--pri-lt);
+  cursor:pointer;font-weight:600;
+}
+.curve-row td{padding:0;}
+.curve-cell{background:var(--bg-lt)!important;padding:12px 20px!important;}
+.curve-inner{display:flex;align-items:center;gap:20px;}
+.curve-inner canvas{border-radius:8px;border:1px solid var(--bdr);}
+.curve-meta p{font-size:12px;color:var(--txt-mid);line-height:1.8;}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━ PLACEHOLDER TABS ━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.tab-placeholder{
+  flex:1;display:none;align-items:center;justify-content:center;
+  flex-direction:column;gap:14px;background:var(--bg);
+}
+.tab-placeholder.active{display:flex;}
+.ph-ico{font-size:52px;opacity:.25;}
+.ph-txt{font-size:16px;color:var(--txt-lt);font-weight:500;}
+.ph-sub{font-size:12px;color:var(--txt-lt);opacity:.7;}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━ MODALS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.modal-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(30,50,80,.45);backdrop-filter:blur(2px);
+  z-index:100;align-items:center;justify-content:center;
+}
+.modal-overlay.open{display:flex;}
+.modal-box{
+  background:#fff;border-radius:14px;
+  box-shadow:0 12px 40px rgba(30,50,80,.25),0 3px 12px rgba(30,50,80,.10);
+  overflow:hidden;min-width:340px;
+}
+.modal-hdr{
+  height:52px;background:var(--blue);color:#fff;
+  display:flex;align-items:center;padding:0 20px;gap:10px;font-size:14px;font-weight:700;
+}
+.modal-hdr .mh-ico{font-size:18px;}
+.modal-body{padding:20px;}
+.modal-footer{
+  display:flex;justify-content:flex-end;gap:10px;
+  padding:12px 20px;border-top:1px solid var(--bdr-lt);background:var(--bg-lt);
+}
+.mbtn{
+  height:42px;padding:0 24px;border-radius:8px;
+  font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;
+}
+.mbtn:active{transform:scale(.97);}
+.mbtn-cancel{background:#fff;border:1.5px solid var(--bdr);color:var(--txt-mid);}
+.mbtn-ok{background:var(--pri);border:none;color:#fff;}
+.mbtn-ok:active{background:var(--pri-dk);}
+
+/* Add card modal */
+#cardItemList{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
+.ci{
+  display:flex;align-items:center;
+  padding:12px 16px;border-radius:10px;
+  border:2px solid var(--bdr);background:var(--bg-lt);
+  cursor:pointer;transition:all .15s;
+}
+.ci:hover,.ci.sel{border-color:var(--pri);background:var(--pri-pale);}
+.ci.sel .ci-name{color:var(--pri);}
+.ci-name{font-size:14px;font-weight:700;color:var(--txt);flex:1;}
+.ci-cnt{font-size:13px;color:var(--txt-mid);}
+.ci-cnt b{color:var(--pri);font-size:16px;}
+.prog-wrap{margin:8px 0 4px;height:8px;background:var(--bdr-lt);border-radius:4px;overflow:hidden;}
+.prog-inner{height:100%;width:0;background:linear-gradient(90deg,var(--pri),var(--acc));border-radius:4px;transition:width 5s linear;}
+.prog-lbl{font-size:11px;color:var(--txt-lt);text-align:center;margin-top:4px;}
+.mbtn-addcard{
+  height:44px;padding:0 28px;border-radius:8px;
+  background:var(--acc);color:#fff;border:none;
+  font-size:14px;font-weight:700;cursor:pointer;transition:all .15s;
+}
+.mbtn-addcard:disabled{opacity:.5;cursor:not-allowed;}
+.mbtn-addcard:not(:disabled):active{background:var(--acc-dk);}
+
+/* Alarm modal */
+#alarmModal .modal-box{min-width:480px;}
+.alarm-hdr-info{display:flex;align-items:center;gap:8px;margin-bottom:14px;}
+.alarm-stat-btns{display:flex;gap:8px;margin-bottom:16px;}
+.alm-sysb{
+  height:38px;padding:0 16px;border-radius:8px;font-size:12px;font-weight:700;
+  cursor:pointer;border:none;display:flex;align-items:center;gap:6px;
+  transition:all .15s;
+}
+.alm-estop{background:#fde8e8;color:var(--red);}
+.alm-reset{background:#fff3dc;color:#d4880a;}
+.alm-clr{background:var(--pri-pale);color:var(--pri);}
+.alarm-list{display:flex;flex-direction:column;gap:8px;max-height:240px;overflow-y:auto;}
+.alarm-row{
+  display:flex;align-items:center;padding:10px 14px;border-radius:8px;
+  border:1.5px solid #fca5a5;background:#fef2f2;gap:10px;
+}
+.alarm-row.warn{border-color:#fcd34d;background:#fffbeb;}
+.alm-code{font-size:11px;font-weight:700;color:var(--txt-lt);min-width:48px;}
+.alm-msg{flex:1;font-size:12px;color:var(--txt);font-weight:500;}
+.alm-handle{
+  height:30px;padding:0 12px;border-radius:6px;font-size:11px;font-weight:700;
+  background:var(--pri-pale);color:var(--pri);border:1px solid var(--pri-lt);
+  cursor:pointer;white-space:nowrap;
+}
+
+/* Keyboard modal */
+#kbModal .modal-box{min-width:380px;max-width:440px;}
+.kb-disp{
+  min-height:52px;background:var(--bg-lt);border:2px solid var(--bdr);
+  border-radius:8px;padding:8px 14px;margin-bottom:12px;
+  font-size:20px;font-weight:600;color:var(--txt);word-break:break-all;
+  line-height:1.4;
+}
+.kb-grid{display:grid;gap:6px;}
+.numgrid{grid-template-columns:repeat(3,1fr);}
+.txtgrid{grid-template-columns:repeat(10,1fr);}
+.kkey{
+  height:44px;background:var(--bg-lt);border:1.5px solid var(--bdr);
+  border-radius:7px;display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:600;color:var(--txt);cursor:pointer;
+  transition:background .12s,transform .08s;user-select:none;
+}
+.kkey:active{background:var(--pri-pale);transform:scale(.94);}
+.kaction{background:var(--pri-pale);color:var(--pri);border-color:var(--pri-lt);}
+.kspan3{grid-column:span 3;}
+.kspan4{grid-column:span 4;}
+
+/* Item extend modal */
+#extModal .modal-box{min-width:320px;}
+.ext-row{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.ext-lbl{font-size:13px;color:var(--txt-mid);width:90px;font-weight:500;}
+.ext-num{
+  flex:1;height:44px;border:1.5px solid var(--bdr);border-radius:8px;
+  padding:0 14px;font-size:14px;color:var(--txt);background:#f8fafc;outline:none;
+}
+.ext-sel{
+  flex:1;height:44px;border:1.5px solid var(--bdr);border-radius:8px;
+  padding:0 10px;font-size:13px;color:var(--txt);background:#f8fafc;outline:none;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━ SCROLLBARS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:var(--pri-lt);}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════ LOGIN PAGE ═══════════════════ -->
+<div id="loginPage">
+  <div class="lcard">
+    <div class="lbrand">
+      <h1>全自动干式荧光免疫分析仪</h1>
+      <div class="lbar"></div>
+    </div>
+    <div class="lf">
+      <label>用户名</label>
+      <input type="text" id="lusername" value="hemai_admin" placeholder="请输入用户名">
+    </div>
+    <div class="lf">
+      <label>密码</label>
+      <input type="password" id="lpassword" value="••••••••••" placeholder="请输入密码">
+    </div>
+    <div class="lrow">
+      <label class="lchk"><input type="checkbox" checked> 记住密码</label>
+      <label class="lchk"><input type="checkbox"> 自动登录</label>
+    </div>
+    <button class="lsub" onclick="doLogin()">登 录</button>
+    <div class="lpow">
+      <button class="lpow-btn" title="关机">⏻</button>
+      <div class="lver">软件版本号 V1.2 &nbsp;·&nbsp; FA08</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ MAIN APP ═══════════════════════ -->
+<div id="mainApp">
+
+  <!-- ── TOP BAR ── -->
+  <div id="topBar">
+    <div class="tb-left">
+      <!-- Nav tabs with SVG icons -->
+      <div class="nav-tab active" onclick="switchTab('detect')" id="tab-detect">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        检测
+      </div>
+      <div class="nav-tab" onclick="switchTab('result')" id="tab-result">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        结果
+      </div>
+      <div class="nav-tab disabled" id="tab-cons">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        耗材
+      </div>
+      <div class="nav-tab disabled" id="tab-set">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M4.93 19.07l1.41-1.41M19.07 19.07l-1.41-1.41M20 12h2M2 12h2M12 20v2M12 2v2"/></svg>
+        设置
+      </div>
+    </div>
+
+    <div class="tb-right">
+      <!-- Running status -->
+      <div class="run-status">
+        <span class="dot dot-green"></span>
+        运行中
+      </div>
+
+      <!-- Alarm button -->
+      <button class="ico-btn ico-alarm" onclick="openModal('alarmModal')" title="报警列表">
+        🔔
+        <span class="abadge">2</span>
+      </button>
+
+      <!-- Start / Pause — 圆形图标 + 下方文字 -->
+      <div class="run-pause-group">
+        <button class="ctrl-btn ctrl-run" title="启动">
+          <div class="ctrl-circle">▶</div>
+          <span class="ctrl-label">启动</span>
+        </button>
+        <button class="ctrl-btn ctrl-pause" title="暂停">
+          <div class="ctrl-circle">⏸</div>
+          <span class="ctrl-label">暂停</span>
+        </button>
+      </div>
+
+      <div class="tb-sep"></div>
+
+      <!-- User block -->
+      <div class="user-block">
+        <div class="u-avatar">管</div>
+        <div class="u-info">
+          <div class="u-name">hemai_admin</div>
+          <div class="u-time" id="clockDisp">--:--:--</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CONTENT AREA ── -->
+  <div id="contentArea">
+
+    <!-- ── MAIN LEFT ── -->
+    <div id="mainLeft">
+
+
+      <!-- View area -->
+      <div id="viewArea">
+
+        <!-- ── FORM VIEW ── -->
+        <div class="main-view" id="formView">
+          <div class="form-header">
+            <div class="form-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              样本申请
+            </div>
+            <div class="form-slot-badge" id="formSlotLabel">S1</div>
+          </div>
+
+          <div class="form-body">
+            <!-- Row 1: 编号 + 样本ID -->
+            <div class="ff-group">
+              <div class="ff-label">编号</div>
+              <input class="ff-input" type="text" id="fNo" value="0001" readonly style="background:#f0f4f8;color:var(--txt-mid);">
+            </div>
+            <div class="ff-group">
+              <div class="ff-label">样本 ID</div>
+              <input class="ff-input" type="text" id="fId" placeholder="扫码或手工输入" onclick="openKb('fId','num','样本 ID')">
+            </div>
+            <!-- Row 2: 姓名 + 性别 -->
+            <div class="ff-group">
+              <div class="ff-label">姓名</div>
+              <input class="ff-input" type="text" id="fName" placeholder="点击输入姓名" onclick="openKb('fName','txt','患者姓名')">
+            </div>
+            <div class="ff-group">
+              <div class="ff-label">性别</div>
+              <div class="gender-row">
+                <button class="gender-btn sel" id="gbM" onclick="setGender('M')">♂ 男</button>
+                <button class="gender-btn" id="gbF" onclick="setGender('F')">♀ 女</button>
+              </div>
+            </div>
+            <!-- Row 3: 年龄 + 样本类型 -->
+            <div class="ff-group">
+              <div class="ff-label">年龄</div>
+              <div class="age-row">
+                <input class="age-input" type="text" id="fAge" placeholder="年龄" onclick="openKb('fAge','num','年龄')">
+                <select class="age-unit" id="fAgeU">
+                  <option value="岁">岁</option>
+                  <option value="月">月</option>
+                </select>
+              </div>
+            </div>
+            <div class="ff-group">
+              <div class="ff-label">样本类型</div>
+              <select class="ff-select" id="fType">
+                <option>全血</option>
+                <option>血清</option>
+                <option>血浆</option>
+                <option>尿液</option>
+              </select>
+            </div>
+            <!-- Row 4: Items (full width) -->
+            <div class="items-section">
+              <div class="items-label">检测项目（可多选）</div>
+              <div class="items-grid">
+                <div class="item-chip" data-item="CRP" onclick="toggleItem(this)">
+                  <button class="ic-ext" onclick="openExt(event,'CRP')">⚙</button>
+                  <div class="ic-name">CRP</div>
+                  <div class="ic-sub">C反应蛋白</div>
+                </div>
+                <div class="item-chip" data-item="PCT" onclick="toggleItem(this)">
+                  <button class="ic-ext" onclick="openExt(event,'PCT')">⚙</button>
+                  <div class="ic-name">PCT</div>
+                  <div class="ic-sub">降钙素原</div>
+                </div>
+                <div class="item-chip" data-item="cTnI" onclick="toggleItem(this)">
+                  <button class="ic-ext" onclick="openExt(event,'cTnI')">⚙</button>
+                  <div class="ic-name">cTnI</div>
+                  <div class="ic-sub">心肌肌钙蛋白</div>
+                </div>
+                <div class="item-chip" data-item="D-D" onclick="toggleItem(this)">
+                  <button class="ic-ext" onclick="openExt(event,'D-D')">⚙</button>
+                  <div class="ic-name">D-D</div>
+                  <div class="ic-sub">D二聚体</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn-cancel" onclick="cancelForm()">取消</button>
+            <button class="btn-confirm" onclick="confirmArrange()">确定申请</button>
+          </div>
+        </div><!-- /formView -->
+
+        <!-- ── LIST VIEW ── -->
+        <div class="main-view active" id="listView">
+          <div class="list-toolbar">
+            <div class="toolbar-title">样本编排列表</div>
+            <div class="cnt-badge"><span id="listCount">0 条</span></div>
+            <div class="tbl-spacer"></div>
+            <button class="tbl-action ta-edit" onclick="editSelected()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              编辑
+            </button>
+            <button class="tbl-action ta-del" onclick="deleteSelected()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+              删除
+            </button>
+          </div>
+          <div class="list-body">
+            <div id="listEmpty">
+              <div class="empty-ico">🧪</div>
+              <div class="empty-txt">暂无编排样本</div>
+            </div>
+            <div class="arr-tbl-wrap">
+              <table id="arrTbl">
+                <thead>
+                  <tr>
+                    <th><input type="checkbox" class="tbl-chk-all" onchange="toggleAll(this)"></th>
+                    <th>编号</th><th>姓名</th><th>样本ID</th>
+                    <th>类型</th><th>位置</th><th>状态</th><th>检测项目</th>
+                  </tr>
+                </thead>
+                <tbody id="arrBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div><!-- /listView -->
+
+      </div><!-- /viewArea -->
+
+      <!-- ── CONSUMABLES STRIP ── -->
+      <div id="consStrip">
+        <div class="cs-item">
+          <span class="cs-lbl">温度</span>
+          <span class="cs-val cv-ok">37.1°C</span>
+        </div>
+        <div class="cs-item">
+          <span class="cs-lbl">吸头</span>
+          <span class="cs-val cv-ok">96 个</span>
+        </div>
+        <div class="cs-item">
+          <span class="cs-lbl">深孔板</span>
+          <span class="cs-val cv-ok">2 块</span>
+        </div>
+        <div class="cs-item">
+          <span class="cs-lbl">稀释液 A</span>
+          <span class="cs-val cv-ok">45 mL</span>
+        </div>
+        <div class="cs-item">
+          <span class="cs-lbl">稀释液 B</span>
+          <span class="cs-val cv-low">8 mL ⚠</span>
+        </div>
+        <div class="cs-item">
+          <span class="cs-lbl">稀释液 C</span>
+          <span class="cs-val cv-ok">38 mL</span>
+        </div>
+      </div>
+
+    </div><!-- /mainLeft -->
+
+    <!-- ── RIGHT SIDEBAR ── -->
+    <div id="rightSidebar">
+
+      <!-- Pending block -->
+      <div id="pendBlock">
+        <span class="pend-lbl">待加卡</span>
+        <span class="pend-cnt" id="totalPending">0</span>
+        <button class="pend-add" onclick="openModal('addCardModal')">加 卡</button>
+      </div>
+
+      <!-- Slots header -->
+      <div class="slots-hdr">
+        <span class="slots-title-txt">样本位置</span>
+        <button class="slots-selall" onclick="selectAll()">全选</button>
+      </div>
+
+      <!-- 8 sample slots -->
+      <div id="slotsList">
+        <!-- Generated by JS -->
+      </div>
+
+    </div><!-- /rightSidebar -->
+
+    <!-- ── RESULT TAB ── -->
+    <div id="resTab">
+      <div class="res-toolbar">
+        <button class="res-filter-btn">📅 今日</button>
+        <button class="res-filter-btn">🔍 搜索</button>
+        <button class="res-filter-btn">样本结果 ▾</button>
+        <div class="res-spacer"></div>
+        <button class="res-act ra-print">🖨 打印</button>
+        <button class="res-act ra-export">📤 导出</button>
+        <button class="res-act ra-del">🗑 清空</button>
+      </div>
+      <div class="res-tbl-wrap">
+        <table id="resTbl">
+          <thead>
+            <tr>
+              <th>编号</th><th>样本ID</th><th>姓名</th><th>类型</th>
+              <th>项目</th><th>结果</th><th>单位</th><th>结论</th>
+              <th>完成时间</th><th>曲线</th>
+            </tr>
+          </thead>
+          <tbody id="resTbody"></tbody>
+        </table>
+      </div>
+    </div><!-- /resTab -->
+
+    <!-- ── PLACEHOLDER TABS ── -->
+    <div class="tab-placeholder" id="consTab">
+      <div class="ph-ico">🧴</div>
+      <div class="ph-txt">耗材管理</div>
+      <div class="ph-sub">功能开发中</div>
+    </div>
+    <div class="tab-placeholder" id="settTab">
+      <div class="ph-ico">⚙️</div>
+      <div class="ph-txt">系统设置</div>
+      <div class="ph-sub">功能开发中</div>
+    </div>
+
+  </div><!-- /contentArea -->
+</div><!-- /mainApp -->
+
+<!-- ═══════════════════════════════════════ MODALS ════════════════════════ -->
+
+<!-- Add Card Modal -->
+<div class="modal-overlay" id="addCardModal">
+  <div class="modal-box" style="min-width:380px;">
+    <div class="modal-hdr">
+      <span class="mh-ico">🃏</span> 加卡操作
+    </div>
+    <div class="modal-body">
+      <div id="cardItemList"></div>
+      <div id="progWrap" class="prog-wrap" style="display:none;">
+        <div class="prog-inner" id="progInner"></div>
+      </div>
+      <div id="progLbl" class="prog-lbl" style="display:none;">加卡中，请等待…</div>
+    </div>
+    <div class="modal-footer">
+      <button class="mbtn mbtn-cancel" onclick="closeModal('addCardModal')">关闭</button>
+      <button class="mbtn-addcard" id="addCardConfBtn" onclick="doAddCard()">加 卡</button>
+    </div>
+  </div>
+</div>
+
+<!-- Alarm Modal -->
+<div class="modal-overlay" id="alarmModal">
+  <div class="modal-box">
+    <div class="modal-hdr" style="background:var(--red);">
+      <span class="mh-ico">🚨</span> 报警列表
+    </div>
+    <div class="modal-body">
+      <div class="alarm-stat-btns">
+        <button class="alm-sysb alm-estop" onclick="alert('急停已执行')">⏹ 急停</button>
+        <button class="alm-sysb alm-reset" onclick="alert('仪器复位中…')">🔄 仪器复位</button>
+        <button class="alm-sysb alm-clr" onclick="alert('整机清卡中…')">🧹 整机清卡</button>
+      </div>
+      <div class="alarm-list">
+        <div class="alarm-row">
+          <span class="alm-code">E-0021</span>
+          <span class="alm-msg">稀释液B液位不足，请及时补液</span>
+          <button class="alm-handle" onclick="alert('请补充稀释液B')">处理</button>
+        </div>
+        <div class="alarm-row warn">
+          <span class="alm-code">W-0005</span>
+          <span class="alm-msg">吸头数量低于阈值（剩余 96 个）</span>
+          <button class="alm-handle" onclick="alert('请补充吸头')">处理</button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="mbtn mbtn-cancel" onclick="closeModal('alarmModal')">关闭</button>
+      <button class="mbtn mbtn-ok" onclick="closeModal('alarmModal')">确认</button>
+    </div>
+  </div>
+</div>
+
+<!-- Keyboard Modal -->
+<div class="modal-overlay" id="kbModal">
+  <div class="modal-box">
+    <div class="modal-hdr">
+      <span class="mh-ico">⌨️</span> <span id="kbTitle">输入</span>
+    </div>
+    <div class="modal-body">
+      <div class="kb-disp" id="kbDisp">▏</div>
+      <div class="kb-grid numgrid" id="kbGrid"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="mbtn mbtn-cancel" onclick="closeModal('kbModal')">取消</button>
+      <button class="mbtn mbtn-ok" onclick="kbOk()">确定</button>
+    </div>
+  </div>
+</div>
+
+<!-- Item Extend Modal -->
+<div class="modal-overlay" id="extModal">
+  <div class="modal-box">
+    <div class="modal-hdr">
+      <span class="mh-ico">⚙</span> <span id="extTitle">项目设置</span>
+    </div>
+    <div class="modal-body">
+      <div class="ext-row">
+        <span class="ext-lbl">重复测试次数</span>
+        <input class="ext-num" type="number" id="extRepeat" value="1" min="1" max="5">
+      </div>
+      <div class="ext-row">
+        <span class="ext-lbl">稀释倍数</span>
+        <select class="ext-sel" id="extDilute">
+          <option>不稀释</option>
+          <option>2倍</option>
+          <option>5倍</option>
+          <option>10倍</option>
+          <option>20倍</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="mbtn mbtn-cancel" onclick="closeModal('extModal')">取消</button>
+      <button class="mbtn mbtn-ok" onclick="closeModal('extModal')">确定</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ JAVASCRIPT ════════════════════ -->
+<script>
+const ITEMS=['CRP','PCT','cTnI','D-D'];
+const S={
+  currentSlot:null,
+  slotData:{},
+  arrangeList:[],
+  pendingTotal:0,
+  sampleNo:1,
+  selCardItem:null,
+  cardLock:false,
+  kb:{},
+  currentTab:'detect'
+};
+
+/* ── INIT ── */
+function init(){
+  buildSlots();
+  renderList();
+  initResults();
+  startClock();
+  showView('listView');
+}
+
+function buildSlots(){
+  const list=document.getElementById('slotsList');
+  list.innerHTML='';
+  for(let i=1;i<=8;i++){
+    list.innerHTML+=`
+    <div class="slot-row" id="slot-${i}" onclick="selectSlot(${i})">
+      <div class="tube-wrap">
+        <div class="tube">
+          <div class="tube-cap"></div>
+          <div class="tube-body">
+            <div class="tube-plus"><span class="plus-txt">+</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="slot-info">
+        <div class="slot-num">S${i}</div>
+        <div class="slot-stat" id="sstat-${i}">空闲</div>
+      </div>
+    </div>`;
+  }
+}
+
+/* ── CLOCK ── */
+function startClock(){
+  function tick(){
+    const n=new Date();
+    const h=String(n.getHours()).padStart(2,'0');
+    const m=String(n.getMinutes()).padStart(2,'0');
+    const s=String(n.getSeconds()).padStart(2,'0');
+    document.getElementById('clockDisp').textContent=`${h}:${m}:${s}`;
+  }
+  tick();setInterval(tick,1000);
+}
+
+/* ── LOGIN ── */
+function doLogin(){
+  document.getElementById('loginPage').style.display='none';
+  document.getElementById('mainApp').style.display='flex';
+  init();
+}
+
+/* ── TAB SWITCHING ── */
+function switchTab(tab){
+  S.currentTab=tab;
+  // Update nav tab active state
+  ['detect','result','cons','sett'].forEach(t=>{
+    const el=document.getElementById('tab-'+t);
+    if(el)el.classList.toggle('active',t===tab);
+  });
+  // Show/hide areas
+  const detectArea=document.getElementById('mainLeft');
+  const rightSidebar=document.getElementById('rightSidebar');
+  const resTab=document.getElementById('resTab');
+  const consTab=document.getElementById('consTab');
+  const settTab=document.getElementById('settTab');
+
+  detectArea.style.display=tab==='detect'?'flex':'none';
+  rightSidebar.style.display=tab==='detect'?'flex':'none';
+  resTab.classList.toggle('active',tab==='result');
+  consTab.classList.toggle('active',tab==='cons');
+  settTab.classList.toggle('active',tab==='sett');
+}
+
+/* ── SAMPLE SLOTS ── */
+function selectSlot(n){
+  // Toggle off if already selected and clicking again
+  if(S.currentSlot===n&&!document.getElementById('slot-'+n).classList.contains('arranged')){
+    S.currentSlot=null;
+    document.getElementById('slot-'+n).classList.remove('sel');
+    showView('listView');return;
+  }
+  S.currentSlot=n;
+  document.querySelectorAll('.slot-row').forEach(r=>r.classList.remove('sel'));
+  document.getElementById('slot-'+n).classList.add('sel');
+  openFormForSlot(n);
+}
+
+function openFormForSlot(n){
+  document.getElementById('formSlotLabel').textContent='S'+n;
+  const d=S.slotData[n]||{};
+  document.getElementById('fNo').value=d.no||(String(S.sampleNo).padStart(4,'0'));
+  document.getElementById('fId').value=d.id||'';
+  document.getElementById('fName').value=d.name||'';
+  document.getElementById('fAge').value=d.age||'';
+  document.getElementById('fAgeU').value=d.ageUnit||'岁';
+  document.getElementById('fType').value=d.sampleType||'全血';
+  setGender(d.gender||'M');
+  document.querySelectorAll('.item-chip').forEach(c=>c.classList.toggle('sel',!!(d.items&&d.items.includes(c.dataset.item))));
+  showView('formView');
+}
+
+function selectAll(){
+  const firstEmpty=Array.from({length:8},(_,i)=>i+1).find(i=>!S.slotData[i]);
+  if(!firstEmpty){alert('所有样本位置已编排完成');return;}
+  selectSlot(firstEmpty);
+}
+
+function showView(id){
+  document.querySelectorAll('.main-view').forEach(v=>v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+/* ── FORM ── */
+function setGender(g){
+  document.getElementById('gbM').classList.toggle('sel',g==='M');
+  document.getElementById('gbF').classList.toggle('sel',g==='F');
+  document.getElementById('gbM').dataset.sel=g==='M'?'1':'';
+  if(!document.querySelector('#formView input[name=gender]')){
+    const h=document.createElement('input');
+    h.type='hidden';h.name='gender';h.id='hidGender';h.value=g;
+    document.getElementById('formView').appendChild(h);
+  }else{document.getElementById('hidGender').value=g;}
+}
+
+function toggleItem(el){if(el.tagName==='BUTTON')return;el.classList.toggle('sel');}
+
+function cancelForm(){
+  S.currentSlot=null;
+  document.querySelectorAll('.slot-row').forEach(r=>r.classList.remove('sel'));
+  showView('listView');
+}
+
+function confirmArrange(){
+  const slot=S.currentSlot;if(!slot){alert('请选择样本位置');return;}
+  const items=[...document.querySelectorAll('.item-chip.sel')].map(c=>c.dataset.item);
+  if(!items.length){alert('请至少选择一个检测项目');return;}
+  const gEl=document.getElementById('hidGender');
+  const gender=gEl?gEl.value:(document.getElementById('gbM').classList.contains('sel')?'M':'F');
+  const id=document.getElementById('fId').value||('SID'+String(S.sampleNo).padStart(4,'0'));
+  const data={
+    no:String(S.sampleNo).padStart(4,'0'),id,slot,
+    name:document.getElementById('fName').value||('患者'+slot),
+    age:document.getElementById('fAge').value||'--',
+    ageUnit:document.getElementById('fAgeU').value,
+    gender,
+    sampleType:document.getElementById('fType').value,
+    items,status:'arranged'
+  };
+  const old=S.slotData[slot];
+  if(old)old.items.forEach(()=>S.pendingTotal=Math.max(0,S.pendingTotal-1));
+  items.forEach(()=>S.pendingTotal++);
+  document.getElementById('totalPending').textContent=S.pendingTotal;
+  S.slotData[slot]=data;
+  const idx=S.arrangeList.findIndex(r=>r.slot===slot);
+  if(idx>=0)S.arrangeList[idx]=data;
+  else{S.arrangeList.push(data);S.sampleNo++;}
+  const row=document.getElementById('slot-'+slot);
+  row.classList.remove('sel');row.classList.add('arranged');
+  document.getElementById('sstat-'+slot).textContent='已编排';
+  renderList();showView('listView');S.currentSlot=null;
+}
+
+/* ── LIST ── */
+const sMap={
+  arranged:'<span class="sbadge sb-arr">已编排</span>',
+  sampling:'<span class="sbadge sb-smp">取样中</span>',
+  incubating:'<span class="sbadge sb-inc">孵育中</span>',
+  done:'<span class="sbadge sb-done">完成</span>'
+};
+function renderList(){
+  const empty=document.getElementById('listEmpty'),tbl=document.getElementById('arrTbl');
+  document.getElementById('listCount').textContent=S.arrangeList.length+' 条';
+  if(!S.arrangeList.length){empty.style.display='flex';tbl.style.display='none';return;}
+  empty.style.display='none';tbl.style.display='table';
+  document.getElementById('arrBody').innerHTML=S.arrangeList.map((r,i)=>`
+    <tr onclick="rowClick(this)">
+      <td><input type="checkbox" class="rowchk" data-i="${i}" onchange="rowChk(this)" onclick="event.stopPropagation()"></td>
+      <td>${r.no}</td><td>${r.name}</td><td>${r.id}</td>
+      <td>${r.sampleType}</td><td>S${r.slot}</td>
+      <td>${sMap[r.status]||r.status}</td><td>${r.items.join('、')}</td>
+    </tr>`).join('');
+}
+function rowClick(tr){tr.classList.toggle('selrow');const cb=tr.querySelector('.rowchk');if(cb)cb.checked=tr.classList.contains('selrow');}
+function rowChk(cb){const tr=cb.closest('tr');if(tr)tr.classList.toggle('selrow',cb.checked);}
+function toggleAll(cb){document.querySelectorAll('.rowchk').forEach(c=>{c.checked=cb.checked;const tr=c.closest('tr');if(tr)tr.classList.toggle('selrow',cb.checked);});}
+function editSelected(){
+  const c=[...document.querySelectorAll('.rowchk:checked')];
+  if(!c.length){alert('请先选择要编辑的样本');return;}
+  selectSlot(S.arrangeList[parseInt(c[0].dataset.i)].slot);
+}
+function deleteSelected(){
+  const c=[...document.querySelectorAll('.rowchk:checked')];
+  if(!c.length){alert('请先选择要删除的样本');return;}
+  if(!confirm('确认删除所选样本？'))return;
+  c.map(x=>parseInt(x.dataset.i)).sort((a,b)=>b-a).forEach(i=>{
+    const d=S.arrangeList[i];
+    d.items.forEach(()=>S.pendingTotal=Math.max(0,S.pendingTotal-1));
+    document.getElementById('totalPending').textContent=S.pendingTotal;
+    const row=document.getElementById('slot-'+d.slot);
+    row.classList.remove('arranged');
+    document.getElementById('sstat-'+d.slot).textContent='空闲';
+    delete S.slotData[d.slot];S.arrangeList.splice(i,1);
+  });
+  renderList();
+}
+
+/* ── ADD CARD ── */
+function openModal(id){
+  if(id==='addCardModal'){
+    const pi={};ITEMS.forEach(it=>pi[it]=0);
+    S.arrangeList.forEach(r=>r.items.forEach(it=>{if(it in pi)pi[it]++;}));
+    document.getElementById('cardItemList').innerHTML=ITEMS.map(it=>`
+      <div class="ci" id="ci-${it}" onclick="selCard('${it}')">
+        <span class="ci-name">${it}</span>
+        <span class="ci-cnt">待加 <b id="cic-${it}">${pi[it]}</b> 张</span>
+      </div>`).join('');
+    document.getElementById('progWrap').style.display='none';
+    document.getElementById('progLbl').style.display='none';
+    document.getElementById('addCardConfBtn').disabled=false;
+    document.getElementById('addCardConfBtn').textContent='加 卡';
+    S.selCardItem=null;S.cardLock=false;
+  }
+  document.getElementById(id).classList.add('open');
+}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function selCard(it){
+  S.selCardItem=it;
+  document.querySelectorAll('.ci').forEach(c=>c.classList.remove('sel'));
+  document.getElementById('ci-'+it).classList.add('sel');
+}
+function doAddCard(){
+  if(S.cardLock)return;
+  if(!S.selCardItem){alert('请选择项目');return;}
+  const el=document.getElementById('cic-'+S.selCardItem);
+  const cur=parseInt(el.textContent)||0;
+  if(cur<=0){alert('该项目暂无待加卡需求');return;}
+  S.cardLock=true;
+  const btn=document.getElementById('addCardConfBtn');
+  btn.disabled=true;btn.textContent='加卡中…';
+  const pw=document.getElementById('progWrap');
+  const pl=document.getElementById('progLbl');
+  pw.style.display='block';pl.style.display='block';
+  const bar=document.getElementById('progInner');
+  bar.style.transition='none';bar.style.width='0%';
+  setTimeout(()=>{bar.style.transition='width 5s linear';bar.style.width='100%';},30);
+  setTimeout(()=>{
+    el.textContent=Math.max(0,cur-1);
+    S.pendingTotal=Math.max(0,S.pendingTotal-1);
+    document.getElementById('totalPending').textContent=S.pendingTotal;
+    pw.style.display='none';pl.style.display='none';
+    bar.style.width='0%';
+    btn.disabled=false;btn.textContent='加 卡';
+    S.cardLock=false;S.selCardItem=null;
+    document.querySelectorAll('.ci').forEach(c=>c.classList.remove('sel'));
+  },5100);
+}
+
+/* ── KEYBOARD ── */
+function openKb(tid,mode,title){
+  S.kb={target:tid,mode,val:document.getElementById(tid).value||''};
+  document.getElementById('kbTitle').textContent=title||'输入';
+  renderKb(mode);updateKbDisp();openModal('kbModal');
+}
+function renderKb(mode){
+  const g=document.getElementById('kbGrid');
+  if(mode==='num'){
+    g.className='kb-grid numgrid';
+    g.innerHTML=['7','8','9','4','5','6','1','2','3','.','0','⌫'].map(k=>
+      k==='⌫'?`<div class="kkey kaction" onclick="kbDel()">⌫</div>`
+      :`<div class="kkey" onclick="kbType('${k}')">${k}</div>`).join('');
+  }else{
+    g.className='kb-grid txtgrid';
+    g.innerHTML='QWERTYUIOPASDFGHJKLZXCVBNM'.split('').map(k=>
+      `<div class="kkey" style="height:40px;font-size:12px;" onclick="kbType('${k}')">${k}</div>`).join('')
+      +`<div class="kkey kaction kspan3" onclick="kbDel()" style="height:40px;">⌫</div>`
+      +`<div class="kkey kaction kspan4" onclick="kbType(' ')" style="height:40px;">空格</div>`
+      +`<div class="kkey kaction kspan3" onclick="S.kb.val='';updateKbDisp();" style="height:40px;">清空</div>`;
+  }
+}
+function kbType(k){S.kb.val+=k;updateKbDisp();}
+function kbDel(){S.kb.val=S.kb.val.slice(0,-1);updateKbDisp();}
+function updateKbDisp(){document.getElementById('kbDisp').textContent=S.kb.val||'▏';}
+function kbOk(){if(S.kb.target)document.getElementById(S.kb.target).value=S.kb.val;closeModal('kbModal');}
+
+/* ── ITEM EXTEND ── */
+function openExt(e,item){e.stopPropagation();document.getElementById('extTitle').textContent=item+' — 项目设置';openModal('extModal');}
+
+/* ── RESULTS ── */
+const resultData=[
+  {no:'0001',id:'P20260404001',name:'张三',type:'全血',item:'CRP',val:'52.3',unit:'mg/L',ref:'<10',conc:'阳性',time:'09:12:33',sts:'hi'},
+  {no:'0001',id:'P20260404001',name:'张三',type:'全血',item:'PCT',val:'0.08',unit:'ng/mL',ref:'<0.5',conc:'阴性',time:'09:12:35',sts:'no'},
+  {no:'0002',id:'P20260404002',name:'李四',type:'血清',item:'cTnI',val:'0.62',unit:'ng/mL',ref:'<0.04',conc:'阳性',time:'10:05:11',sts:'hi'},
+  {no:'0003',id:'P20260404003',name:'王芳',type:'血浆',item:'D-D',val:'0.35',unit:'μg/mL',ref:'<0.5',conc:'阴性',time:'11:23:47',sts:'no'},
+  {no:'0004',id:'P20260404004',name:'赵六',type:'全血',item:'CRP',val:'3.1',unit:'mg/L',ref:'<10',conc:'阴性',time:'13:41:02',sts:'no'},
+  {no:'0004',id:'P20260404004',name:'赵六',type:'全血',item:'PCT',val:'2.14',unit:'ng/mL',ref:'<0.5',conc:'阳性',time:'13:41:04',sts:'hi'},
+];
+function initResults(){
+  document.getElementById('resTbody').innerHTML=resultData.map((r,i)=>{
+    const vc=r.sts==='hi'?'rv-hi':r.sts==='lo'?'rv-lo':'rv-no';
+    const cc=r.conc==='阳性'?'rc-pos':'rc-neg';
+    return`<tr>
+      <td>${r.no}</td><td>${r.id}</td><td>${r.name}</td><td>${r.type}</td>
+      <td><b>${r.item}</b></td><td class="${vc}">${r.val}</td><td>${r.unit}</td>
+      <td><span class="${cc}">${r.conc}</span></td><td>${r.time}</td>
+      <td><button class="curve-btn" onclick="toggleCurve(${i},this)">📈 查看</button></td>
+    </tr>
+    <tr class="curve-row" id="cv-${i}" style="display:none;">
+      <td colspan="10" class="curve-cell">
+        <div class="curve-inner">
+          <canvas id="cvs-${i}" width="260" height="80"></canvas>
+          <div class="curve-meta">
+            <p><b>${r.item}</b> 检测原始曲线</p>
+            <p>结果：<b class="${vc}">${r.val} ${r.unit}</b></p>
+            <p>参考范围：${r.ref} ${r.unit}</p>
+            <p>结论：<span class="${cc}">${r.conc}</span></p>
+          </div>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+function toggleCurve(i,btn){
+  const row=document.getElementById('cv-'+i);
+  const open=row.style.display==='table-row';
+  row.style.display=open?'none':'table-row';
+  btn.textContent=open?'📈 查看':'▲ 收起';
+  if(!open)drawCurve(i);
+}
+function drawCurve(i){
+  const cvs=document.getElementById('cvs-'+i);if(!cvs)return;
+  const ctx=cvs.getContext('2d');
+  const pts=Array.from({length:20},(_,x)=>({x,y:Math.random()*50+15+(x>8?Math.sin((x-8)*0.5)*20:0)}));
+  ctx.clearRect(0,0,cvs.width,cvs.height);
+  // Background
+  ctx.fillStyle='#f6f9fd';ctx.fillRect(0,0,cvs.width,cvs.height);
+  // Grid lines
+  ctx.strokeStyle='#dde6ef';ctx.lineWidth=1;
+  [20,40,60].forEach(y=>{ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(cvs.width,y);ctx.stroke();});
+  // Curve
+  ctx.beginPath();ctx.strokeStyle='#4a78b5';ctx.lineWidth=2;
+  pts.forEach((p,j)=>{
+    const x=(p.x/19)*cvs.width;const y=cvs.height-p.y;
+    j===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  });
+  ctx.stroke();
+  // Fill under curve
+  ctx.lineTo(cvs.width,cvs.height);ctx.lineTo(0,cvs.height);ctx.closePath();
+  ctx.fillStyle='rgba(74,120,181,0.08)';ctx.fill();
+}
+</script>
+</body>
+</html>
