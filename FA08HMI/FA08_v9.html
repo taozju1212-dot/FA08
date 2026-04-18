@@ -419,33 +419,73 @@ html,body{width:800px;height:600px;overflow:hidden;font-family:'Inter','Microsof
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━ RESULTS TAB ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 #resTab{flex:1;display:none;flex-direction:column;overflow:hidden;background:var(--bg);}
 #resTab.active{display:flex;}
-.res-toolbar{flex-shrink:0;height:48px;background:var(--white);border-bottom:1px solid var(--bdr-lt);display:flex;align-items:center;padding:0 14px;gap:8px;}
-.res-filter-btn{height:34px;padding:0 12px;border-radius:8px;font-size:12px;font-weight:700;background:var(--bg-lt);color:var(--txt-mid);border:1.5px solid var(--bdr);cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .15s;box-shadow:var(--inset-shadow);}
-.res-filter-btn:active{background:var(--acc-pale);color:var(--acc-dk);}
-.res-spacer{flex:1;}
-.res-act{height:34px;padding:0 12px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;transition:transform .1s,box-shadow .1s;display:flex;align-items:center;gap:5px;border:none;box-shadow:var(--tactile-shadow-sm);}
+/* 工具栏 */
+.res-toolbar{flex-shrink:0;height:46px;background:var(--white);border-bottom:1px solid var(--bdr-lt);display:flex;align-items:center;padding:0 12px;gap:8px;}
+/* 日期筛选区 */
+.res-date-wrap{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+.res-date-lbl{font-size:11px;font-weight:700;color:var(--txt-mid);white-space:nowrap;}
+.res-date-input{height:30px;padding:0 8px;border:1.5px solid var(--bdr);border-radius:8px;font-size:12px;font-weight:600;color:var(--txt);background:var(--bg-lt);outline:none;cursor:pointer;transition:border-color .2s,box-shadow .2s;}
+.res-date-input:focus{border-color:var(--acc);background:var(--white);box-shadow:0 0 0 2px rgba(254,122,65,.12);}
+.res-toolbar-spacer{flex:1;}
+/* 操作按钮 */
+.res-act{height:30px;padding:0 13px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px;border:none;box-shadow:var(--tactile-shadow-sm);transition:transform .1s,box-shadow .1s;}
 .res-act:active{transform:translateY(1px);box-shadow:var(--tactile-active);}
+.ra-search{background:var(--pri);color:#fff;}
 .ra-print{background:var(--acc);color:#fff;}
 .ra-export{background:var(--grn);color:#fff;}
+.ra-export-row{background:var(--acc);color:#fff;}
 .ra-del{background:var(--red);color:#fff;}
-.res-tbl-wrap{flex:1;overflow-y:auto;}
-#resTbl{width:100%;border-collapse:collapse;}
+.ra-row-del{background:var(--red);color:#fff;}
+/* ── 高级查找弹窗 ── */
+.srch-modal-box{background:var(--white);border-radius:18px;box-shadow:0 24px 60px rgba(0,0,0,.30),0 4px 16px rgba(0,0,0,.12);overflow:hidden;width:420px;}
+.srch-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px;padding:18px 20px 8px;}
+.srch-field{display:flex;flex-direction:column;gap:5px;}
+.srch-field.full{grid-column:1/3;}
+.srch-label{font-size:11px;font-weight:800;color:var(--txt-mid);letter-spacing:.4px;}
+.srch-input{height:34px;padding:0 10px;border:1.5px solid var(--bdr);border-radius:8px;font-size:12px;font-weight:600;color:var(--txt);background:var(--bg-lt);outline:none;transition:border-color .2s,box-shadow .2s;width:100%;box-sizing:border-box;}
+.srch-input:focus{border-color:var(--acc);background:var(--white);box-shadow:0 0 0 2px rgba(254,122,65,.12);}
+.srch-range{display:flex;align-items:center;gap:6px;}
+.srch-range-sep{font-size:11px;color:var(--txt-lt);font-weight:700;}
+.srch-range .srch-input{flex:1;min-width:0;}
+/* 表格 */
+.res-tbl-wrap{flex:1;overflow-y:auto;min-height:0;}
+#resTbl{width:100%;border-collapse:collapse;table-layout:fixed;}
+#resTbl col.rc-no  {width:52px;}
+#resTbl col.rc-id  {width:116px;}
+#resTbl col.rc-name{width:68px;}
+#resTbl col.rc-type{width:52px;}
+#resTbl col.rc-item{width:56px;}
+#resTbl col.rc-val {width:78px;}
+#resTbl col.rc-unit{width:64px;}
+#resTbl col.rc-ref {width:72px;}
+#resTbl col.rc-conc{width:68px;}
+#resTbl col.rc-time{width:64px;}
+#resTbl col.rc-cv  {width:auto;}
 #resTbl thead tr{background:var(--pri);color:#fff;position:sticky;top:0;z-index:2;}
-#resTbl th{padding:10px 8px;font-size:11px;font-weight:800;letter-spacing:.8px;text-align:center;text-transform:uppercase;}
-#resTbl td{padding:9px 8px;font-size:12px;text-align:center;border-bottom:1px solid var(--bdr-lt);}
-#resTbl tbody tr:nth-child(even){background:var(--bg);}
-#resTbl tbody tr:hover{background:var(--acc-pale);}
+#resTbl th{padding:0 6px;height:38px;font-size:11px;font-weight:800;letter-spacing:.5px;text-align:center;text-transform:uppercase;white-space:nowrap;}
+#resTbl td{padding:0 6px;height:44px;font-size:12px;text-align:center;border-bottom:1px solid var(--bdr-lt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+/* 患者分组行 */
+.res-group-row{background:rgba(22,40,57,.06)!important;}
+.res-group-row td{height:30px!important;font-size:11px!important;font-weight:800!important;color:var(--pri)!important;text-align:left!important;padding-left:10px!important;letter-spacing:.3px;}
+#resTbl tbody tr.res-item-row:nth-child(even){background:var(--bg);}
+#resTbl tbody tr.res-item-row:hover{background:var(--acc-pale);cursor:pointer;}
+#resTbl tbody tr.res-item-row.selrow td{color:var(--acc-dk);font-weight:700;}
+/* 结果值 */
 .rv-hi{color:var(--red);font-weight:800;}
 .rv-lo{color:var(--grn);font-weight:800;}
 .rv-no{color:var(--txt);}
-.rc-pos{background:#fee2e2;color:var(--red);border-radius:10px;padding:2px 10px;font-size:11px;font-weight:800;}
-.rc-neg{background:#f0fdf4;color:#166534;border-radius:10px;padding:2px 10px;font-size:11px;font-weight:800;}
-.curve-btn{height:28px;padding:0 12px;border-radius:6px;font-size:11px;background:var(--acc-pale);color:var(--acc-dk);border:1px solid var(--acc-lt);cursor:pointer;font-weight:700;}
-.curve-row td{padding:0;}
-.curve-cell{background:var(--bg-lt)!important;padding:12px 20px!important;}
-.curve-inner{display:flex;align-items:center;gap:20px;}
-.curve-inner canvas{border-radius:8px;border:1px solid var(--bdr);}
-.curve-meta p{font-size:12px;color:var(--txt-mid);line-height:1.8;}
+/* 结论 badge */
+.rc-pos{background:#fee2e2;color:var(--red);border-radius:10px;padding:2px 9px;font-size:11px;font-weight:800;border:1px solid #fca5a5;display:inline-block;}
+.rc-neg{background:#f0fdf4;color:#166534;border-radius:10px;padding:2px 9px;font-size:11px;font-weight:800;border:1px solid #86efac;display:inline-block;}
+/* 曲线按钮 */
+.curve-btn{height:26px;padding:0 10px;border-radius:6px;font-size:11px;background:var(--acc-pale);color:var(--acc-dk);border:1px solid var(--acc-lt);cursor:pointer;font-weight:700;transition:all .12s;}
+.curve-btn:hover{background:var(--acc);color:#fff;border-color:var(--acc);}
+/* 曲线展开行 */
+.curve-row td{padding:0!important;height:auto!important;}
+.curve-cell{background:var(--bg-lt)!important;padding:12px 16px!important;}
+.curve-inner{display:flex;align-items:center;gap:18px;}
+.curve-inner canvas{border-radius:8px;border:1px solid var(--bdr);flex-shrink:0;}
+.curve-meta p{font-size:12px;color:var(--txt-mid);line-height:1.9;}
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━ PLACEHOLDERS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 .tab-placeholder{flex:1;display:none;align-items:center;justify-content:center;flex-direction:column;gap:14px;background:var(--bg);}
@@ -771,20 +811,52 @@ html,body{width:800px;height:600px;overflow:hidden;font-family:'Inter','Microsof
 
     </div><!-- /detectMain -->
 
-    <!-- RESULT TAB -->
+    <!-- RESULT TAB: 单栏，与检测界面风格统一 -->
     <div id="resTab">
+      <!-- 工具栏 -->
       <div class="res-toolbar">
-        <button class="res-filter-btn">📅 今日</button>
-        <button class="res-filter-btn">🔍 搜索</button>
-        <button class="res-filter-btn">样本结果 ▾</button>
-        <div class="res-spacer"></div>
-        <button class="res-act ra-print">🖨 打印</button>
-        <button class="res-act ra-export">📤 导出</button>
-        <button class="res-act ra-del">🗑 清空</button>
+        <div class="res-date-wrap">
+          <span class="res-date-lbl">检测日期</span>
+          <input type="date" id="resDatePicker" class="res-date-input" value="2026-04-17" onchange="filterAndRender()">
+        </div>
+        <button class="res-act ra-search" onclick="openResSearch()">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          查找
+        </button>
+        <div class="res-toolbar-spacer"></div>
+        <button class="res-act ra-print" onclick="alert('打印中…')">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          打印
+        </button>
+        <button class="res-act ra-export" onclick="alert('导出中…')">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          导出
+        </button>
+        <button class="res-act ra-del" onclick="deleteSelectedResults()">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+          删除
+        </button>
+        <button class="res-act ra-del" onclick="if(confirm('确认清空所有结果？')){resultData.length=0;filterAndRender();}">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><line x1="9" y1="9" x2="15" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/></svg>
+          清空
+        </button>
       </div>
+      <!-- 结果表格 -->
       <div class="res-tbl-wrap">
         <table id="resTbl">
-          <thead><tr><th>编号</th><th>样本ID</th><th>姓名</th><th>类型</th><th>项目</th><th>结果</th><th>单位</th><th>结论</th><th>完成时间</th><th>曲线</th></tr></thead>
+          <colgroup>
+            <col style="width:32px"><col class="rc-no"><col class="rc-id"><col class="rc-name"><col class="rc-type">
+            <col class="rc-item"><col class="rc-val"><col class="rc-unit"><col class="rc-ref">
+            <col class="rc-conc"><col class="rc-time"><col class="rc-cv">
+          </colgroup>
+          <thead>
+            <tr>
+              <th><input type="checkbox" id="resSelAll" onchange="toggleSelAll(this)" style="cursor:pointer;accent-color:var(--acc)"></th>
+              <th>编号</th><th>样本ID</th><th>姓名</th><th>类型</th>
+              <th>项目</th><th>结果</th><th>单位</th><th>参考范围</th>
+              <th>结论</th><th>时间</th><th>曲线</th>
+            </tr>
+          </thead>
           <tbody id="resTbody"></tbody>
         </table>
       </div>
@@ -859,6 +931,49 @@ html,body{width:800px;height:600px;overflow:hidden;font-family:'Inter','Microsof
 </div><!-- /mainApp -->
 
 <!-- ══════════════════════════ MODALS ══════════════════════════════════════ -->
+<!-- ── 高级结果查找 弹窗 ── -->
+<div class="modal-overlay" id="resSearchModal">
+  <div class="srch-modal-box">
+    <div class="modal-hdr"><span class="mh-ico">🔍</span> 结果查找</div>
+    <div class="srch-grid">
+      <div class="srch-field">
+        <label class="srch-label">样本 ID</label>
+        <input class="srch-input" type="text" id="sq-id" placeholder="如 P20260404001">
+      </div>
+      <div class="srch-field">
+        <label class="srch-label">姓名</label>
+        <input class="srch-input" type="text" id="sq-name" placeholder="患者姓名">
+      </div>
+      <div class="srch-field full">
+        <label class="srch-label">时间段</label>
+        <div class="srch-range">
+          <input class="srch-input" type="date" id="sq-t0" value="2026-04-01">
+          <span class="srch-range-sep">—</span>
+          <input class="srch-input" type="date" id="sq-t1" value="2026-04-17">
+        </div>
+      </div>
+      <div class="srch-field full">
+        <label class="srch-label">项目名称</label>
+        <select class="srch-input" id="sq-item" style="cursor:pointer">
+          <option value="">全部项目</option>
+          <option value="CRP">CRP</option>
+          <option value="PCT">PCT</option>
+          <option value="cTnI">cTnI</option>
+          <option value="D-D">D-D</option>
+          <option value="SAA">SAA</option>
+        </select>
+      </div>
+    </div>
+    <div style="padding:0 20px 8px;display:flex;justify-content:flex-end;gap:8px;">
+      <button class="mbtn mbtn-cancel" onclick="closeResSearch()">取消</button>
+      <button class="mbtn mbtn-ok" onclick="doResSearch()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:4px"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        查找
+      </button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="addCardModal">
   <div class="modal-box" style="min-width:400px;">
     <div class="modal-hdr"><span class="mh-ico">🃏</span> 加卡操作</div>
@@ -1020,6 +1135,8 @@ function switchTab(tab){
   document.getElementById('detectMain').style.display=isDetect?'flex':'none';
   document.getElementById('resTab').classList.toggle('active',tab==='result');
   document.getElementById('settTab').classList.toggle('active',tab==='sett');
+  /* 结果页隐藏底栏，让列表延伸到底部 */
+  document.getElementById('bottomBar').style.display=isDetect?'':'none';
 }
 
 function selectSlot(n){
@@ -1265,38 +1382,123 @@ function kbOk(){if(S.kb.target)document.getElementById(S.kb.target).value=S.kb.v
 function openExt(e,item){e.stopPropagation();document.getElementById('extTitle').textContent=item+' — 项目设置';openModal('extModal');}
 
 const resultData=[
-  {no:'0001',id:'P20260404001',name:'张三',type:'全血',item:'CRP',val:'52.3',unit:'mg/L',ref:'<10',conc:'阳性',time:'09:12:33',sts:'hi'},
-  {no:'0001',id:'P20260404001',name:'张三',type:'全血',item:'PCT',val:'0.08',unit:'ng/mL',ref:'<0.5',conc:'阴性',time:'09:12:35',sts:'no'},
-  {no:'0002',id:'P20260404002',name:'李四',type:'血清',item:'cTnI',val:'0.62',unit:'ng/mL',ref:'<0.04',conc:'阳性',time:'10:05:11',sts:'hi'},
-  {no:'0003',id:'P20260404003',name:'王芳',type:'血浆',item:'D-D',val:'0.35',unit:'μg/mL',ref:'<0.5',conc:'阴性',time:'11:23:47',sts:'no'},
-  {no:'0004',id:'P20260404004',name:'赵六',type:'全血',item:'CRP',val:'3.1',unit:'mg/L',ref:'<10',conc:'阴性',time:'13:41:02',sts:'no'},
-  {no:'0004',id:'P20260404004',name:'赵六',type:'全血',item:'PCT',val:'2.14',unit:'ng/mL',ref:'<0.5',conc:'阳性',time:'13:41:04',sts:'hi'},
+  {no:'0001',id:'P20260404001',name:'张三',type:'全血',item:'CRP',  val:'52.3',unit:'mg/L',  ref:'<10',   conc:'阳性',time:'09:12',sts:'hi'},
+  {no:'0001',id:'P20260404001',name:'张三',type:'全血',item:'PCT',  val:'0.08', unit:'ng/mL', ref:'<0.5',  conc:'阴性',time:'09:12',sts:'no'},
+  {no:'0002',id:'P20260404002',name:'李四',type:'血清',item:'cTnI', val:'0.62', unit:'ng/mL', ref:'<0.04', conc:'阳性',time:'10:05',sts:'hi'},
+  {no:'0003',id:'P20260404003',name:'王芳',type:'血浆',item:'D-D',  val:'0.35', unit:'μg/mL', ref:'<0.5',  conc:'阴性',time:'11:23',sts:'no'},
+  {no:'0004',id:'P20260404004',name:'赵六',type:'全血',item:'CRP',  val:'3.1',  unit:'mg/L',  ref:'<10',   conc:'阴性',time:'13:41',sts:'no'},
+  {no:'0004',id:'P20260404004',name:'赵六',type:'全血',item:'PCT',  val:'2.14', unit:'ng/mL', ref:'<0.5',  conc:'阳性',time:'13:41',sts:'hi'},
+  {no:'0005',id:'P20260404005',name:'陈丽',type:'血清',item:'SAA',  val:'8.5',  unit:'mg/L',  ref:'<10',   conc:'阴性',time:'14:30',sts:'no'},
 ];
-function initResults(){
-  document.getElementById('resTbody').innerHTML=resultData.map((r,i)=>{
+
+let RS={search:{id:'',name:'',t0:'',t1:'',item:''},activeFilter:false};
+
+function initResults(){ filterAndRender(); }
+
+function filterAndRender(){
+  let list=[...resultData];
+  /* 日期筛选 */
+  const datePick=(document.getElementById('resDatePicker')||{}).value||'';
+  /* 高级查找筛选（优先级更高，激活后忽略日期选择器） */
+  if(RS.activeFilter){
+    const {id,name,t0,t1,item}=RS.search;
+    if(id) list=list.filter(r=>r.id.toLowerCase().includes(id.toLowerCase()));
+    if(name) list=list.filter(r=>r.name.includes(name));
+    if(item) list=list.filter(r=>r.item===item);
+    /* 时间段暂按 time 字符串粗比（演示数据无完整日期，实际可用 date 字段） */
+  } else if(datePick){
+    /* 演示数据无 date 字段，直接显示全部，实际项目按 r.date===datePick 过滤 */
+  }
+  /* 平铺渲染（无分组行） */
+  let html='';
+  list.forEach((r,i)=>{
     const vc=r.sts==='hi'?'rv-hi':r.sts==='lo'?'rv-lo':'rv-no';
     const cc=r.conc==='阳性'?'rc-pos':'rc-neg';
-    return`<tr>
-      <td>${r.no}</td><td>${r.id}</td><td>${r.name}</td><td>${r.type}</td>
-      <td><b>${r.item}</b></td><td class="${vc}">${r.val}</td><td>${r.unit}</td>
-      <td><span class="${cc}">${r.conc}</span></td><td>${r.time}</td>
-      <td><button class="curve-btn" onclick="toggleCurve(${i},this)">📈 查看</button></td>
+    const indicator=r.sts==='hi'?' ↑':r.sts==='lo'?' ↓':'';
+    html+=`<tr class="res-item-row" onclick="toggleRowSel(this)">
+      <td onclick="event.stopPropagation()"><input type="checkbox" class="res-row-chk" style="cursor:pointer;accent-color:var(--acc)" onchange="onRowChk()"></td>
+      <td>${r.no}</td>
+      <td style="font-size:10.5px;color:var(--txt-lt)">${r.id}</td>
+      <td style="font-weight:700">${r.name}</td>
+      <td>${r.type}</td>
+      <td><b style="color:var(--pri)">${r.item}</b></td>
+      <td class="${vc}" style="font-weight:800;font-size:14px">${r.val}${indicator}</td>
+      <td style="color:var(--txt-lt)">${r.unit}</td>
+      <td style="color:var(--txt-lt);font-size:11px">${r.ref}</td>
+      <td><span class="${cc}">${r.conc}</span></td>
+      <td style="color:var(--txt-lt)">${r.time}</td>
+      <td><button class="curve-btn" onclick="event.stopPropagation();toggleCurve(${i},this)">📈 查看</button></td>
     </tr>
     <tr class="curve-row" id="cv-${i}" style="display:none;">
-      <td colspan="10" class="curve-cell">
+      <td colspan="12" class="curve-cell">
         <div class="curve-inner">
-          <canvas id="cvs-${i}" width="260" height="80"></canvas>
+          <canvas id="cvs-${i}" width="240" height="76"></canvas>
           <div class="curve-meta">
-            <p><b>${r.item}</b> 检测原始曲线</p>
-            <p>结果：<b class="${vc}">${r.val} ${r.unit}</b></p>
+            <p><b>${r.item}</b> 原始检测曲线</p>
+            <p>结果：<b class="${vc}" style="font-size:14px">${r.val} ${r.unit}${indicator}</b></p>
             <p>参考范围：${r.ref} ${r.unit}</p>
             <p>结论：<span class="${cc}">${r.conc}</span></p>
           </div>
         </div>
       </td>
     </tr>`;
-  }).join('');
+  });
+  document.getElementById('resTbody').innerHTML=html||
+    `<tr><td colspan="12" style="padding:28px;text-align:center;color:var(--txt-lt);font-size:13px">暂无检测结果</td></tr>`;
 }
+
+/* 全选 / 单选 */
+function toggleSelAll(cb){
+  document.querySelectorAll('.res-row-chk').forEach(c=>c.checked=cb.checked);
+}
+function toggleRowSel(tr){
+  const cb=tr.querySelector('.res-row-chk');
+  if(cb){cb.checked=!cb.checked;onRowChk();}
+}
+function onRowChk(){
+  const all=[...document.querySelectorAll('.res-row-chk')];
+  const selAll=document.getElementById('resSelAll');
+  if(selAll) selAll.checked=all.length>0&&all.every(c=>c.checked);
+}
+
+/* 删除已勾选行 */
+function deleteSelectedResults(){
+  const rows=[...document.querySelectorAll('#resTbody .res-item-row')];
+  const sel=rows.filter(tr=>tr.querySelector('.res-row-chk')?.checked);
+  if(sel.length===0){alert('请先勾选要删除的结果行');return;}
+  if(!confirm(`确认删除已选 ${sel.length} 条结果？`))return;
+  /* 从 resultData 中按行索引倒序移除（演示逻辑） */
+  sel.reverse().forEach(tr=>{
+    const siblings=[...document.querySelectorAll('#resTbody .res-item-row')];
+    const idx=siblings.indexOf(tr);
+    if(idx>=0&&idx<resultData.length)resultData.splice(idx,1);
+  });
+  document.getElementById('resSelAll').checked=false;
+  filterAndRender();
+}
+
+/* ── 高级查找 弹窗 ── */
+function openResSearch(){
+  /* 预填当前选择日期到时间段 */
+  const d=(document.getElementById('resDatePicker')||{}).value||'2026-04-17';
+  const t0=document.getElementById('sq-t0');const t1=document.getElementById('sq-t1');
+  if(t0&&!t0.value)t0.value=d;if(t1&&!t1.value)t1.value=d;
+  openModal('resSearchModal');
+}
+function closeResSearch(){ closeModal('resSearchModal'); }
+function doResSearch(){
+  RS.search={
+    id:(document.getElementById('sq-id')||{}).value||'',
+    name:(document.getElementById('sq-name')||{}).value||'',
+    t0:(document.getElementById('sq-t0')||{}).value||'',
+    t1:(document.getElementById('sq-t1')||{}).value||'',
+    item:(document.getElementById('sq-item')||{}).value||''
+  };
+  RS.activeFilter=!!(RS.search.id||RS.search.name||RS.search.item);
+  closeModal('resSearchModal');
+  filterAndRender();
+}
+
 function toggleCurve(i,btn){
   const row=document.getElementById('cv-'+i);
   const open=row.style.display==='table-row';
@@ -1304,19 +1506,33 @@ function toggleCurve(i,btn){
   btn.textContent=open?'📈 查看':'▲ 收起';
   if(!open)drawCurve(i);
 }
+
 function drawCurve(i){
   const cvs=document.getElementById('cvs-'+i);if(!cvs)return;
   const ctx=cvs.getContext('2d');
-  const pts=Array.from({length:20},(_,x)=>({x,y:Math.random()*50+15+(x>8?Math.sin((x-8)*0.5)*20:0)}));
+  /* 模拟荧光增长曲线 */
+  const pts=Array.from({length:24},(_,x)=>{
+    const base=8;
+    const rise=x>4&&x<16?Math.pow((x-4)/5,1.8)*52:0;
+    const plateau=x>=16?52+(x-16)*1.5:0;
+    return{x,y:base+rise+plateau+(Math.random()-.5)*2.5};
+  });
   ctx.clearRect(0,0,cvs.width,cvs.height);
-  ctx.fillStyle='#f6f9fd';ctx.fillRect(0,0,cvs.width,cvs.height);
-  ctx.strokeStyle='#dde6ef';ctx.lineWidth=1;
-  [20,40,60].forEach(y=>{ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(cvs.width,y);ctx.stroke();});
-  ctx.beginPath();ctx.strokeStyle='#4a78b5';ctx.lineWidth=2;
-  pts.forEach((p,j)=>{const x=(p.x/19)*cvs.width;const y=cvs.height-p.y;j===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});
+  ctx.fillStyle='#faf8f4';ctx.fillRect(0,0,cvs.width,cvs.height);
+  /* 网格 */
+  ctx.strokeStyle='#ede9e4';ctx.lineWidth=1;
+  [19,38,57].forEach(y=>{ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(cvs.width,y);ctx.stroke();});
+  /* 曲线 */
+  ctx.beginPath();ctx.strokeStyle='#fe7a41';ctx.lineWidth=2.5;ctx.lineJoin='round';ctx.lineCap='round';
+  pts.forEach((p,j)=>{
+    const x=(p.x/23)*cvs.width;
+    const y=cvs.height-p.y;
+    j===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  });
   ctx.stroke();
+  /* 填充 */
   ctx.lineTo(cvs.width,cvs.height);ctx.lineTo(0,cvs.height);ctx.closePath();
-  ctx.fillStyle='rgba(74,120,181,0.08)';ctx.fill();
+  ctx.fillStyle='rgba(254,122,65,0.09)';ctx.fill();
 }
 </script>
 </body>
