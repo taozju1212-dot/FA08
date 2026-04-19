@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>FA08 全自动荧光免疫分析仪</title>
+<link rel="stylesheet" href="styles.css" />
+<template id="__bundler_thumbnail" data-bg-color="#0F4E85">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#0F4E85"/>
+    <g transform="translate(600 400)" fill="none" stroke="#fff" stroke-width="14" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M-90 -160 H90 V-80 L140 160 a20 20 0 0 1 -20 20 H-120 a20 20 0 0 1 -20 -20 L-90 -80 Z"/>
+      <path d="M-120 40 H120" stroke-width="10"/>
+      <circle cx="-40" cy="90" r="10" fill="#fff" stroke="none"/>
+      <circle cx="30" cy="110" r="14" fill="#fff" stroke="none"/>
+      <circle cx="70" cy="70" r="8" fill="#fff" stroke="none"/>
+    </g>
+    <text x="600" y="640" text-anchor="middle" font-family="Arial, sans-serif" font-size="44" font-weight="700" fill="#fff" letter-spacing="4">FA08</text>
+  </svg>
+</template>
+</head>
+<body>
+<div class="stage-wrap">
+  <div class="stage" id="stage"></div>
+</div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script>
+  // Scale 800x600 stage to fit viewport
+  function fitStage() {
+    const s = document.getElementById('stage');
+    if (!s) return;
+    const vw = window.innerWidth, vh = window.innerHeight;
+    const scale = Math.min(vw / 800, vh / 600);
+    s.style.transform = `scale(${scale})`;
+  }
+  window.addEventListener('resize', fitStage);
+  fitStage();
+</script>
+
+<script type="text/babel" src="src/data.jsx"></script>
+<script type="text/babel" src="src/Icons.jsx"></script>
+<script type="text/babel" src="src/Keyboard.jsx"></script>
+<script type="text/babel" src="src/Login.jsx"></script>
+<script type="text/babel" src="src/TopBar.jsx"></script>
+<script type="text/babel" src="src/BottomBar.jsx"></script>
+<script type="text/babel" src="src/SampleForm.jsx"></script>
+<script type="text/babel" src="src/SampleList.jsx"></script>
+<script type="text/babel" src="src/SlotPanel.jsx"></script>
+<script type="text/babel" src="src/DetectPage.jsx"></script>
+<script type="text/babel" src="src/ResultsPage.jsx"></script>
+<script type="text/babel" src="src/ConsumablesPage.jsx"></script>
+<script type="text/babel" src="src/Modals.jsx"></script>
+<script type="text/babel" src="src/App.jsx"></script>
+</body>
+</html>

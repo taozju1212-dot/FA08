@@ -1,0 +1,272 @@
+/* FA08 Fluorescence Immunoassay Analyzer HMI — 800x600 */
+
+:root {
+  /* Brand — medical blue */
+  --blue-900: #0B3C66;
+  --blue-800: #0F4E85;
+  --blue-700: #1464A5;
+  --blue-600: #1E78BE;
+  --blue-500: #2E86C1;
+  --blue-300: #7FB2DC;
+  --blue-100: #DCE8F2;
+  --blue-050: #EEF4F9;
+
+  --bg: #EEF2F6;
+  --surface: #FFFFFF;
+  --surface-alt: #F4F7FA;
+  --surface-sunken: #E8EEF3;
+  --border: #D6DEE6;
+  --border-strong: #B7C3CE;
+  --divider: #E6ECF2;
+
+  --ink-900: #0F1C2B;
+  --ink-800: #1F2A37;
+  --ink-700: #334155;
+  --ink-500: #5B6B7B;
+  --ink-400: #7A8898;
+  --ink-300: #A5B0BC;
+
+  --ok:   #2E8B57;
+  --ok-bg:#E6F3EC;
+  --warn: #D08419;
+  --warn-bg:#FBF1DF;
+  --err:  #C0392B;
+  --err-bg:#FBE6E3;
+  --run:  #1E78BE;
+  --run-bg:#DCE8F2;
+
+  --radius: 6px;
+  --radius-lg: 10px;
+  --shadow-1: 0 1px 0 rgba(15,28,43,.04), 0 1px 2px rgba(15,28,43,.06);
+  --shadow-2: 0 2px 4px rgba(15,28,43,.08), 0 8px 24px rgba(15,28,43,.08);
+
+  --font: "PingFang SC","Microsoft YaHei","Noto Sans SC","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  --font-num: "SF Mono","Menlo","Consolas","Roboto Mono",monospace;
+}
+
+* { box-sizing: border-box; }
+html, body { margin:0; padding:0; height:100%; }
+body {
+  background:#000;
+  font-family: var(--font);
+  color: var(--ink-800);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+/* Stage — 800x600 letterboxed on black */
+.stage-wrap {
+  position: fixed; inset: 0;
+  display: grid; place-items: center;
+  background: #000;
+}
+.stage {
+  width: 800px; height: 600px;
+  background: var(--bg);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px #000, 0 10px 60px rgba(0,0,0,.6);
+  transform-origin: center center;
+}
+
+/* Buttons */
+.btn {
+  display:inline-flex; align-items:center; justify-content:center; gap:6px;
+  height: 36px; padding: 0 14px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-strong);
+  background: #fff;
+  color: var(--ink-800);
+  font: 500 13px/1 var(--font);
+  cursor: pointer;
+  user-select: none;
+  transition: background .12s, border-color .12s, transform .05s;
+}
+.btn:hover { background: var(--blue-050); border-color: var(--blue-500); }
+.btn:active { transform: translateY(1px); }
+.btn.primary {
+  background: var(--blue-700); color:#fff; border-color: var(--blue-800);
+}
+.btn.primary:hover { background: var(--blue-800); }
+.btn.success { background: var(--ok); color:#fff; border-color: #226B42; }
+.btn.success:hover { background:#226B42; }
+.btn.danger { background: var(--err); color:#fff; border-color: #8E2A20; }
+.btn.warn { background: var(--warn); color:#fff; border-color:#A9671A; }
+.btn.ghost { background: transparent; border-color: transparent; }
+.btn.ghost:hover { background: var(--blue-050); border-color: var(--border); }
+.btn.sm { height: 28px; padding: 0 10px; font-size: 12px; }
+.btn.lg { height: 44px; padding: 0 18px; font-size: 14px; }
+.btn:disabled { opacity:.45; cursor:not-allowed; }
+
+/* Cards */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-1);
+}
+.card-hd {
+  height: 32px;
+  padding: 0 10px;
+  display:flex; align-items:center; justify-content:space-between;
+  border-bottom: 1px solid var(--divider);
+  background: var(--surface-alt);
+  border-radius: var(--radius) var(--radius) 0 0;
+  font-size: 12px; color: var(--ink-700); font-weight:600;
+}
+
+/* Inputs */
+.field {
+  display:flex; flex-direction:column; gap:4px;
+}
+.field > label {
+  font-size: 11px; color: var(--ink-500); font-weight:500;
+}
+.input {
+  height: 32px;
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  background: #fff;
+  padding: 0 10px;
+  font: 13px var(--font);
+  color: var(--ink-800);
+  outline:none;
+}
+.input:focus, .input.focus { border-color: var(--blue-600); box-shadow: 0 0 0 3px var(--blue-100); }
+.input[readonly] { background: var(--surface-sunken); color: var(--ink-500); }
+
+/* Status pill */
+.pill {
+  display:inline-flex; align-items:center; gap:4px;
+  height: 20px; padding: 0 8px;
+  border-radius: 10px;
+  font-size: 11px; font-weight:600;
+  background: var(--surface-sunken); color: var(--ink-700);
+  border: 1px solid var(--border);
+  white-space:nowrap;
+}
+.pill .dot { width:6px; height:6px; border-radius:50%; background: currentColor; }
+.pill.ok   { color:#1E6B43; background: var(--ok-bg);   border-color:#BDDDC9; }
+.pill.warn { color:#8A5A10; background: var(--warn-bg); border-color:#E7CFA1; }
+.pill.err  { color:#8E2A20; background: var(--err-bg);  border-color:#EFC2BC; }
+.pill.run  { color:#0F4E85; background: var(--run-bg);  border-color:#B4CCE1; }
+.pill.idle { color: var(--ink-500); }
+
+/* Scrollbars */
+.scroll { overflow-y:auto; }
+.scroll::-webkit-scrollbar { width: 8px; }
+.scroll::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
+.scroll::-webkit-scrollbar-track { background: transparent; }
+
+/* Overlay / modals */
+.overlay {
+  position:absolute; inset:0;
+  background: rgba(15,28,43,.42);
+  display:flex; align-items:center; justify-content:center;
+  z-index: 50;
+}
+.modal {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-2);
+  min-width: 420px;
+  max-width: 740px;
+  max-height: 540px;
+  display:flex; flex-direction:column;
+  overflow:hidden;
+}
+.modal-hd {
+  height: 44px;
+  padding: 0 14px;
+  display:flex; align-items:center; justify-content:space-between;
+  background: var(--blue-700); color:#fff;
+  font-weight:600; font-size: 14px;
+}
+.modal-hd .x { cursor:pointer; font-size: 18px; opacity:.9; padding: 4px 8px; }
+.modal-hd .x:hover { opacity:1; }
+.modal-bd { padding: 14px; overflow:auto; }
+.modal-ft {
+  padding: 10px 14px;
+  border-top: 1px solid var(--divider);
+  background: var(--surface-alt);
+  display:flex; justify-content:flex-end; gap: 8px;
+}
+
+/* Table */
+.tbl { width:100%; border-collapse: collapse; font-size: 12px; }
+.tbl th, .tbl td {
+  padding: 8px 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--divider);
+}
+.tbl thead th {
+  background: var(--surface-alt);
+  color: var(--ink-600);
+  font-weight: 600;
+  font-size: 11px;
+  color: var(--ink-700);
+  text-transform: none;
+  position: sticky; top: 0; z-index: 1;
+}
+.tbl tbody tr:hover { background: var(--blue-050); }
+.tbl tbody tr.selected { background: var(--blue-100); }
+.tbl .num { font-family: var(--font-num); font-variant-numeric: tabular-nums; }
+
+/* Checkbox */
+.ck {
+  width:16px; height:16px;
+  border:1px solid var(--border-strong);
+  border-radius: 3px;
+  background: #fff;
+  display:inline-grid; place-items:center;
+  cursor:pointer;
+  flex-shrink: 0;
+}
+.ck.on { background: var(--blue-700); border-color: var(--blue-800); }
+.ck.on::after {
+  content:''; width:9px; height:5px;
+  border-left: 2px solid #fff; border-bottom: 2px solid #fff;
+  transform: rotate(-45deg) translateY(-1px);
+}
+
+/* Utility */
+.hstack { display:flex; align-items:center; }
+.vstack { display:flex; flex-direction:column; }
+.gap-4 { gap:4px; } .gap-6 { gap:6px; } .gap-8 { gap:8px; } .gap-10 { gap:10px; } .gap-12 { gap:12px; }
+.grow { flex:1 1 auto; }
+.muted { color: var(--ink-500); }
+.mono { font-family: var(--font-num); font-variant-numeric: tabular-nums; }
+.sep { height:1px; background: var(--divider); }
+.vsep { width:1px; background: var(--divider); align-self: stretch; }
+
+/* Focus ring */
+.focusable:focus { outline: 2px solid var(--blue-500); outline-offset: 2px; }
+
+/* Spinner */
+@keyframes spin { to { transform: rotate(360deg); } }
+.spinner {
+  width: 14px; height: 14px;
+  border: 2px solid var(--blue-100);
+  border-top-color: var(--blue-700);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Marquee / subtle pulse */
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
+.pulse { animation: pulse 1.6s ease-in-out infinite; }
+
+/* Running strip */
+@keyframes stripe {
+  from { background-position: 0 0; }
+  to   { background-position: 20px 0; }
+}
+.running-strip {
+  height: 3px; width:100%;
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--blue-600) 0 8px,
+    var(--blue-300) 8px 16px
+  );
+  animation: stripe 1.2s linear infinite;
+}
