@@ -1,0 +1,2495 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>FA08 全自动荧光免疫分析仪</title>
+<style>/* FA08 Fluorescence Immunoassay Analyzer HMI — 800x600 */
+
+:root {
+  /* Brand — medical blue */
+  --blue-900: #0B3C66;
+  --blue-800: #0F4E85;
+  --blue-700: #1464A5;
+  --blue-600: #1E78BE;
+  --blue-500: #2E86C1;
+  --blue-300: #7FB2DC;
+  --blue-100: #DCE8F2;
+  --blue-050: #EEF4F9;
+
+  --bg: #EEF2F6;
+  --surface: #FFFFFF;
+  --surface-alt: #F4F7FA;
+  --surface-sunken: #E8EEF3;
+  --border: #D6DEE6;
+  --border-strong: #B7C3CE;
+  --divider: #E6ECF2;
+
+  --ink-900: #0F1C2B;
+  --ink-800: #1F2A37;
+  --ink-700: #334155;
+  --ink-500: #5B6B7B;
+  --ink-400: #7A8898;
+  --ink-300: #A5B0BC;
+
+  --ok:   #2E8B57;
+  --ok-bg:#E6F3EC;
+  --warn: #D08419;
+  --warn-bg:#FBF1DF;
+  --err:  #C0392B;
+  --err-bg:#FBE6E3;
+  --run:  #1E78BE;
+  --run-bg:#DCE8F2;
+
+  --radius: 6px;
+  --radius-lg: 10px;
+  --shadow-1: 0 1px 0 rgba(15,28,43,.04), 0 1px 2px rgba(15,28,43,.06);
+  --shadow-2: 0 2px 4px rgba(15,28,43,.08), 0 8px 24px rgba(15,28,43,.08);
+
+  --font: "PingFang SC","Microsoft YaHei","Noto Sans SC","Segoe UI","Helvetica Neue",Arial,sans-serif;
+  --font-num: "SF Mono","Menlo","Consolas","Roboto Mono",monospace;
+}
+
+* { box-sizing: border-box; }
+html, body { margin:0; padding:0; height:100%; }
+body {
+  background:#000;
+  font-family: var(--font);
+  color: var(--ink-800);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+/* Stage — 800x600 letterboxed on black */
+.stage-wrap {
+  position: fixed; inset: 0;
+  display: grid; place-items: center;
+  background: #000;
+}
+.stage {
+  width: 800px; height: 600px;
+  background: var(--bg);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px #000, 0 10px 60px rgba(0,0,0,.6);
+  transform-origin: center center;
+}
+
+/* Buttons */
+.btn {
+  display:inline-flex; align-items:center; justify-content:center; gap:6px;
+  height: 36px; padding: 0 14px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-strong);
+  background: #fff;
+  color: var(--ink-800);
+  font: 500 13px/1 var(--font);
+  cursor: pointer;
+  user-select: none;
+  transition: background .12s, border-color .12s, transform .05s;
+}
+.btn:hover { background: var(--blue-050); border-color: var(--blue-500); }
+.btn:active { transform: translateY(1px); }
+.btn.primary {
+  background: var(--blue-700); color:#fff; border-color: var(--blue-800);
+}
+.btn.primary:hover { background: var(--blue-800); }
+.btn.success { background: var(--ok); color:#fff; border-color: #226B42; }
+.btn.success:hover { background:#226B42; }
+.btn.danger { background: var(--err); color:#fff; border-color: #8E2A20; }
+.btn.warn { background: var(--warn); color:#fff; border-color:#A9671A; }
+.btn.ghost { background: transparent; border-color: transparent; }
+.btn.ghost:hover { background: var(--blue-050); border-color: var(--border); }
+.btn.sm { height: 28px; padding: 0 10px; font-size: 12px; }
+.btn.lg { height: 44px; padding: 0 18px; font-size: 14px; }
+.btn:disabled { opacity:.45; cursor:not-allowed; }
+
+/* Cards */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-1);
+}
+.card-hd {
+  height: 32px;
+  padding: 0 10px;
+  display:flex; align-items:center; justify-content:space-between;
+  border-bottom: 1px solid var(--divider);
+  background: var(--surface-alt);
+  border-radius: var(--radius) var(--radius) 0 0;
+  font-size: 12px; color: var(--ink-700); font-weight:600;
+}
+
+/* Inputs */
+.field {
+  display:flex; flex-direction:column; gap:4px;
+}
+.field > label {
+  font-size: 11px; color: var(--ink-500); font-weight:500;
+}
+.input {
+  height: 32px;
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  background: #fff;
+  padding: 0 10px;
+  font: 13px var(--font);
+  color: var(--ink-800);
+  outline:none;
+}
+.input:focus, .input.focus { border-color: var(--blue-600); box-shadow: 0 0 0 3px var(--blue-100); }
+.input[readonly] { background: var(--surface-sunken); color: var(--ink-500); }
+
+/* Status pill */
+.pill {
+  display:inline-flex; align-items:center; gap:4px;
+  height: 20px; padding: 0 8px;
+  border-radius: 10px;
+  font-size: 11px; font-weight:600;
+  background: var(--surface-sunken); color: var(--ink-700);
+  border: 1px solid var(--border);
+  white-space:nowrap;
+}
+.pill .dot { width:6px; height:6px; border-radius:50%; background: currentColor; }
+.pill.ok   { color:#1E6B43; background: var(--ok-bg);   border-color:#BDDDC9; }
+.pill.warn { color:#8A5A10; background: var(--warn-bg); border-color:#E7CFA1; }
+.pill.err  { color:#8E2A20; background: var(--err-bg);  border-color:#EFC2BC; }
+.pill.run  { color:#0F4E85; background: var(--run-bg);  border-color:#B4CCE1; }
+.pill.idle { color: var(--ink-500); }
+
+/* Scrollbars */
+.scroll { overflow-y:auto; }
+.scroll::-webkit-scrollbar { width: 8px; }
+.scroll::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
+.scroll::-webkit-scrollbar-track { background: transparent; }
+
+/* Overlay / modals */
+.overlay {
+  position:absolute; inset:0;
+  background: rgba(15,28,43,.42);
+  display:flex; align-items:center; justify-content:center;
+  z-index: 50;
+}
+.modal {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-2);
+  min-width: 420px;
+  max-width: 740px;
+  max-height: 540px;
+  display:flex; flex-direction:column;
+  overflow:hidden;
+}
+.modal-hd {
+  height: 44px;
+  padding: 0 14px;
+  display:flex; align-items:center; justify-content:space-between;
+  background: var(--blue-700); color:#fff;
+  font-weight:600; font-size: 14px;
+}
+.modal-hd .x { cursor:pointer; font-size: 18px; opacity:.9; padding: 4px 8px; }
+.modal-hd .x:hover { opacity:1; }
+.modal-bd { padding: 14px; overflow:auto; }
+.modal-ft {
+  padding: 10px 14px;
+  border-top: 1px solid var(--divider);
+  background: var(--surface-alt);
+  display:flex; justify-content:flex-end; gap: 8px;
+}
+
+/* Table */
+.tbl { width:100%; border-collapse: collapse; font-size: 12px; }
+.tbl th, .tbl td {
+  padding: 8px 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--divider);
+}
+.tbl thead th {
+  background: var(--surface-alt);
+  color: var(--ink-600);
+  font-weight: 600;
+  font-size: 11px;
+  color: var(--ink-700);
+  text-transform: none;
+  position: sticky; top: 0; z-index: 1;
+}
+.tbl tbody tr:hover { background: var(--blue-050); }
+.tbl tbody tr.selected { background: var(--blue-100); }
+.tbl .num { font-family: var(--font-num); font-variant-numeric: tabular-nums; }
+
+/* Checkbox */
+.ck {
+  width:16px; height:16px;
+  border:1px solid var(--border-strong);
+  border-radius: 3px;
+  background: #fff;
+  display:inline-grid; place-items:center;
+  cursor:pointer;
+  flex-shrink: 0;
+}
+.ck.on { background: var(--blue-700); border-color: var(--blue-800); }
+.ck.on::after {
+  content:''; width:9px; height:5px;
+  border-left: 2px solid #fff; border-bottom: 2px solid #fff;
+  transform: rotate(-45deg) translateY(-1px);
+}
+
+/* Utility */
+.hstack { display:flex; align-items:center; }
+.vstack { display:flex; flex-direction:column; }
+.gap-4 { gap:4px; } .gap-6 { gap:6px; } .gap-8 { gap:8px; } .gap-10 { gap:10px; } .gap-12 { gap:12px; }
+.grow { flex:1 1 auto; }
+.muted { color: var(--ink-500); }
+.mono { font-family: var(--font-num); font-variant-numeric: tabular-nums; }
+.sep { height:1px; background: var(--divider); }
+.vsep { width:1px; background: var(--divider); align-self: stretch; }
+
+/* Focus ring */
+.focusable:focus { outline: 2px solid var(--blue-500); outline-offset: 2px; }
+
+/* Spinner */
+@keyframes spin { to { transform: rotate(360deg); } }
+.spinner {
+  width: 14px; height: 14px;
+  border: 2px solid var(--blue-100);
+  border-top-color: var(--blue-700);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Marquee / subtle pulse */
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
+.pulse { animation: pulse 1.6s ease-in-out infinite; }
+
+/* Status ticker — seamless slow scroll */
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* Running strip */
+@keyframes stripe {
+  from { background-position: 0 0; }
+  to   { background-position: 20px 0; }
+}
+.running-strip {
+  height: 3px; width:100%;
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--blue-600) 0 8px,
+    var(--blue-300) 8px 16px
+  );
+  animation: stripe 1.2s linear infinite;
+}
+</style>
+</head>
+<body>
+<div class="stage-wrap"><div class="stage" id="stage"></div></div>
+<script>
+  function fitStage(){var s=document.getElementById('stage');if(!s)return;s.style.transform='scale('+Math.min(window.innerWidth/800,window.innerHeight/600)+')';}
+  window.addEventListener('resize',fitStage);fitStage();
+</script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin></script>
+<script type="text/babel">// Seed data & constants
+const ASSAYS = [
+  { code: 'TnI',    name: '肌钙蛋白I',   unit: 'ng/mL', ref: '0 ~ 0.04',   dilution: 'D1' },
+  { code: 'Myo',    name: '肌红蛋白',    unit: 'ng/mL', ref: '0 ~ 72',     dilution: 'D1' },
+  { code: 'CKMB',   name: '肌酸激酶MB',  unit: 'ng/mL', ref: '0 ~ 5.0',    dilution: 'D1' },
+  { code: 'NTproBNP',name: 'NT-proBNP',  unit: 'pg/mL', ref: '0 ~ 125',    dilution: 'D2' },
+  { code: 'Ddimer', name: 'D-二聚体',    unit: 'mg/L',  ref: '0 ~ 0.5',    dilution: 'D2' },
+  { code: 'CRP',    name: 'C反应蛋白',   unit: 'mg/L',  ref: '0 ~ 10',     dilution: 'D3' },
+];
+
+const SAMPLE_TYPES = ['全血', '血清', '血浆', '尿液'];
+const GENDERS = ['男', '女'];
+const AGE_UNITS = ['岁', '月', '天'];
+
+// 8 slots seeded
+const INITIAL_SLOTS = [
+  // status: empty | scheduled | running | done | error
+  { id:'S1', status:'scheduled', sampleId:'20260418001', name:'张伟',  gender:'男', age:56, ageUnit:'岁', type:'血清', assays:['TnI','Myo','CKMB'] },
+  { id:'S2', status:'scheduled', sampleId:'20260418002', name:'李娜',  gender:'女', age:42, ageUnit:'岁', type:'血清', assays:['NTproBNP'] },
+  { id:'S3', status:'done',      sampleId:'20260418003', name:'王强',  gender:'男', age:63, ageUnit:'岁', type:'血浆', assays:['Ddimer','CRP'] },
+  { id:'S4', status:'empty' },
+  { id:'S5', status:'scheduled', sampleId:'20260418004', name:'陈敏',  gender:'女', age:29, ageUnit:'岁', type:'血清', assays:['CRP'] },
+  { id:'S6', status:'empty' },
+  { id:'S7', status:'error',     sampleId:'20260418005', name:'赵磊',  gender:'男', age:71, ageUnit:'岁', type:'全血', assays:['CRP'] },
+  { id:'S8', status:'empty' },
+];
+
+// Consumables
+const INITIAL_CONSUMABLES = {
+  tips:     { name:'TIP吸头',   qty: 52,  capacity: 96, lotNo:'TIP-2603-A', expire:'2026-11' },
+  plate:    { name:'深孔板',    qty: 36,  capacity: 96, lotNo:'PLT-2603-B', expire:'2026-09' },
+  dilutions: [
+    { slot:'D1', name:'SAA',  qty: 18, capacity: 50, lotNo:'SAA-2602-11', expire:'2026-08' },
+    { slot:'D2', name:'PCT',  qty: 8,  capacity: 50, lotNo:'PCT-2602-03', expire:'2026-07' },
+    { slot:'D3', name:'hsCRP',qty: 0,  capacity: 50, lotNo:'—', expire:'—', loaded:false },
+  ],
+};
+
+// Reagent cards (inventory)
+const INITIAL_CARDS = [
+  { code:'TnI',    lot:'A2603-01', expire:'2026-09', remaining: 22 },
+  { code:'Myo',    lot:'A2603-02', expire:'2026-09', remaining: 18 },
+  { code:'CKMB',   lot:'A2603-05', expire:'2026-10', remaining: 14 },
+  { code:'NTproBNP',lot:'B2602-11', expire:'2026-08', remaining: 9 },
+  { code:'Ddimer', lot:'B2602-12', expire:'2026-08', remaining: 11 },
+  { code:'CRP',    lot:'C2603-20', expire:'2026-11', remaining: 30 },
+  { code:'PCT',    lot:'C2603-21', expire:'2026-11', remaining: 7 },
+  { code:'hsCRP',  lot:'C2603-22', expire:'2026-11', remaining: 16 },
+];
+
+// Past results (for Results tab)
+function seedResults() {
+  const samples = [
+    { id:'R001', sampleId:'20260418100', name:'刘洋',  gender:'男', age:58, type:'血清', slot:'S1', time:'2026-04-18 09:12',
+      items: [
+        { code:'TnI',  value: 0.18, unit:'ng/mL', ref:'0 ~ 0.04', concl:'阳性' },
+        { code:'Myo',  value: 112,  unit:'ng/mL', ref:'0 ~ 72',   concl:'阳性' },
+        { code:'CKMB', value: 8.6,  unit:'ng/mL', ref:'0 ~ 5.0',  concl:'阳性' },
+      ]},
+    { id:'R002', sampleId:'20260418101', name:'孙悦',  gender:'女', age:34, type:'血清', slot:'S2', time:'2026-04-18 09:38',
+      items: [
+        { code:'NTproBNP', value: 78, unit:'pg/mL', ref:'0 ~ 125', concl:'阴性' },
+      ]},
+    { id:'R003', sampleId:'20260418102', name:'周浩',  gender:'男', age:67, type:'血浆', slot:'S3', time:'2026-04-18 10:02',
+      items: [
+        { code:'Ddimer', value: 1.8, unit:'mg/L', ref:'0 ~ 0.5', concl:'阳性' },
+        { code:'CRP',    value: 42,  unit:'mg/L', ref:'0 ~ 10',  concl:'阳性' },
+      ]},
+    { id:'R004', sampleId:'20260418103', name:'钱静',  gender:'女', age:45, type:'血清', slot:'S5', time:'2026-04-18 10:41',
+      items: [
+        { code:'hsCRP', value: 2.1, unit:'mg/L', ref:'0 ~ 3.0', concl:'阴性' },
+      ]},
+    { id:'R005', sampleId:'20260418104', name:'吴迪',  gender:'男', age:52, type:'血清', slot:'S6', time:'2026-04-18 11:15',
+      items: [
+        { code:'PCT', value: 0.36, unit:'ng/mL', ref:'0 ~ 0.05', concl:'阳性' },
+        { code:'CRP', value: 68,   unit:'mg/L',  ref:'0 ~ 10',   concl:'阳性' },
+      ]},
+  ];
+  return samples;
+}
+
+// Initial alerts
+const INITIAL_ALERTS = [
+  { id:1, level:'warn',  time:'2026-04-18 08:42', code:'W-0312', msg:'稀释液D2余量低 (< 10)', handled:false },
+  { id:2, level:'info',  time:'2026-04-18 08:46', code:'I-0015', msg:'系统自检通过', handled:true },
+];
+
+// Status helpers
+const STATUS_MAP = {
+  empty:     { label:'空位',   cls:'idle' },
+  scheduled: { label:'已编排', cls:'run'  },
+  running:   { label:'检测中', cls:'run'  },
+  done:      { label:'已完成', cls:'ok'   },
+  error:     { label:'异常',   cls:'err'  },
+};
+
+Object.assign(window, {
+  ASSAYS, SAMPLE_TYPES, GENDERS, AGE_UNITS,
+  INITIAL_SLOTS, INITIAL_CONSUMABLES, INITIAL_CARDS,
+  INITIAL_ALERTS, STATUS_MAP, seedResults,
+});
+</script>
+<script type="text/babel">// Simple inline SVG icons — 16px grid
+const Icon = ({ name, size = 16, color = 'currentColor', style }) => {
+  const s = size;
+  const stroke = { stroke: color, strokeWidth: 1.6, fill: 'none', strokeLinecap:'round', strokeLinejoin:'round' };
+  const svgProps = { width: s, height: s, viewBox: '0 0 16 16', style };
+
+  switch(name) {
+    case 'play':
+      return <svg {...svgProps}><path d="M4 3 L13 8 L4 13 Z" fill={color} stroke="none" /></svg>;
+    case 'pause':
+      return <svg {...svgProps}><rect x="4" y="3" width="3" height="10" fill={color} /><rect x="9" y="3" width="3" height="10" fill={color} /></svg>;
+    case 'stop':
+      return <svg {...svgProps}><rect x="3" y="3" width="10" height="10" fill={color} /></svg>;
+    case 'alert':
+      return <svg {...svgProps}><path d="M8 2 L14 13 L2 13 Z" {...stroke} /><path d="M8 6 L8 9.5" {...stroke}/><circle cx="8" cy="11.5" r=".8" fill={color}/></svg>;
+    case 'bell':
+      return <svg {...svgProps}><path d="M4 11 h8 v-1 c-.6 -.3 -1 -1 -1 -1.8 v-2.2 a3 3 0 0 0 -6 0 v2.2 c0 .8 -.4 1.5 -1 1.8 z" {...stroke}/><path d="M7 13 a1 1 0 0 0 2 0" {...stroke}/></svg>;
+    case 'user':
+      return <svg {...svgProps}><circle cx="8" cy="6" r="2.6" {...stroke}/><path d="M3 13 c1 -2.5 3 -3.6 5 -3.6 s4 1.1 5 3.6" {...stroke}/></svg>;
+    case 'search':
+      return <svg {...svgProps}><circle cx="7" cy="7" r="4" {...stroke}/><path d="M10 10 L13.5 13.5" {...stroke}/></svg>;
+    case 'scan':
+      return <svg {...svgProps}><path d="M3 6 V4 h2 M11 4 h2 v2 M3 10 v2 h2 M13 10 v2 h-2" {...stroke}/><path d="M2.5 8 H13.5" {...stroke}/></svg>;
+    case 'add':
+      return <svg {...svgProps}><path d="M8 3 V13 M3 8 H13" {...stroke}/></svg>;
+    case 'minus':
+      return <svg {...svgProps}><path d="M3 8 H13" {...stroke}/></svg>;
+    case 'close':
+      return <svg {...svgProps}><path d="M4 4 L12 12 M12 4 L4 12" {...stroke}/></svg>;
+    case 'edit':
+      return <svg {...svgProps}><path d="M3 13 L3 11 L10 4 L12 6 L5 13 Z" {...stroke}/></svg>;
+    case 'trash':
+      return <svg {...svgProps}><path d="M3 4 H13 M5 4 V3 H11 V4 M4 4 L5 13 H11 L12 4" {...stroke}/></svg>;
+    case 'print':
+      return <svg {...svgProps}><path d="M4 6 V3 H12 V6 M4 10 H3 V6 H13 V10 H12 M5 10 H11 V13 H5 Z" {...stroke}/></svg>;
+    case 'export':
+      return <svg {...svgProps}><path d="M3 13 H13 M8 3 V10 M5 7 L8 10 L11 7" {...stroke}/></svg>;
+    case 'check':
+      return <svg {...svgProps}><path d="M3 8.5 L6.5 12 L13 4.5" {...stroke} strokeWidth="2"/></svg>;
+    case 'card':
+      return <svg {...svgProps}><rect x="2" y="4" width="12" height="8" rx="1" {...stroke}/><path d="M2 7 H14" {...stroke}/></svg>;
+    case 'tip':
+      return <svg {...svgProps}><path d="M6 2 H10 V6 L8 13 L6 6 Z" {...stroke}/></svg>;
+    case 'plate':
+      return <svg {...svgProps}><rect x="2" y="3" width="12" height="10" rx="1" {...stroke}/><circle cx="5" cy="6" r=".7" fill={color}/><circle cx="8" cy="6" r=".7" fill={color}/><circle cx="11" cy="6" r=".7" fill={color}/><circle cx="5" cy="10" r=".7" fill={color}/><circle cx="8" cy="10" r=".7" fill={color}/><circle cx="11" cy="10" r=".7" fill={color}/></svg>;
+    case 'flask':
+      return <svg {...svgProps}><path d="M6 2 H10 V6 L13 12 a1 1 0 0 1 -1 1 H4 a1 1 0 0 1 -1 -1 L6 6 Z" {...stroke}/></svg>;
+    case 'therm':
+      return <svg {...svgProps}><path d="M8 2 a2 2 0 0 1 2 2 V9 a3 3 0 1 1 -4 0 V4 a2 2 0 0 1 2 -2 Z" {...stroke}/></svg>;
+    case 'chart':
+      return <svg {...svgProps}><path d="M2 12 L6 8 L9 10 L14 4" {...stroke}/></svg>;
+    case 'settings':
+      return <svg {...svgProps}><circle cx="8" cy="8" r="2" {...stroke}/><path d="M8 2 V4 M8 12 V14 M2 8 H4 M12 8 H14 M3.5 3.5 L5 5 M11 11 L12.5 12.5 M12.5 3.5 L11 5 M5 11 L3.5 12.5" {...stroke}/></svg>;
+    case 'flask-small':
+      return <svg {...svgProps}><path d="M7 2 H9 V5 L12 12 H4 L7 5 Z" {...stroke}/></svg>;
+    case 'arrow-right':
+      return <svg {...svgProps}><path d="M4 8 H12 M9 5 L12 8 L9 11" {...stroke}/></svg>;
+    case 'chevron-down':
+      return <svg {...svgProps}><path d="M4 6 L8 10 L12 6" {...stroke}/></svg>;
+    case 'chevron-up':
+      return <svg {...svgProps}><path d="M4 10 L8 6 L12 10" {...stroke}/></svg>;
+    case 'chevron-right':
+      return <svg {...svgProps}><path d="M6 4 L10 8 L6 12" {...stroke}/></svg>;
+    case 'reset':
+      return <svg {...svgProps}><path d="M3 8 a5 5 0 1 1 1.5 3.5" {...stroke}/><path d="M3 4 V8 H7" {...stroke}/></svg>;
+    case 'refresh':
+      return <svg {...svgProps}><path d="M3 8 a5 5 0 1 1 1.5 3.5 M3 4 V8 H7" {...stroke}/></svg>;
+    case 'dot':
+      return <svg {...svgProps}><circle cx="8" cy="8" r="3" fill={color}/></svg>;
+    default: return null;
+  }
+};
+
+window.Icon = Icon;
+</script>
+<script type="text/babel">// Virtual on-screen keyboard — numeric + full QWERTY + Chinese-friendly (ASCII)
+const KB_LAYOUTS = {
+  num: [
+    ['1','2','3'],
+    ['4','5','6'],
+    ['7','8','9'],
+    ['-','0','.'],
+  ],
+  abc: [
+    ['1','2','3','4','5','6','7','8','9','0'],
+    ['q','w','e','r','t','y','u','i','o','p'],
+    ['a','s','d','f','g','h','j','k','l'],
+    ['shift','z','x','c','v','b','n','m','back'],
+  ],
+};
+
+const Keyboard = ({ mode = 'abc', target, onInput, onClose, value }) => {
+  const [shift, setShift] = React.useState(false);
+  const layout = mode === 'num' ? KB_LAYOUTS.num : KB_LAYOUTS.abc;
+
+  const press = (key) => {
+    if (key === 'shift') { setShift(s => !s); return; }
+    if (key === 'back')  { onInput('__back'); return; }
+    if (key === 'space') { onInput(' '); return; }
+    onInput(shift && key.length === 1 ? key.toUpperCase() : key);
+  };
+
+  // Position: fixed within 800x600 stage (bottom sheet)
+  const isNum = mode === 'num';
+  const w = isNum ? 260 : 640;
+  const h = isNum ? 220 : 220;
+
+  return (
+    <div style={{
+      position:'absolute',
+      left: isNum ? 'auto' : (800 - w) / 2,
+      right: isNum ? 10 : 'auto',
+      bottom: 68,
+      width: w,
+      background:'#fff',
+      border: '1px solid var(--border-strong)',
+      borderRadius: 8,
+      boxShadow: '0 8px 24px rgba(15,28,43,.25)',
+      zIndex: 80,
+      padding: 8,
+    }}>
+      <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', padding:'2px 6px 6px'}}>
+        <div style={{fontSize:11, color:'var(--ink-500)'}}>
+          <Icon name="edit" size={11}/> 输入: <span className="mono" style={{color:'var(--ink-800)'}}>{value || '—'}</span>
+        </div>
+        <div style={{display:'flex', gap:4}}>
+          <button className="btn sm" onClick={() => onInput('__clear')}>清空</button>
+          <button className="btn sm" onClick={onClose}><Icon name="close" size={12}/> 关闭</button>
+        </div>
+      </div>
+      <div style={{display:'flex', flexDirection:'column', gap:4}}>
+        {layout.map((row, r) => (
+          <div key={r} style={{display:'flex', gap:4, justifyContent:'center'}}>
+            {row.map(k => {
+              const isSpecial = k === 'shift' || k === 'back';
+              return (
+                <button
+                  key={k}
+                  onClick={() => press(k)}
+                  style={{
+                    flex: isSpecial ? '0 0 60px' : '1 1 0',
+                    height: 36,
+                    minWidth: 36,
+                    border: '1px solid var(--border-strong)',
+                    background: k === 'shift' && shift ? 'var(--blue-100)' : '#fff',
+                    borderRadius: 4,
+                    fontSize: 14,
+                    fontFamily: 'var(--font-num)',
+                    color: 'var(--ink-800)',
+                    cursor: 'pointer',
+                  }}
+                >
+                  {k === 'shift' ? '⇧' : k === 'back' ? '⌫' : (shift && k.length===1 ? k.toUpperCase() : k)}
+                </button>
+              );
+            })}
+          </div>
+        ))}
+        {!isNum && (
+          <div style={{display:'flex', gap:4, justifyContent:'center'}}>
+            <button onClick={() => press('space')} style={{flex:'1 1 0', height:36, border:'1px solid var(--border-strong)', borderRadius:4, background:'#fff', fontSize:12}}>空格</button>
+            <button onClick={() => onInput('__enter')} style={{flex:'0 0 80px', height:36, border:'1px solid var(--blue-700)', borderRadius:4, background:'var(--blue-700)', color:'#fff', fontSize:12, fontWeight:600}}>确认</button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+window.Keyboard = Keyboard;
+</script>
+<script type="text/babel">// Login screen
+const Login = ({ onLogin }) => {
+  const [user, setUser] = React.useState('admin');
+  const [pwd, setPwd]   = React.useState('123456');
+  const [remember, setRemember] = React.useState(true);
+  const [autoLogin, setAutoLogin] = React.useState(false);
+  const [err, setErr] = React.useState('');
+
+  const submit = () => {
+    if (!user || !pwd) { setErr('请输入用户名和密码'); return; }
+    onLogin({ user });
+  };
+
+  return (
+    <div style={{
+      position:'absolute', inset:0,
+      background:'linear-gradient(135deg, #0B3C66 0%, #1464A5 60%, #2E86C1 100%)',
+      display:'flex', alignItems:'center', justifyContent:'center',
+    }}>
+      {/* decorative watermark grid */}
+      <svg width="800" height="600" style={{position:'absolute', inset:0, opacity:.08, pointerEvents:'none'}}>
+        <defs><pattern id="g" width="40" height="40" patternUnits="userSpaceOnUse">
+          <path d="M40 0 L0 0 L0 40" stroke="#fff" strokeWidth=".6" fill="none"/>
+        </pattern></defs>
+        <rect width="800" height="600" fill="url(#g)"/>
+      </svg>
+
+      {/* centered panel */}
+      <div style={{
+        width:340, background:'#fff', borderRadius:10, padding:'32px 32px 24px',
+        boxShadow:'0 24px 60px rgba(0,0,0,.25)', position:'relative', zIndex:1,
+      }}>
+        <div style={{
+          fontSize:20, fontWeight:600, color:'#0F1C2B',
+          textAlign:'center', letterSpacing:1, marginBottom:28,
+        }}>全自动荧光免疫分析仪</div>
+        <div style={{fontSize:15, fontWeight:600, color:'#0F1C2B', marginBottom:18}}>用户登录</div>
+
+        <div className="field" style={{marginBottom:12}}>
+          <label>用户名</label>
+          <input className="input" value={user} onChange={e => setUser(e.target.value)} />
+        </div>
+        <div className="field" style={{marginBottom:16}}>
+          <label>密码</label>
+          <input className="input" type="password" value={pwd} onChange={e => setPwd(e.target.value)} />
+        </div>
+
+        <div style={{display:'flex', gap:14, marginBottom:18, fontSize:12, color:'#334155'}}>
+          <label style={{display:'flex', gap:6, alignItems:'center', cursor:'pointer'}}>
+            <span className={'ck' + (remember?' on':'')} onClick={() => setRemember(!remember)}/>
+            记住密码
+          </label>
+          <label style={{display:'flex', gap:6, alignItems:'center', cursor:'pointer'}}>
+            <span className={'ck' + (autoLogin?' on':'')} onClick={() => setAutoLogin(!autoLogin)}/>
+            自动登录
+          </label>
+        </div>
+
+        {err && <div style={{color:'var(--err)', fontSize:12, marginBottom:10}}>{err}</div>}
+
+        <button className="btn primary lg" style={{width:'100%'}} onClick={submit}>登 录</button>
+      </div>
+    </div>
+  );
+};
+
+window.Login = Login;
+</script>
+<script type="text/babel">// Top bar: tabs (left) + status strip (right) — single 44px row
+const useClock = () => {
+  const [t, setT] = React.useState(() => new Date());
+  React.useEffect(() => {
+    const id = setInterval(() => setT(new Date()), 1000);
+    return () => clearInterval(id);
+  }, []);
+  const p = n => String(n).padStart(2, '0');
+  // Time only — no date, no username
+  return `${p(t.getHours())}:${p(t.getMinutes())}:${p(t.getSeconds())}`;
+};
+
+const TopBar = ({ tab, onTab, device, temp, alerts, onAlerts, message }) => {
+  const time = useClock();
+  const unhandled = alerts.filter(a => !a.handled).length;
+
+  const Tab = ({ id, label, icon, disabled }) => {
+    const active = tab === id;
+    return (
+      <button
+        disabled={disabled}
+        onClick={() => !disabled && onTab(id)}
+        style={{
+          height: 44, padding: '0 16px',
+          border: 'none', outline: 'none',
+          background: active ? 'rgba(255,255,255,0.95)' : 'transparent',
+          color: disabled ? 'rgba(255,255,255,0.35)'
+               : active   ? 'var(--blue-700)'
+               :             'rgba(255,255,255,0.88)',
+          fontSize: 13, fontWeight: active ? 700 : 500,
+          cursor: disabled ? 'not-allowed' : 'pointer',
+          display: 'flex', alignItems: 'center', gap: 5,
+          borderRight: '1px solid rgba(255,255,255,0.12)',
+          flexShrink: 0,
+          transition: 'background .15s, color .15s',
+        }}
+      >
+        <Icon name={icon} size={13}/>
+        {label}
+      </button>
+    );
+  };
+
+  const deviceMap = {
+    idle:    { label:'待机',   color:'#A5B0BC' },
+    running: { label:'运行中', color:'#4CAF50' },
+    paused:  { label:'暂停',   color:'#E8A33D' },
+    error:   { label:'报警',   color:'#E74C3C' },
+  };
+  const dev = deviceMap[device] || deviceMap.idle;
+
+  return (
+    <div style={{
+      height: 44, flexShrink: 0,
+      background: 'linear-gradient(180deg, #0F4E85 0%, #1464A5 100%)',
+      display: 'flex', alignItems: 'stretch',
+      boxShadow: '0 2px 8px rgba(0,0,0,.18)',
+      position: 'relative', overflow: 'hidden',
+    }}>
+
+      {/* ── Left: Tab area ── */}
+      <div style={{ display: 'flex', alignItems: 'stretch', flexShrink: 0 }}>
+        <Tab id="detect"      label="检测" icon="flask-small" />
+        <Tab id="results"     label="结果" icon="chart" />
+        <Tab id="consumables" label="耗材" icon="plate" />
+        <Tab id="settings"    label="设置" icon="settings" disabled />
+      </div>
+
+      {/* ── Divider ── */}
+      <div style={{
+        width: 1,
+        background: 'rgba(255,255,255,0.22)',
+        margin: '7px 0',
+        flexShrink: 0,
+      }}/>
+
+      {/* ── Right: Status strip (B方案 dark overlay) ── */}
+      <div style={{
+        flex: 1, minWidth: 0,
+        background: 'rgba(0,0,0,0.20)',
+        display: 'flex', alignItems: 'center',
+        padding: '0 12px', gap: 0,
+        fontSize: 11, color: '#fff',
+        overflow: 'hidden',
+      }}>
+
+        {/* Left spacer — 1/4 of flexible space, creates breathing room from tabs */}
+        <div style={{flex:1}}/>
+
+        {/* Device status */}
+        <div style={{ display:'flex', alignItems:'center', gap:5, flexShrink:0, padding:'0 10px 0 0' }}>
+          <span style={{
+            width:7, height:7, borderRadius:'50%',
+            background: dev.color,
+            boxShadow: device==='running' ? '0 0 7px '+dev.color : 'none',
+            flexShrink: 0,
+          }} className={device==='running' ? 'pulse' : ''}/>
+          <span style={{fontWeight:600, letterSpacing:.3}}>{dev.label}</span>
+        </div>
+
+        <span style={{opacity:.25, flexShrink:0}}>|</span>
+
+        {/* Static ticker message — flex:3 = 3/4 of flexible space */}
+        <div style={{
+          flex: 3, minWidth: 0,
+          overflow: 'hidden',
+          padding: '0 10px',
+          display: 'flex', alignItems: 'center', gap: 5,
+        }}>
+          {message && (
+            <>
+              <span style={{
+                width:6, height:6, borderRadius:'50%',
+                background:'#8FD1A0', flexShrink:0,
+              }} className="pulse"/>
+              <span style={{
+                fontSize:11, color:'rgba(255,255,255,0.82)',
+                whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis',
+              }}>{message}</span>
+            </>
+          )}
+        </div>
+
+        <span style={{opacity:.25, flexShrink:0}}>|</span>
+
+        {/* Alarm — icon only, no background, small top-right badge */}
+        <div
+          onClick={onAlerts}
+          style={{
+            position:'relative',
+            display:'flex', alignItems:'center', justifyContent:'center',
+            cursor:'pointer', flexShrink:0,
+            width:28, height:28,
+          }}
+        >
+          <Icon name="bell" size={17}/>
+          {unhandled > 0 && (
+            <span style={{
+              position:'absolute', top:2, right:2,
+              minWidth:13, height:13, borderRadius:7,
+              background:'#E74C3C', color:'#fff',
+              fontSize:9, fontWeight:800,
+              display:'flex', alignItems:'center', justifyContent:'center',
+              lineHeight:1,
+              boxShadow:'0 0 0 1.5px #1464A5',
+            }}>{unhandled}</span>
+          )}
+        </div>
+
+        <span style={{opacity:.25, flexShrink:0}}>|</span>
+
+        {/* Temperature */}
+        <div style={{ display:'flex', alignItems:'center', gap:4, flexShrink:0, padding:'0 10px' }}>
+          <Icon name="therm" size={11}/>
+          <span className="mono">{temp.toFixed(1)}°C</span>
+        </div>
+
+        <span style={{opacity:.25, flexShrink:0}}>|</span>
+
+        {/* Time only */}
+        <span className="mono" style={{ flexShrink:0, padding:'0 0 0 10px', opacity:.95, letterSpacing:.5 }}>
+          {time}
+        </span>
+      </div>
+
+      {/* Running strip at bottom */}
+      {device === 'running' && (
+        <div className="running-strip" style={{position:'absolute', left:0, right:0, bottom:0}}/>
+      )}
+    </div>
+  );
+};
+
+window.TopBar = TopBar;
+</script>
+<script type="text/babel">// Bottom bar: compact read-only consumables + prominent card button + device controls
+const BottomBar = ({
+  consumables, device, onStart, onPause,
+  scheduledCount, pendingCardCount, onAddCard
+}) => {
+  const canStart = device === 'idle' || device === 'paused';
+  const canPause = device === 'running';
+
+  const Chip = ({ icon, qty, capacity, label, warn, crit }) => {
+    const color = crit ? '#C0392B' : warn ? '#D08419' : '#2E8B57';
+    return (
+      <div style={{
+        display:'flex', alignItems:'center', gap:5,
+        padding:'0 8px', height:38,
+        background:'#fff', border:'1px solid var(--border)', borderRadius:4,
+      }}>
+        <Icon name={icon} size={14} color={color}/>
+        <span style={{fontSize:10, color:'var(--ink-500)'}}>{label}</span>
+        <span className="mono" style={{fontSize:13, fontWeight:700, color}}>
+          {qty}<span style={{fontSize:9, fontWeight:400, color:'var(--ink-400)'}}>/{capacity}</span>
+        </span>
+      </div>
+    );
+  };
+
+  const DChip = ({ d }) => {
+    const loaded = d.loaded !== false;
+    const pct = loaded && d.capacity > 0 ? Math.max(0, Math.min(1, d.qty / d.capacity)) : 0;
+    const state = !loaded ? 'unloaded'
+      : pct < 0.12 ? 'crit'
+      : pct < 0.25 ? 'warn'
+      : 'ok';
+    const color = {
+      unloaded: '#C5CCD4',
+      crit:     '#E0574B',
+      warn:     '#E8A33D',
+      ok:       '#4CAF50',
+    }[state];
+    const trackColor = loaded ? '#E6EAEF' : '#EEF0F3';
+
+    const R = 10, C = 2 * Math.PI * R;
+    const dash = loaded ? C * pct : 0;
+
+    return (
+      <div style={{
+        display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center',
+        width:46, height:38, gap:1,
+        background: loaded ? '#fff' : '#F5F6F8',
+        border:'1px solid ' + (loaded ? 'var(--border)' : '#E0E3E7'),
+        borderRadius:4,
+      }} title={loaded ? `${d.name}  ${d.qty}/${d.capacity}` : `${d.name} 未装载`}>
+        <svg width="22" height="22" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r={R} fill="none" stroke={trackColor} strokeWidth="2.5"/>
+          {loaded ? (
+            <circle cx="12" cy="12" r={R} fill="none"
+              stroke={color} strokeWidth="2.5" strokeLinecap="round"
+              strokeDasharray={`${dash} ${C}`}
+              transform="rotate(-90 12 12)"/>
+          ) : (
+            <circle cx="12" cy="12" r={R} fill="none"
+              stroke="#C5CCD4" strokeWidth="1" strokeDasharray="2 2.5"/>
+          )}
+          {state === 'unloaded' && (
+            <text x="12" y="15" textAnchor="middle" fontSize="8" fill="#9AA4B0" fontWeight="700">—</text>
+          )}
+          {state === 'crit' && (
+            <g>
+              <path d="M12 8 V13" stroke={color} strokeWidth="1.8" strokeLinecap="round"/>
+              <circle cx="12" cy="15.4" r="1" fill={color}/>
+            </g>
+          )}
+          {(state === 'ok' || state === 'warn') && (
+            <circle cx="12" cy="12" r="1.8" fill={color}/>
+          )}
+        </svg>
+        <span style={{fontSize:9, fontWeight:700, color: loaded ? 'var(--ink-700)' : 'var(--ink-400)', lineHeight:1, letterSpacing:.3}}>
+          {d.name}
+        </span>
+      </div>
+    );
+  };
+
+  return (
+    <div style={{
+      height: 56,
+      background: 'var(--surface-alt)',
+      borderTop:'1px solid var(--border)',
+      padding:'8px 10px',
+      display:'flex', alignItems:'center', gap:6,
+    }}>
+      <Chip icon="tip" label="吸头"
+        qty={consumables.tips.qty} capacity={consumables.tips.capacity}
+        warn={consumables.tips.qty<20} crit={consumables.tips.qty<10}/>
+      <Chip icon="plate" label="混匀板"
+        qty={consumables.plate.qty} capacity={consumables.plate.capacity}
+        warn={consumables.plate.qty<20} crit={consumables.plate.qty<10}/>
+      {consumables.dilutions.map(d => <DChip key={d.slot} d={d}/>)}
+
+      <div className="vsep" style={{height:28, margin:'0 6px'}}/>
+
+      {/* Card queue — prominent */}
+      <div onClick={onAddCard} style={{
+        display:'flex', alignItems:'center', gap:8,
+        padding:'0 14px', height:40,
+        background: pendingCardCount>0 ? 'var(--warn-bg)' : '#fff',
+        border:'1.5px solid '+(pendingCardCount>0 ? '#D08419' : 'var(--border-strong)'),
+        borderRadius:5, cursor:'pointer',
+      }}>
+        <Icon name="card" size={18} color={pendingCardCount>0?'#8A5A10':'var(--blue-700)'}/>
+        <span style={{fontSize:12, color:'var(--ink-700)', fontWeight:500}}>待加卡</span>
+        <span className="mono" style={{fontSize:18, fontWeight:800,
+          color: pendingCardCount>0 ? '#8A5A10' : 'var(--ink-800)'}}>{pendingCardCount}</span>
+        <span style={{
+          fontSize:13, padding:'6px 14px', background:'var(--blue-700)',
+          color:'#fff', borderRadius:4, fontWeight:700, marginLeft:4,
+        }}>加 卡</span>
+      </div>
+
+      <div style={{flex:1}}/>
+
+      {/* Device controls */}
+      <button className={'btn ' + (canStart ? 'success' : '')}
+        disabled={!canStart || scheduledCount===0} onClick={onStart}
+        style={{height:40, minWidth:96}}>
+        <Icon name="play" size={13} color="currentColor"/> 启动检测
+      </button>
+      <button className={'btn ' + (canPause ? 'warn' : '')}
+        disabled={!canPause} onClick={onPause}
+        style={{height:40, minWidth:68}}>
+        <Icon name="pause" size={11} color="currentColor"/> 暂停
+      </button>
+    </div>
+  );
+};
+
+window.BottomBar = BottomBar;
+</script>
+<script type="text/babel">// Sample application form
+const SampleForm = ({ slot, onSubmit, onCancel, onKeyboard, keyboardTarget, initial, nextSeq }) => {
+  const [form, setForm] = React.useState(() => ({
+    sampleId: initial?.sampleId || '',
+    name:     initial?.name || '',
+    gender:   initial?.gender || '男',
+    age:      initial?.age || '',
+    ageUnit:  initial?.ageUnit || '岁',
+    type:     initial?.type || '血清',
+    assays:   initial?.assays || [],
+    assayCfg: initial?.assayCfg || {}, // { [code]: { repeat:1, dilution:1 } }
+  }));
+  const [expanded, setExpanded] = React.useState(null); // assay code currently expanded
+
+  const update = (k, v) => setForm(f => ({...f, [k]: v}));
+  const toggleAssay = (code) => {
+    setForm(f => {
+      const on = f.assays.includes(code);
+      const assays = on ? f.assays.filter(c => c!==code) : [...f.assays, code];
+      const assayCfg = {...f.assayCfg};
+      if (!on && !assayCfg[code]) assayCfg[code] = { repeat: 1, dilution: 1 };
+      return {...f, assays, assayCfg};
+    });
+  };
+  const updateCfg = (code, key, val) => {
+    setForm(f => ({
+      ...f,
+      assayCfg: {...f.assayCfg, [code]: {...(f.assayCfg[code] || {repeat:1, dilution:1}), [key]: val}}
+    }));
+  };
+
+  const valid = form.sampleId && form.name && form.assays.length > 0;
+  const seq = String(nextSeq || 1).padStart(3, '0');
+
+  React.useEffect(() => {
+    window.__sampleFormSetValue = (key, val) => update(key, val);
+    return () => { delete window.__sampleFormSetValue; };
+  }, []);
+
+  const FieldLabel = ({ children, required }) => (
+    <label style={{fontSize:11, color:'var(--ink-500)', fontWeight:500}}>
+      {children}{required && <span style={{color:'var(--err)', marginLeft:2}}>*</span>}
+    </label>
+  );
+
+  const REPEATS = [1, 2, 3];
+  const DILUTIONS = [1, 5, 10, 50, 100];
+
+  return (
+    <div style={{height:'100%', display:'flex', flexDirection:'column', background:'#fff'}}>
+      <div style={{
+        padding: '10px 14px',
+        borderBottom:'1px solid var(--divider)',
+        background:'var(--surface-alt)',
+        display:'flex', alignItems:'center', justifyContent:'space-between',
+      }}>
+        <div style={{fontSize:13, fontWeight:600}}>
+          <Icon name="edit" size={13}/> 样本申请
+          <span style={{marginLeft:10, fontSize:11, color:'var(--ink-500)', fontWeight:400}}>
+            位置：<span className="mono" style={{color:'var(--blue-700)', fontWeight:600}}>{slot?.id || '—'}</span>
+            {' · '}编号：<span className="mono" style={{color:'var(--blue-700)', fontWeight:600}}>{seq}</span>
+          </span>
+        </div>
+      </div>
+
+      <div className="scroll" style={{flex:1, padding:'10px 14px'}}>
+        {/* Row 1: sample ID + name */}
+        <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:10, marginBottom:10}}>
+          <div className="field">
+            <FieldLabel required>样本ID</FieldLabel>
+            <div style={{display:'flex', gap:4}}>
+              <input className={'input' + (keyboardTarget==='sampleId' ? ' focus' : '')}
+                style={{flex:1}}
+                value={form.sampleId}
+                readOnly
+                onClick={() => onKeyboard('sampleId', form.sampleId)}
+                placeholder="点击输入或扫码"/>
+              <button className="btn sm" onClick={() => update('sampleId', '2026041810' + Math.floor(Math.random()*900+100))}>
+                <Icon name="scan" size={12}/> 扫码
+              </button>
+            </div>
+          </div>
+          <div className="field">
+            <FieldLabel required>姓名</FieldLabel>
+            <input className={'input' + (keyboardTarget==='name' ? ' focus' : '')}
+              value={form.name}
+              readOnly
+              onClick={() => onKeyboard('name', form.name)}
+              placeholder="点击输入"/>
+          </div>
+        </div>
+
+        {/* Row 2: gender / age / type — inline */}
+        <div style={{display:'grid', gridTemplateColumns:'auto 1fr auto', gap:10, marginBottom:10, alignItems:'end'}}>
+          <div className="field" style={{minWidth:120}}>
+            <FieldLabel>性别</FieldLabel>
+            <div style={{display:'flex', gap:4}}>
+              {GENDERS.map(g => (
+                <button key={g}
+                  onClick={() => update('gender', g)}
+                  style={{
+                    width:44, height:30,
+                    border:'1px solid ' + (form.gender===g ? 'var(--blue-700)' : 'var(--border-strong)'),
+                    background: form.gender===g ? 'var(--blue-100)' : '#fff',
+                    color: form.gender===g ? 'var(--blue-700)' : 'var(--ink-800)',
+                    borderRadius:4, fontSize:12, fontWeight: form.gender===g ? 600 : 400,
+                    cursor:'pointer',
+                  }}>{g}</button>
+              ))}
+            </div>
+          </div>
+          <div className="field">
+            <FieldLabel>年龄</FieldLabel>
+            <div style={{display:'flex', gap:4}}>
+              <input className={'input mono' + (keyboardTarget==='age' ? ' focus' : '')}
+                style={{flex:1}}
+                value={form.age}
+                readOnly
+                onClick={() => onKeyboard('age', String(form.age))}
+                placeholder="—"/>
+              <select className="input" style={{width:56}} value={form.ageUnit} onChange={e => update('ageUnit', e.target.value)}>
+                {AGE_UNITS.map(u => <option key={u}>{u}</option>)}
+              </select>
+            </div>
+          </div>
+          <div className="field">
+            <FieldLabel>样本类型</FieldLabel>
+            <div style={{display:'flex', gap:3}}>
+              {SAMPLE_TYPES.map(t => (
+                <button key={t}
+                  onClick={() => update('type', t)}
+                  style={{
+                    width:44, height:30,
+                    border:'1px solid ' + (form.type===t ? 'var(--blue-700)' : 'var(--border-strong)'),
+                    background: form.type===t ? 'var(--blue-100)' : '#fff',
+                    color: form.type===t ? 'var(--blue-700)' : 'var(--ink-700)',
+                    borderRadius:4, fontSize:11, fontWeight: form.type===t ? 600 : 400,
+                    cursor:'pointer', padding:0,
+                  }}>{t}</button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Assays — 3x2 grid */}
+        <div className="field">
+          <FieldLabel required>检测项目 <span style={{color:'var(--ink-400)', fontWeight:400}}>（已选 {form.assays.length}）</span></FieldLabel>
+          <div style={{display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:5, marginTop:3}}>
+            {ASSAYS.map(a => {
+              const on = form.assays.includes(a.code);
+              const isExp = expanded === a.code;
+              const cfg = form.assayCfg[a.code] || { repeat:1, dilution:1 };
+              return (
+                <div key={a.code} style={{
+                  gridColumn: isExp ? 'span 3' : 'span 1',
+                  border:'1px solid ' + (on ? 'var(--blue-700)' : 'var(--border)'),
+                  background: on ? 'var(--blue-050, #EEF5FB)' : '#fff',
+                  borderRadius:4,
+                  transition:'all .15s',
+                }}>
+                  <div
+                    onClick={() => toggleAssay(a.code)}
+                    style={{
+                      padding:'6px 8px',
+                      cursor:'pointer',
+                      display:'flex', alignItems:'center', gap:6,
+                      minHeight: 44,
+                    }}>
+                    <span className={'ck' + (on ? ' on' : '')} style={{width:14, height:14, flexShrink:0}}/>
+                    <div style={{flex:1, minWidth:0}}>
+                      <div style={{fontSize:12, fontWeight:600, color: on?'var(--blue-700)':'var(--ink-800)', lineHeight:1.2}}>{a.code}</div>
+                      <div style={{fontSize:10, color:'var(--ink-500)', lineHeight:1.2, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap'}}>{a.name}</div>
+                    </div>
+                    {on && (
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setExpanded(isExp ? null : a.code); }}
+                        style={{
+                          border:'none', background:'transparent', cursor:'pointer',
+                          padding:2, display:'grid', placeItems:'center',
+                          color:'var(--blue-700)',
+                        }}
+                        title="配置重复次数与稀释倍数">
+                        <Icon name={isExp ? 'chevron-up' : 'chevron-down'} size={12} color="currentColor"/>
+                      </button>
+                    )}
+                  </div>
+
+                  {on && isExp && (
+                    <div style={{
+                      padding:'8px 12px 10px',
+                      borderTop:'1px dashed var(--blue-100, #B8D2EB)',
+                      display:'flex', gap:20, alignItems:'center', flexWrap:'wrap',
+                    }}>
+                      <div style={{display:'flex', alignItems:'center', gap:8}}>
+                        <span style={{fontSize:11, color:'var(--ink-600)', fontWeight:500}}>重复次数</span>
+                        <div style={{display:'flex', gap:2}}>
+                          {REPEATS.map(r => (
+                            <button key={r}
+                              onClick={() => updateCfg(a.code, 'repeat', r)}
+                              style={{
+                                width:30, height:26,
+                                border:'1px solid ' + (cfg.repeat===r ? 'var(--blue-700)' : 'var(--border-strong)'),
+                                background: cfg.repeat===r ? 'var(--blue-700)' : '#fff',
+                                color: cfg.repeat===r ? '#fff' : 'var(--ink-700)',
+                                borderRadius:3, fontSize:11, fontWeight:600,
+                                cursor:'pointer', padding:0,
+                              }}>{r}</button>
+                          ))}
+                        </div>
+                      </div>
+                      <div style={{display:'flex', alignItems:'center', gap:8}}>
+                        <span style={{fontSize:11, color:'var(--ink-600)', fontWeight:500}}>稀释倍数</span>
+                        <div style={{display:'flex', gap:2}}>
+                          {DILUTIONS.map(d => (
+                            <button key={d}
+                              onClick={() => updateCfg(a.code, 'dilution', d)}
+                              style={{
+                                minWidth:38, height:26, padding:'0 6px',
+                                border:'1px solid ' + (cfg.dilution===d ? 'var(--blue-700)' : 'var(--border-strong)'),
+                                background: cfg.dilution===d ? 'var(--blue-700)' : '#fff',
+                                color: cfg.dilution===d ? '#fff' : 'var(--ink-700)',
+                                borderRadius:3, fontSize:11, fontWeight:600,
+                                cursor:'pointer',
+                              }}>{d===1 ? '原液' : d+'×'}</button>
+                          ))}
+                        </div>
+                      </div>
+                      <div style={{flex:1}}/>
+                      <div style={{fontSize:10, color:'var(--ink-500)'}}>
+                        参考区间 <span className="mono">{a.ref}</span> {a.unit}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      <div style={{
+        padding:'8px 14px',
+        borderTop:'1px solid var(--divider)',
+        background:'var(--surface-alt)',
+        display:'flex', justifyContent:'flex-end', gap:8,
+      }}>
+        <button className="btn" onClick={onCancel}>取消</button>
+        <button className="btn primary" disabled={!valid} onClick={() => onSubmit(form)}>
+          <Icon name="check" size={12}/> 提交申请
+        </button>
+      </div>
+    </div>
+  );
+};
+
+window.SampleForm = SampleForm;
+</script>
+<script type="text/babel">// Sample list — flex rows, always 8 slots, fills all available height
+const SampleList = ({ slots, selected, onSelect, onSelectAll, onEdit, onDelete }) => {
+  const visible = slots.filter(s => s.status !== 'empty');
+  const allSelected = visible.length > 0 && visible.every(s => selected.includes(s.id));
+
+  // Column widths (px) — keep consistent between header and rows
+  const COL = { seq:42, id:108, name:52, gender:36, type:40, pos:40, assay:'auto', status:70 };
+
+  const Cell = ({ w, style, children }) => (
+    <div style={{
+      width: w === 'auto' ? undefined : w,
+      flex: w === 'auto' ? 1 : undefined,
+      flexShrink: w === 'auto' ? 1 : 0,
+      padding: '0 8px',
+      display: 'flex', alignItems: 'center',
+      ...style,
+    }}>{children}</div>
+  );
+
+  return (
+    <div style={{height:'100%', display:'flex', flexDirection:'column', background:'#fff'}}>
+
+      {/* ── Toolbar ── */}
+      <div style={{
+        padding:'8px 12px', borderBottom:'1px solid var(--divider)',
+        background:'var(--surface-alt)', flexShrink:0,
+        display:'flex', alignItems:'center', justifyContent:'space-between',
+      }}>
+        <div style={{fontSize:13, fontWeight:600}}>
+          <Icon name="flask-small" size={13}/> 样本编排列表
+          <span style={{marginLeft:10, fontSize:11, color:'var(--ink-500)', fontWeight:400}}>
+            共 <b style={{color:'var(--ink-800)'}}>{visible.length}</b> 个样本
+            {selected.length > 0 && <span> · 已选 <b style={{color:'var(--blue-700)'}}>{selected.length}</b></span>}
+          </span>
+        </div>
+        <div style={{display:'flex', gap:6}}>
+          <button className="btn sm" disabled={selected.length !== 1} onClick={onEdit}>
+            <Icon name="edit" size={11}/> 编辑
+          </button>
+          <button className="btn sm" disabled={selected.length === 0} onClick={onDelete}>
+            <Icon name="trash" size={11}/> 删除{selected.length > 0 && `(${selected.length})`}
+          </button>
+          <button className="btn sm primary" onClick={() => onSelectAll(!allSelected)}>
+            {allSelected ? '取消全选' : '全选'}
+          </button>
+        </div>
+      </div>
+
+      {/* ── Column header ── */}
+      <div style={{
+        display:'flex', alignItems:'center',
+        background:'var(--surface-alt)',
+        borderBottom:'1px solid var(--divider)',
+        flexShrink:0, height:28,
+        fontSize:11, fontWeight:600, color:'var(--ink-700)',
+      }}>
+        <Cell w={COL.seq}>编号</Cell>
+        <Cell w={COL.id}>样本ID</Cell>
+        <Cell w={COL.name}>姓名</Cell>
+        <Cell w={COL.gender}>性别</Cell>
+        <Cell w={COL.type}>类型</Cell>
+        <Cell w={COL.pos}>位置</Cell>
+        <Cell w={COL.assay}>检测项目</Cell>
+        <Cell w={COL.status}>状态</Cell>
+      </div>
+
+      {/* ── Rows: only arranged samples, flex:1 fills height evenly ── */}
+      {visible.length === 0 ? (
+        <div style={{flex:1, display:'grid', placeItems:'center', color:'var(--ink-400)'}}>
+          <div style={{textAlign:'center'}}>
+            <Icon name="flask-small" size={36} color="#D6DEE6"/>
+            <div style={{fontSize:13, marginTop:8}}>尚无编排的样本</div>
+            <div style={{fontSize:11, marginTop:4}}>点击左侧样本位（空位）开始录入</div>
+          </div>
+        </div>
+      ) : (
+        <div style={{flex:1, display:'flex', flexDirection:'column', minHeight:0}}>
+          {visible.map((s, i) => {
+            const isSel = selected.includes(s.id);
+            const st = STATUS_MAP[s.status];
+            const seqNum = String(i + 1).padStart(3, '0');
+            return (
+              <div
+                key={s.id}
+                onClick={() => onSelect(s.id)}
+                style={{
+                  height: 'calc(100% / 8)',
+                  flexShrink: 0,
+                  display: 'flex', alignItems: 'center',
+                  borderBottom: '1px solid var(--divider)',
+                  background: isSel ? 'var(--blue-100)' : '#fff',
+                  cursor: 'pointer',
+                  transition: 'background .1s',
+                  minHeight: 0,
+                }}
+              >
+                <Cell w={COL.seq}>
+                  <span className="mono" style={{fontSize:12, fontWeight:700, color:'var(--ink-700)'}}>{seqNum}</span>
+                </Cell>
+                <Cell w={COL.id}>
+                  <span className="mono" style={{fontSize:11}}>{s.sampleId}</span>
+                </Cell>
+                <Cell w={COL.name}>
+                  <span style={{fontSize:12, fontWeight:600}}>{s.name}</span>
+                </Cell>
+                <Cell w={COL.gender}>
+                  <span style={{fontSize:12, color:'var(--ink-700)'}}>{s.gender}</span>
+                </Cell>
+                <Cell w={COL.type}>
+                  <span style={{fontSize:11, color:'var(--ink-700)'}}>{s.type}</span>
+                </Cell>
+                <Cell w={COL.pos}>
+                  <span className="mono" style={{fontSize:12, fontWeight:700, color:'var(--blue-700)'}}>{s.id}</span>
+                </Cell>
+                <Cell w={COL.assay}>
+                  <div style={{display:'flex', gap:3, flexWrap:'wrap'}}>
+                    {s.assays?.map(code => (
+                      <span key={code} style={{
+                        fontSize:10, padding:'2px 5px',
+                        background:'var(--blue-050)', color:'var(--blue-700)',
+                        borderRadius:3, border:'1px solid var(--blue-100)',
+                      }}>{code}</span>
+                    ))}
+                  </div>
+                </Cell>
+                <Cell w={COL.status}>
+                  <span className={'pill ' + st.cls} style={{fontSize:10}}>
+                    <span className="dot"/>{st.label}
+                  </span>
+                </Cell>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+};
+
+window.SampleList = SampleList;
+</script>
+<script type="text/babel">// Sample slot panel — single-column 8-slot rack (matching physical layout)
+const SlotPanel = ({ slots, activeSlot, onSelectSlot, selected, onToggleSelect, onSelectAll, onRackChange }) => {
+  const allSelected = slots.every(s => s.status === 'empty' || selected.includes(s.id));
+  const nonEmptyCount = slots.filter(s => s.status !== 'empty').length;
+
+  // Rack insertion state — toggled by test button (simulates microswitch signal)
+  const [rackIn, setRackIn] = React.useState(true);
+
+  const handleRackToggle = () => {
+    const next = !rackIn;
+    setRackIn(next);
+    onRackChange?.(next);
+  };
+
+  return (
+    <div style={{
+      height:'100%', display:'flex', flexDirection:'column',
+      background:'#fff', borderRight:'1px solid var(--border)',
+    }}>
+      {/* Header — click "样本位" to toggle rack state */}
+      <div style={{
+        padding:'8px 10px', borderBottom:'1px solid var(--divider)',
+        background:'var(--surface-alt)',
+        display:'flex', alignItems:'center', justifyContent:'space-between',
+      }}>
+        <div
+          onClick={handleRackToggle}
+          style={{fontSize:12, fontWeight:600, cursor:'pointer', userSelect:'none'}}
+          title="点击模拟样本架插拔"
+        >样本位</div>
+        <div style={{display:'flex', gap:4, alignItems:'center', fontSize:10, color:'var(--ink-500)'}}>
+          <span className={'ck' + (allSelected && nonEmptyCount>0 ?' on':'')}
+            onClick={() => onSelectAll(!allSelected)} style={{width:13, height:13}}/>
+          全选
+        </div>
+      </div>
+
+      {/* Rack — single column, 8 slots */}
+      <div style={{padding:'8px 8px', flex:1, display:'flex', flexDirection:'column', minHeight:0}}>
+        <div style={{
+          borderRadius:6,
+          padding:'6px 6px',
+          flex:1,
+          display:'flex', flexDirection:'column', gap:4,
+          minHeight:0,
+          // B方案：仅改左边框颜色区分插入/取出，其余保持不变
+          borderTop:    '2px solid var(--border-strong)',
+          borderRight:  '2px solid var(--border-strong)',
+          borderBottom: '2px solid var(--border-strong)',
+          borderLeft:   rackIn ? '4px solid #2E8B57' : '4px solid var(--border-strong)',
+          background:   'var(--surface-alt)',
+          transition:   'border-left-color .35s ease',
+        }}>
+          {slots.map(s => {
+            const isActive = activeSlot === s.id;
+            const isSel = selected.includes(s.id);
+            const statusLabel = {
+              empty:'空闲', scheduled:'已编排', running:'检测中',
+              done:'已完成', error:'异常',
+            }[s.status];
+            const isEmpty = s.status === 'empty';
+
+            const TubeIcon = ({ filled }) => (
+              <svg width="14" height="16" viewBox="0 0 14 16" style={{flexShrink:0}}>
+                <path d="M3 1 H11 V4 L9.5 14 a1.5 1.5 0 0 1 -1.5 1.2 H6 a1.5 1.5 0 0 1 -1.5 -1.2 L3 4 Z"
+                  fill={filled ? '#1E78BE' : '#fff'}
+                  stroke={filled ? '#0F4E85' : '#A5B0BC'} strokeWidth="1.2"/>
+                {filled && <path d="M4 9 L10 9" stroke="#fff" strokeWidth="1" opacity=".7"/>}
+                <path d="M2.5 1 H11.5"
+                  stroke={filled ? '#0F4E85' : '#A5B0BC'}
+                  strokeWidth="1.4" strokeLinecap="round"/>
+              </svg>
+            );
+
+            return (
+              <div key={s.id}
+                onClick={() => onSelectSlot(s.id)}
+                style={{
+                  position:'relative', flex:1,
+                  border: '1.5px solid ' + (isActive ? 'var(--blue-700)' : 'var(--border-strong)'),
+                  borderRadius:4,
+                  background: isActive ? 'var(--blue-100)' : '#fff',
+                  cursor:'pointer',
+                  padding:'2px 6px',
+                  display:'flex', alignItems:'center', gap:6,
+                  boxShadow: isActive ? '0 0 0 2px var(--blue-100)' : 'none',
+                  minHeight:0,
+                }}>
+                <TubeIcon filled={!isEmpty}/>
+                <span className="mono" style={{
+                  fontSize:13, fontWeight:800, flexShrink:0,
+                  color: isActive ? 'var(--blue-800)' : 'var(--ink-800)',
+                  minWidth:22,
+                }}>{s.id}</span>
+                <span style={{
+                  flex:1, textAlign:'right',
+                  fontSize:10, fontWeight:600,
+                  color: isEmpty ? 'var(--ink-400)' :
+                         s.status==='error' ? '#C0392B' :
+                         s.status==='done'  ? '#2E8B57' :
+                                              'var(--blue-700)',
+                }}>{statusLabel}</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+window.SlotPanel = SlotPanel;
+</script>
+<script type="text/babel">// Detect page: combines SlotPanel + (SampleList | SampleForm)
+const DetectPage = ({
+  slots, activeSlotId, onSelectSlot,
+  selected, onToggleSelect, onSelectAll,
+  view, setView,
+  onSubmitForm, onCancelForm,
+  onEdit, onDelete, onNew,
+  onKeyboard, keyboardTarget,
+  editing, nextSeq, onRackChange,
+}) => {
+  const activeSlot = slots.find(s => s.id === activeSlotId);
+
+  return (
+    <div style={{
+      flex:1, display:'flex', gap:8, padding:8, minHeight:0, background:'var(--bg)',
+    }}>
+      <div style={{width: 150, flexShrink:0}}>
+        <SlotPanel
+          slots={slots}
+          activeSlot={activeSlotId}
+          onSelectSlot={onSelectSlot}
+          selected={selected}
+          onToggleSelect={onToggleSelect}
+          onSelectAll={onSelectAll}
+          onRackChange={onRackChange}
+        />
+      </div>
+      <div style={{flex:1, minWidth:0, border:'1px solid var(--border)', borderRadius:6, overflow:'hidden'}}>
+        {view === 'form' ? (
+          <SampleForm
+            slot={activeSlot}
+            initial={editing}
+            nextSeq={nextSeq}
+            onSubmit={onSubmitForm}
+            onCancel={onCancelForm}
+            onKeyboard={onKeyboard}
+            keyboardTarget={keyboardTarget}
+          />
+        ) : (
+          <SampleList
+            slots={slots}
+            selected={selected}
+            onSelect={onToggleSelect}
+            onSelectAll={onSelectAll}
+            onEdit={onEdit}
+            onDelete={onDelete}
+            onNew={onNew}
+          />
+        )}
+      </div>
+    </div>
+  );
+};
+
+window.DetectPage = DetectPage;
+</script>
+<script type="text/babel">// Results page: filter + sample-grouped list + curve detail
+const PAGE_SIZE = 3; // rows per page
+
+const ResultsPage = ({ results }) => {
+  const [expanded, setExpanded] = React.useState(results[0]?.id || null);
+  const [selectedIds, setSelectedIds] = React.useState([]);
+  const [date, setDate] = React.useState('2026-04-18');
+  const [curveItem, setCurveItem] = React.useState(null);
+  const [page, setPage] = React.useState(1);
+
+  // Filter by date only
+  const filtered = results.filter(r => !date || r.time.startsWith(date));
+
+  // Pagination
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const safePage = Math.min(page, totalPages);
+  const pageItems = filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
+
+  // Reset to page 1 when filter changes
+  React.useEffect(() => { setPage(1); }, [date]);
+
+  const toggleSel = (id) => setSelectedIds(s => s.includes(id) ? s.filter(x => x !== id) : [...s, id]);
+  const hasSelected = selectedIds.length > 0;
+
+  return (
+    <div style={{flex:1, display:'flex', flexDirection:'column', padding:8, gap:8, minHeight:0, background:'var(--bg)'}}>
+      {/* Filter bar */}
+      <div style={{
+        background:'#fff', border:'1px solid var(--border)', borderRadius:6,
+        padding:'8px 10px', display:'flex', alignItems:'center', gap:8, flexWrap:'wrap',
+      }}>
+        {/* 单日日期选择 */}
+        <div style={{display:'flex', alignItems:'center', gap:6, fontSize:12}}>
+          <span style={{color:'var(--ink-500)'}}>日期</span>
+          <input type="date" className="input" style={{width:132, height:28, fontSize:12}}
+            value={date} onChange={e => setDate(e.target.value)}/>
+        </div>
+
+        {/* 更多查找按钮 */}
+        <button className="btn sm"><Icon name="search" size={11}/> 更多查找</button>
+
+        <div style={{flex:1}}/>
+
+        {/* 右侧4个操作按钮：打印、导出、删除、清空 */}
+        <div className="vsep" style={{height:20}}/>
+        <button className="btn sm" disabled={!hasSelected}><Icon name="print"  size={11}/> 打印</button>
+        <button className="btn sm" disabled={!hasSelected}><Icon name="export" size={11}/> 导出</button>
+        <button className="btn sm" disabled={!hasSelected}><Icon name="trash"  size={11}/> 删除</button>
+        <button className="btn sm" onClick={() => setSelectedIds([])}><Icon name="close" size={11}/> 清空</button>
+      </div>
+
+      <div style={{flex:1, display:'flex', gap:8, minHeight:0}}>
+        {/* Result list */}
+        <div style={{flex: curveItem ? 1.2 : 1, background:'#fff', border:'1px solid var(--border)', borderRadius:6, display:'flex', flexDirection:'column', minWidth:0, overflow:'hidden'}}>
+
+          {/* List body */}
+          <div className="scroll" style={{flex:1}}>
+            {pageItems.map(r => {
+              const open = expanded === r.id;
+              const sel = selectedIds.includes(r.id);
+              const hasPos = r.items.some(i => i.concl === '阳性');
+              return (
+                <div key={r.id} style={{borderBottom:'1px solid var(--divider)'}}>
+                  <div style={{
+                    display:'flex', alignItems:'center', gap:8,
+                    padding:'8px 10px', cursor:'pointer',
+                    background: sel ? 'var(--blue-050)' : '#fff',
+                  }} onClick={() => setExpanded(open ? null : r.id)}>
+                    <span className={'ck' + (sel ? ' on' : '')} onClick={(e) => { e.stopPropagation(); toggleSel(r.id); }}/>
+                    <Icon name={open ? 'chevron-down' : 'chevron-right'} size={12} color="#7A8898"/>
+                    <span className="mono" style={{fontSize:11, color:'var(--blue-700)', fontWeight:700, minWidth:90}}>{r.sampleId}</span>
+                    <span style={{fontSize:12, fontWeight:600, minWidth:48}}>{r.name}</span>
+                    <span style={{fontSize:11, color:'var(--ink-500)'}}>
+                      {r.gender}·{r.age}岁·{r.type}
+                      {r.slot && (
+                        <span style={{
+                          marginLeft:5, padding:'1px 5px',
+                          background:'var(--blue-050)', color:'var(--blue-700)',
+                          border:'1px solid var(--blue-200)', borderRadius:3,
+                          fontSize:10, fontWeight:600,
+                        }}>{r.slot}</span>
+                      )}
+                    </span>
+                    <span style={{flex:1}}/>
+                    <span className="pill" style={{fontSize:10}}>{r.items.length} 项</span>
+                    {hasPos && <span className="pill err" style={{fontSize:10}}><span className="dot"/>阳性</span>}
+                    <span style={{fontSize:11, color:'var(--ink-500)'}} className="mono">{r.time.slice(11)}</span>
+                  </div>
+                  {open && (
+                    <div style={{padding:'0 10px 10px 36px', background:'var(--surface-alt)'}}>
+                      <table className="tbl" style={{background:'#fff', border:'1px solid var(--border)', borderRadius:4}}>
+                        <thead>
+                          <tr>
+                            <th style={{width:64}}>项目</th>
+                            <th style={{width:72}}>结果</th>
+                            <th style={{width:72}}>单位</th>
+                            <th style={{width:90}}>参考范围</th>
+                            <th style={{width:60}}>结论</th>
+                            <th></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {r.items.map(it => (
+                            <tr key={it.code}>
+                              <td style={{fontWeight:600}}>{it.code}</td>
+                              <td className="num" style={{color: it.concl==='阳性' ? 'var(--err)' : 'var(--ink-800)', fontWeight:700}}>
+                                {it.value}
+                              </td>
+                              <td style={{fontSize:11, color:'var(--ink-500)'}}>{it.unit}</td>
+                              <td className="num" style={{fontSize:11, color:'var(--ink-500)'}}>{it.ref}</td>
+                              <td>
+                                <span className={'pill ' + (it.concl==='阳性' ? 'err' : 'ok')} style={{fontSize:10}}>
+                                  <span className="dot"/>{it.concl}
+                                </span>
+                              </td>
+                              <td style={{textAlign:'right'}}>
+                                <button className="btn sm" onClick={() => setCurveItem({ result:r, item:it })}>
+                                  <Icon name="chart" size={11}/> 曲线
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Bottom bar: total count + pagination */}
+          <div style={{
+            borderTop:'1px solid var(--divider)',
+            background:'var(--surface-alt)',
+            padding:'6px 10px',
+            display:'flex', alignItems:'center', justifyContent:'space-between',
+            flexShrink:0,
+          }}>
+            <span style={{fontSize:11, color:'var(--ink-500)'}}>
+              共 <span style={{fontWeight:600, color:'var(--ink-800)'}}>{filtered.length}</span> 条
+              {selectedIds.length > 0 && <span style={{marginLeft:8}}>· 已选 <span style={{fontWeight:600, color:'var(--blue-700)'}}>{selectedIds.length}</span></span>}
+            </span>
+
+            {/* Pagination */}
+            <div style={{display:'flex', alignItems:'center', gap:6}}>
+              <button
+                className="btn sm"
+                disabled={safePage <= 1}
+                onClick={() => setPage(p => Math.max(1, p - 1))}
+                style={{padding:'0 10px', minWidth:32}}
+              >
+                <Icon name="chevron-right" size={12} style={{transform:'rotate(180deg)'}}/>
+              </button>
+              <span style={{fontSize:12, color:'var(--ink-700)', minWidth:64, textAlign:'center'}}>
+                第 <span style={{fontWeight:600}}>{safePage}</span> / {totalPages} 页
+              </span>
+              <button
+                className="btn sm"
+                disabled={safePage >= totalPages}
+                onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                style={{padding:'0 10px', minWidth:32}}
+              >
+                <Icon name="chevron-right" size={12}/>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Curve detail */}
+        {curveItem && (
+          <div style={{width:300, background:'#fff', border:'1px solid var(--border)', borderRadius:6, display:'flex', flexDirection:'column'}}>
+            <div style={{
+              padding:'6px 10px', borderBottom:'1px solid var(--divider)',
+              background:'var(--surface-alt)', fontSize:12, fontWeight:600,
+              display:'flex', justifyContent:'space-between', alignItems:'center',
+            }}>
+              <span><Icon name="chart" size={12}/> 荧光曲线 · {curveItem.item.code}</span>
+              <span onClick={() => setCurveItem(null)} style={{cursor:'pointer', color:'var(--ink-500)'}}>
+                <Icon name="close" size={12}/>
+              </span>
+            </div>
+            <div style={{padding:10, flex:1, overflow:'auto'}}>
+              <div style={{fontSize:11, color:'var(--ink-500)', marginBottom:4}}>{curveItem.result.name} · {curveItem.result.sampleId}</div>
+              <svg viewBox="0 0 280 160" style={{width:'100%', height:160, border:'1px solid var(--divider)', background:'var(--surface-alt)', borderRadius:4}}>
+                {[0,1,2,3,4].map(i => <line key={'h'+i} x1="20" y1={20+i*30} x2="270" y2={20+i*30} stroke="#E6ECF2" strokeWidth=".5"/>)}
+                {[0,1,2,3,4,5].map(i => <line key={'v'+i} x1={20+i*50} y1="20" x2={20+i*50} y2="140" stroke="#E6ECF2" strokeWidth=".5"/>)}
+                <line x1="20" y1="140" x2="270" y2="140" stroke="#B7C3CE"/>
+                <line x1="20" y1="20"  x2="20"  y2="140" stroke="#B7C3CE"/>
+                <path d="M20 130 Q 60 120 90 95 T 160 50 T 240 35 L 270 32" stroke="#1464A5" strokeWidth="1.8" fill="none"/>
+                {[[20,130],[70,112],[120,80],[170,52],[220,38],[265,33]].map(([x,y],i) => (
+                  <circle key={i} cx={x} cy={y} r="2.5" fill="#fff" stroke="#1464A5" strokeWidth="1.5"/>
+                ))}
+                <text x="22" y="16" fontSize="9" fill="#5B6B7B">强度</text>
+                <text x="250" y="154" fontSize="9" fill="#5B6B7B">时间(s)</text>
+              </svg>
+              <div style={{marginTop:8, fontSize:11, display:'grid', gridTemplateColumns:'1fr 1fr', gap:4, color:'var(--ink-700)'}}>
+                <div><span style={{color:'var(--ink-500)'}}>T/C：</span><span className="mono">{(Math.random()*2+0.8).toFixed(3)}</span></div>
+                <div><span style={{color:'var(--ink-500)'}}>T值：</span><span className="mono">{Math.floor(Math.random()*5000+1000)}</span></div>
+                <div><span style={{color:'var(--ink-500)'}}>C值：</span><span className="mono">{Math.floor(Math.random()*5000+2000)}</span></div>
+                <div><span style={{color:'var(--ink-500)'}}>积分时间：</span><span className="mono">15s</span></div>
+                <div><span style={{color:'var(--ink-500)'}}>批号：</span><span className="mono">A2603-01</span></div>
+                <div><span style={{color:'var(--ink-500)'}}>温度：</span><span className="mono">37.2°C</span></div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+window.ResultsPage = ResultsPage;
+</script>
+<script type="text/babel">// Consumables management page — deep management (beyond bottom-bar chips)
+const ConsumablesPage = ({ consumables, cards, onReplace, onLoadDilution }) => {
+  const [tab, setTab] = React.useState('tray');
+
+  const Bar = ({ pct, color }) => (
+    <div style={{height:6, background:'var(--surface-sunken)', borderRadius:3, overflow:'hidden'}}>
+      <div style={{height:'100%', width:pct+'%', background:color, transition:'width .3s'}}/>
+    </div>
+  );
+
+  const statusOf = (qty, cap) => {
+    const pct = qty/cap*100;
+    if (pct < 10) return { label:'耗尽', cls:'err', color:'#C0392B' };
+    if (pct < 25) return { label:'低量', cls:'warn', color:'#D08419' };
+    return { label:'充足', cls:'ok', color:'#2E8B57' };
+  };
+
+  return (
+    <div style={{flex:1, display:'flex', flexDirection:'column', padding:8, gap:8, background:'var(--bg)', minHeight:0}}>
+      {/* sub-tabs */}
+      <div style={{display:'flex', gap:2, borderBottom:'1px solid var(--border)', background:'#fff', borderRadius:'6px 6px 0 0', padding:'4px 4px 0'}}>
+        {[
+          {k:'tray',   l:'托盘耗材',    i:'tip'},
+          {k:'cards',  l:'试剂卡库存',   i:'card'},
+          {k:'dilutions', l:'稀释液', i:'flask'},
+        ].map(t => (
+          <button key={t.k} onClick={() => setTab(t.k)} style={{
+            height:34, padding:'0 14px',
+            border:'none',
+            background: tab===t.k ? 'var(--blue-050)' : 'transparent',
+            color: tab===t.k ? 'var(--blue-700)' : 'var(--ink-700)',
+            borderBottom: tab===t.k ? '2px solid var(--blue-700)' : '2px solid transparent',
+            fontSize:12, fontWeight: tab===t.k?700:500,
+            cursor:'pointer', display:'flex', alignItems:'center', gap:6,
+          }}>
+            <Icon name={t.i} size={12}/> {t.l}
+          </button>
+        ))}
+      </div>
+
+      {tab === 'tray' && (
+        <div style={{flex:1, background:'#fff', border:'1px solid var(--border)', borderRadius:6, padding:12, display:'flex', gap:12, minHeight:0}}>
+          {/* Schematic tray */}
+          <div style={{width:260, flexShrink:0}}>
+            <div style={{fontSize:12, fontWeight:600, marginBottom:6}}>托盘布局示意</div>
+            <div style={{fontSize:10, color:'var(--ink-400)', textAlign:'center', letterSpacing:1, marginBottom:4}}>▲ 内侧</div>
+            <div style={{
+              border:'2px solid var(--border-strong)', background:'var(--surface-alt)',
+              borderRadius:6, padding:8, display:'grid', gap:6,
+              gridTemplateColumns:'1fr 1fr 1fr', gridTemplateRows:'1fr 1fr',
+            }}>
+              {consumables.dilutions.map(d => {
+                const pct = d.qty/d.capacity*100;
+                const st = statusOf(d.qty, d.capacity);
+                return (
+                  <div key={d.slot} style={{
+                    background:'#fff', border:'1.5px solid '+st.color,
+                    borderRadius:4, padding:'6px 6px', textAlign:'center',
+                  }}>
+                    <div style={{fontSize:11, fontWeight:700, color:st.color}}>{d.slot}</div>
+                    <div style={{fontSize:9, color:'var(--ink-500)'}}>稀释液</div>
+                    <div className="mono" style={{fontSize:13, fontWeight:700, marginTop:2}}>{d.qty}<span style={{fontSize:9, fontWeight:400, color:'var(--ink-400)'}}>/{d.capacity}</span></div>
+                  </div>
+                );
+              })}
+              <div style={{
+                background:'#fff', border:'1.5px solid var(--ok)',
+                borderRadius:4, padding:'6px 6px', textAlign:'center', gridColumn:'1 / 2',
+              }}>
+                <div style={{fontSize:11, fontWeight:700, color:'var(--ok)'}}>TIP</div>
+                <div style={{fontSize:9, color:'var(--ink-500)'}}>吸头盒</div>
+                <div className="mono" style={{fontSize:13, fontWeight:700, marginTop:2}}>{consumables.tips.qty}<span style={{fontSize:9, fontWeight:400, color:'var(--ink-400)'}}>/{consumables.tips.capacity}</span></div>
+              </div>
+              <div style={{
+                background:'#fff', border:'1.5px solid var(--ok)',
+                borderRadius:4, padding:'6px 6px', textAlign:'center', gridColumn:'2 / 4',
+              }}>
+                <div style={{fontSize:11, fontWeight:700, color:'var(--ok)'}}>深孔板</div>
+                <div style={{fontSize:9, color:'var(--ink-500)'}}>样本/稀释液混匀</div>
+                <div className="mono" style={{fontSize:13, fontWeight:700, marginTop:2}}>{consumables.plate.qty}<span style={{fontSize:9, fontWeight:400, color:'var(--ink-400)'}}>/{consumables.plate.capacity}</span></div>
+              </div>
+            </div>
+            <div style={{fontSize:10, color:'var(--ink-400)', textAlign:'center', letterSpacing:1, marginTop:4}}>▼ 正面（抽出）</div>
+            <div style={{fontSize:10, color:'var(--ink-500)', marginTop:10, lineHeight:1.6, padding:'8px', background:'var(--surface-alt)', borderRadius:4}}>
+              <b>使用说明：</b><br/>
+              从正面将托盘抽出 → 更换耗材后 → 推入仪器，系统会自动识别。
+            </div>
+          </div>
+
+          {/* Details */}
+          <div style={{flex:1, display:'flex', flexDirection:'column', gap:8, minHeight:0, overflow:'auto'}}>
+            {[
+              { key:'tips',  icon:'tip',   data: consumables.tips },
+              { key:'plate', icon:'plate', data: consumables.plate },
+            ].map(c => {
+              const st = statusOf(c.data.qty, c.data.capacity);
+              return (
+                <div key={c.key} style={{border:'1px solid var(--border)', borderRadius:6, padding:10}}>
+                  <div style={{display:'flex', alignItems:'center', gap:8, marginBottom:8}}>
+                    <Icon name={c.icon} size={18} color={st.color}/>
+                    <div style={{flex:1}}>
+                      <div style={{fontSize:13, fontWeight:700}}>{c.data.name}</div>
+                      <div style={{fontSize:10, color:'var(--ink-500)'}}>批号 {c.data.lotNo} · 有效期 {c.data.expire}</div>
+                    </div>
+                    <span className={'pill '+st.cls}><span className="dot"/>{st.label}</span>
+                    <button className="btn sm primary" onClick={() => onReplace(c.key)}>
+                      <Icon name="refresh" size={11}/> 更换
+                    </button>
+                  </div>
+                  <div style={{display:'flex', alignItems:'center', gap:8}}>
+                    <div style={{flex:1}}><Bar pct={c.data.qty/c.data.capacity*100} color={st.color}/></div>
+                    <div className="mono" style={{fontSize:12, fontWeight:700, minWidth:70, textAlign:'right'}}>
+                      {c.data.qty} / {c.data.capacity}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+            {consumables.dilutions.map((d, i) => {
+              const st = statusOf(d.qty, d.capacity);
+              return (
+                <div key={d.slot} style={{border:'1px solid var(--border)', borderRadius:6, padding:10}}>
+                  <div style={{display:'flex', alignItems:'center', gap:8, marginBottom:8}}>
+                    <Icon name="flask" size={18} color={st.color}/>
+                    <div style={{flex:1}}>
+                      <div style={{fontSize:13, fontWeight:700}}>{d.name} <span style={{fontSize:10, color:'var(--ink-500)', fontWeight:400, marginLeft:4}}>位置 {d.slot}</span></div>
+                      <div style={{fontSize:10, color:'var(--ink-500)'}}>批号 {d.lotNo} · 有效期 {d.expire}</div>
+                    </div>
+                    <span className={'pill '+st.cls}><span className="dot"/>{st.label}</span>
+                    <button className="btn sm" onClick={() => onLoadDilution(i, 'load')}>装载</button>
+                    <button className="btn sm" onClick={() => onLoadDilution(i, 'unload')}>卸载</button>
+                  </div>
+                  <div style={{display:'flex', alignItems:'center', gap:8}}>
+                    <div style={{flex:1}}><Bar pct={d.qty/d.capacity*100} color={st.color}/></div>
+                    <div className="mono" style={{fontSize:12, fontWeight:700, minWidth:70, textAlign:'right'}}>
+                      {d.qty} / {d.capacity} ml
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {tab === 'cards' && (
+        <div style={{flex:1, background:'#fff', border:'1px solid var(--border)', borderRadius:6, overflow:'hidden', display:'flex', flexDirection:'column'}}>
+          <div className="scroll" style={{flex:1}}>
+            <table className="tbl">
+              <thead><tr>
+                <th>项目</th><th>LOT批号</th><th>有效期</th><th style={{width:120}}>剩余数量</th><th style={{width:80}}>状态</th><th></th>
+              </tr></thead>
+              <tbody>
+                {cards.map(c => {
+                  const pct = Math.min(100, c.remaining/30*100);
+                  const st = statusOf(c.remaining, 30);
+                  return (
+                    <tr key={c.code}>
+                      <td style={{fontWeight:700}}>{c.code} <span style={{fontSize:10, color:'var(--ink-500)', fontWeight:400, marginLeft:4}}>{ASSAYS.find(a=>a.code===c.code)?.name}</span></td>
+                      <td className="mono">{c.lot}</td>
+                      <td className="mono">{c.expire}</td>
+                      <td>
+                        <div style={{display:'flex', alignItems:'center', gap:8}}>
+                          <div style={{flex:1, maxWidth:100}}><Bar pct={pct} color={st.color}/></div>
+                          <span className="mono" style={{fontSize:12, fontWeight:700, minWidth:32}}>{c.remaining}</span>
+                        </div>
+                      </td>
+                      <td><span className={'pill '+st.cls}><span className="dot"/>{st.label}</span></td>
+                      <td style={{textAlign:'right'}}><button className="btn sm">补充</button></td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {tab === 'dilutions' && (
+        <div style={{flex:1, background:'#fff', border:'1px solid var(--border)', borderRadius:6, padding:12, display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:10}}>
+          {consumables.dilutions.map((d, i) => {
+            const st = statusOf(d.qty, d.capacity);
+            return (
+              <div key={d.slot} style={{border:'1px solid var(--border)', borderRadius:6, padding:10, display:'flex', flexDirection:'column', gap:6}}>
+                <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+                  <div style={{fontSize:13, fontWeight:700}}>{d.name}</div>
+                  <span className={'pill '+st.cls}><span className="dot"/>{st.label}</span>
+                </div>
+                <div style={{fontSize:10, color:'var(--ink-500)'}}>位置 {d.slot} · 批号 {d.lotNo}</div>
+                <div style={{fontSize:10, color:'var(--ink-500)'}}>有效期 {d.expire}</div>
+                <div className="mono" style={{fontSize:22, fontWeight:700, color:st.color, textAlign:'center', margin:'8px 0 4px'}}>
+                  {d.qty}<span style={{fontSize:12, fontWeight:400, color:'var(--ink-400)'}}> / {d.capacity} ml</span>
+                </div>
+                <Bar pct={d.qty/d.capacity*100} color={st.color}/>
+                <div style={{display:'flex', gap:4, marginTop:6}}>
+                  <button className="btn sm" style={{flex:1}} onClick={() => onLoadDilution(i,'load')}><Icon name="scan" size={11}/> 扫码装载</button>
+                  <button className="btn sm" style={{flex:1}} onClick={() => onLoadDilution(i,'unload')}>卸载</button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+};
+
+window.ConsumablesPage = ConsumablesPage;
+</script>
+<script type="text/babel">// Modal: Add card dialog
+const AddCardModal = ({ cards, neededByCode, onClose, onConfirm }) => {
+  const [qtys, setQtys] = React.useState(() => {
+    const q = {};
+    Object.keys(neededByCode).forEach(code => { q[code] = neededByCode[code]; });
+    return q;
+  });
+
+  const totalNeeded = Object.values(neededByCode).reduce((a,b)=>a+b, 0);
+  const totalAdding = Object.values(qtys).reduce((a,b)=>a+b, 0);
+
+  const change = (code, delta) => {
+    setQtys(q => {
+      const card = cards.find(c=>c.code===code);
+      const maxAllowed = Math.min(neededByCode[code] || 0, card?.remaining || 0);
+      const next = Math.max(0, Math.min(maxAllowed, (q[code]||0) + delta));
+      return { ...q, [code]: next };
+    });
+  };
+
+  return (
+    <div className="overlay">
+      <div className="modal" style={{width: 540}}>
+        <div className="modal-hd">
+          <div><Icon name="card" size={14}/> 加卡 — 加载试剂卡</div>
+          <span className="x" onClick={onClose}>×</span>
+        </div>
+        <div className="modal-bd">
+          <div style={{fontSize:12, color:'var(--ink-600)', marginBottom:10,
+            display:'flex', justifyContent:'space-between',
+            padding:'8px 10px', background:'var(--blue-050)', borderRadius:4, border:'1px solid var(--blue-100)'}}>
+            <span>编排待加卡总数：<b className="mono" style={{color:'var(--blue-700)'}}>{totalNeeded}</b> 张</span>
+            <span>本次准备加载：<b className="mono" style={{color:'var(--ok)'}}>{totalAdding}</b> 张</span>
+          </div>
+          <table className="tbl" style={{border:'1px solid var(--border)'}}>
+            <thead><tr>
+              <th>项目</th><th>LOT批号</th><th>库存</th><th>需要</th><th style={{width:110}}>加载</th>
+            </tr></thead>
+            <tbody>
+              {Object.keys(neededByCode).map(code => {
+                const card = cards.find(c => c.code===code);
+                const need = neededByCode[code];
+                const qty = qtys[code] || 0;
+                const shortage = !card || card.remaining < need;
+                return (
+                  <tr key={code}>
+                    <td style={{fontWeight:700}}>{code}</td>
+                    <td className="mono">{card?.lot || '—'}</td>
+                    <td className="mono" style={{color: shortage?'var(--err)':'var(--ink-700)'}}>{card?.remaining || 0}</td>
+                    <td className="mono" style={{fontWeight:700}}>{need}</td>
+                    <td>
+                      <div style={{display:'flex', alignItems:'center', gap:4}}>
+                        <button className="btn sm" style={{width:26, padding:0}} onClick={()=>change(code,-1)}>−</button>
+                        <div className="mono" style={{flex:1, textAlign:'center', fontWeight:700, fontSize:13}}>{qty}</div>
+                        <button className="btn sm" style={{width:26, padding:0}} onClick={()=>change(code,1)}>+</button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+        <div className="modal-ft">
+          <button className="btn" onClick={onClose}>取消</button>
+          <button className="btn primary" disabled={totalAdding===0} onClick={() => onConfirm(qtys)}>
+            <Icon name="check" size={11}/> 确认加载 {totalAdding} 张
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Alerts modal
+const AlertsModal = ({ alerts, onClose, onHandle, onResetSystem, onEstop, onClearAll }) => (
+  <div className="overlay">
+    <div className="modal" style={{width: 620}}>
+      <div className="modal-hd" style={{background: alerts.some(a=>!a.handled) ? '#C0392B' : 'var(--blue-700)'}}>
+        <div><Icon name="alert" size={14}/> 报警管理</div>
+        <span className="x" onClick={onClose}>×</span>
+      </div>
+      <div className="modal-bd" style={{padding:0}}>
+        {alerts.length === 0 ? (
+          <div style={{padding:40, textAlign:'center', color:'var(--ink-400)'}}>
+            <Icon name="check" size={28} color="#C5D3DF"/>
+            <div style={{marginTop:6, fontSize:12}}>暂无报警</div>
+          </div>
+        ) : (
+          <table className="tbl">
+            <thead><tr>
+              <th style={{width:64}}>级别</th><th style={{width:130}}>时间</th><th style={{width:80}}>代码</th>
+              <th>描述</th><th style={{width:80}}>状态</th><th style={{width:70}}></th>
+            </tr></thead>
+            <tbody>
+              {alerts.map(a => (
+                <tr key={a.id}>
+                  <td>
+                    <span className={'pill '+(a.level==='warn'?'err': a.level==='info'?'run':'warn')} style={{fontSize:10}}>
+                      <span className="dot"/>{a.level==='warn'?'警告': a.level==='info'?'信息':'严重'}
+                    </span>
+                  </td>
+                  <td className="mono" style={{fontSize:11}}>{a.time}</td>
+                  <td className="mono" style={{fontSize:11}}>{a.code}</td>
+                  <td style={{fontSize:12}}>{a.msg}</td>
+                  <td>
+                    {a.handled
+                      ? <span className="pill ok"><span className="dot"/>已处理</span>
+                      : <span className="pill err"><span className="dot"/>未处理</span>}
+                  </td>
+                  <td style={{textAlign:'right'}}>
+                    {!a.handled && <button className="btn sm" onClick={()=>onHandle(a.id)}>处理</button>}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+      <div className="modal-ft" style={{justifyContent:'space-between'}}>
+        <div style={{display:'flex', gap:6}}>
+          <button className="btn danger" onClick={onEstop}><Icon name="stop" size={11}/> 急停</button>
+          <button className="btn warn" onClick={onResetSystem}><Icon name="reset" size={11}/> 复位</button>
+          <button className="btn" onClick={onClearAll}>清除已处理</button>
+        </div>
+        <button className="btn primary" onClick={onClose}>关闭</button>
+      </div>
+    </div>
+  </div>
+);
+
+// Replace consumable modal
+const ReplaceModal = ({ type, consumables, onClose, onConfirm }) => {
+  const data = consumables[type];
+  const [qty, setQty] = React.useState(data.capacity);
+
+  return (
+    <div className="overlay">
+      <div className="modal" style={{width: 440}}>
+        <div className="modal-hd">
+          <div><Icon name="refresh" size={14}/> 更换耗材 — {data.name}</div>
+          <span className="x" onClick={onClose}>×</span>
+        </div>
+        <div className="modal-bd">
+          <div style={{fontSize:12, color:'var(--ink-600)', marginBottom:12, lineHeight:1.8}}>
+            1. 从正面抽出托盘<br/>
+            2. 取出旧 {data.name}，放入新的耗材<br/>
+            3. 将托盘推回仪器并确认
+          </div>
+          <div className="field" style={{marginBottom:10}}>
+            <label style={{fontSize:11, color:'var(--ink-500)'}}>新批号</label>
+            <input className="input" defaultValue={'NEW-'+Date.now().toString().slice(-6)}/>
+          </div>
+          <div className="field">
+            <label style={{fontSize:11, color:'var(--ink-500)'}}>更新库存数量</label>
+            <div style={{display:'flex', gap:4, alignItems:'center'}}>
+              <button className="btn sm" onClick={()=>setQty(q=>Math.max(0,q-1))}>−</button>
+              <input className="input mono" style={{flex:1, textAlign:'center', fontWeight:700}} value={qty} onChange={e=>setQty(parseInt(e.target.value)||0)}/>
+              <button className="btn sm" onClick={()=>setQty(q=>Math.min(data.capacity,q+1))}>+</button>
+              <button className="btn sm" onClick={()=>setQty(data.capacity)}>满载</button>
+            </div>
+          </div>
+        </div>
+        <div className="modal-ft">
+          <button className="btn" onClick={onClose}>取消</button>
+          <button className="btn primary" onClick={()=>onConfirm(qty)}><Icon name="check" size={11}/> 确认更新</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Toast
+const Toast = ({ msg, type='info' }) => {
+  if (!msg) return null;
+  const colors = { info:'#1464A5', ok:'#2E8B57', err:'#C0392B', warn:'#D08419' };
+  return (
+    <div style={{
+      position:'absolute', top:76, left:'50%', transform:'translateX(-50%)',
+      background: colors[type], color:'#fff',
+      padding:'8px 14px', borderRadius:4,
+      fontSize:12, fontWeight:500,
+      boxShadow:'0 4px 12px rgba(0,0,0,.2)',
+      zIndex: 100,
+    }}>{msg}</div>
+  );
+};
+
+Object.assign(window, { AddCardModal, AlertsModal, ReplaceModal, Toast });
+</script>
+<script type="text/babel">// Root App — wires everything together
+const { useState, useEffect, useRef, useMemo } = React;
+
+function App() {
+  // Auth
+  const [user, setUser] = useState(null);
+
+  // Navigation
+  const [tab, setTab] = useState('detect');
+
+  // Detect state
+  const [slots, setSlots] = useState(INITIAL_SLOTS);
+  const [activeSlotId, setActiveSlotId] = useState(null);
+  const [selected, setSelected] = useState([]);
+  const [view, setView] = useState('list'); // 'list' | 'form'
+  const [editing, setEditing] = useState(null);
+
+  // Keyboard
+  const [kb, setKb] = useState(null); // {target, mode, value}
+
+  // Device
+  const [device, setDevice] = useState('idle'); // idle | running | paused | error
+  const [temp, setTemp] = useState(37.0);
+  const [tickerMsg, setTickerMsg] = useState('');
+
+  // Consumables / cards
+  const [consumables, setConsumables] = useState(INITIAL_CONSUMABLES);
+  const [cards, setCards] = useState(INITIAL_CARDS);
+  const [loadedCards, setLoadedCards] = useState({}); // code -> qty loaded
+
+  // Alerts
+  const [alerts, setAlerts] = useState(INITIAL_ALERTS);
+
+  // Modals
+  const [modal, setModal] = useState(null); // 'addCard' | 'alerts' | 'replace:tips' | 'replace:plate' | 'dilution:idx' | null
+
+  // Results
+  const [results] = useState(() => seedResults());
+
+  // Toast
+  const [toast, setToast] = useState(null);
+  const showToast = (msg, type='info') => {
+    setToast({ msg, type });
+    setTimeout(() => setToast(null), 2200);
+  };
+
+  // Temperature wiggle
+  useEffect(() => {
+    const id = setInterval(() => {
+      setTemp(t => 37 + (Math.random()-.5)*.4);
+    }, 2000);
+    return () => clearInterval(id);
+  }, []);
+
+  // Running simulation — advance samples through states
+  useEffect(() => {
+    if (device !== 'running') return;
+    const id = setInterval(() => {
+      setSlots(prev => {
+        const next = [...prev];
+        // any running -> 80% chance done
+        const runningIdx = next.findIndex(s => s.status === 'running');
+        if (runningIdx >= 0 && Math.random() > 0.3) {
+          next[runningIdx] = { ...next[runningIdx], status: 'done' };
+          setTickerMsg(`样本 ${next[runningIdx].id} (${next[runningIdx].name}) 检测完成`);
+          return next;
+        }
+        // pick a scheduled to start
+        const schedIdx = next.findIndex(s => s.status === 'scheduled');
+        if (schedIdx >= 0) {
+          next[schedIdx] = { ...next[schedIdx], status: 'running' };
+          setTickerMsg(`正在检测样本 ${next[schedIdx].id} (${next[schedIdx].name})...`);
+          return next;
+        }
+        // all done -> stop
+        if (!next.some(s => s.status === 'scheduled' || s.status === 'running')) {
+          setDevice('idle');
+          setTickerMsg('所有样本检测完成');
+          showToast('所有样本检测完成', 'ok');
+        }
+        return next;
+      });
+    }, 2200);
+    return () => clearInterval(id);
+  }, [device]);
+
+  // Pending cards calculation
+  const neededByCode = useMemo(() => {
+    const need = {};
+    slots.forEach(s => {
+      if (s.status === 'scheduled') {
+        s.assays?.forEach(a => {
+          need[a] = (need[a] || 0) + 1;
+        });
+      }
+    });
+    // subtract loaded
+    Object.keys(loadedCards).forEach(c => {
+      if (need[c]) need[c] = Math.max(0, need[c] - loadedCards[c]);
+    });
+    return need;
+  }, [slots, loadedCards]);
+  const pendingCardCount = Object.values(neededByCode).reduce((a,b)=>a+b,0);
+
+  const scheduledCount = slots.filter(s => s.status==='scheduled').length;
+  const runningCount   = slots.filter(s => s.status==='running').length;
+
+  // Handlers
+  const handleSelectSlot = (id) => {
+    const slot = slots.find(s => s.id === id);
+    setActiveSlotId(id);
+    if (slot.status === 'empty') {
+      setEditing(null);
+      setView('form');
+    } else {
+      setView('list');
+    }
+  };
+
+  const handleSubmitForm = (form) => {
+    setSlots(prev => prev.map(s => s.id === activeSlotId ? {
+      ...s,
+      status: 'scheduled',
+      sampleId: form.sampleId, name: form.name, gender: form.gender,
+      age: form.age, ageUnit: form.ageUnit, type: form.type, assays: form.assays,
+    } : s));
+    setView('list');
+    setKb(null);
+    showToast(`样本 ${activeSlotId} 已编排`, 'ok');
+  };
+
+  const handleCancelForm = () => { setView('list'); setKb(null); };
+
+  const handleToggleSelect = (id) => setSelected(s => s.includes(id) ? s.filter(x=>x!==id) : [...s, id]);
+  const handleSelectAll = (on) => {
+    if (on) setSelected(slots.filter(s => s.status !== 'empty').map(s => s.id));
+    else setSelected([]);
+  };
+
+  const handleDelete = () => {
+    setSlots(prev => prev.map(s => selected.includes(s.id)
+      ? { id: s.id, status:'empty' } : s));
+    showToast(`已删除 ${selected.length} 个样本`, 'ok');
+    setSelected([]);
+  };
+
+  const handleEdit = () => {
+    if (selected.length !== 1) { showToast('请选择一个样本编辑', 'warn'); return; }
+    const slot = slots.find(s => s.id === selected[0]);
+    setActiveSlotId(slot.id);
+    setEditing(slot);
+    setView('form');
+  };
+
+  const handleNew = () => {
+    const empty = slots.find(s => s.status === 'empty');
+    if (!empty) { showToast('所有样本位已满', 'warn'); return; }
+    setActiveSlotId(empty.id);
+    setEditing(null);
+    setView('form');
+  };
+
+  // Keyboard input handling
+  const onKeyboardInput = (ch) => {
+    if (!kb) return;
+    if (ch === '__close' || ch === '__enter') { setKb(null); return; }
+    if (ch === '__clear') {
+      setKb(k => ({...k, value: ''}));
+      window.__sampleFormSetValue?.(kb.target, kb.target==='age' ? '' : '');
+      return;
+    }
+    if (ch === '__back') {
+      setKb(k => {
+        const v = (k.value || '').slice(0, -1);
+        window.__sampleFormSetValue?.(k.target, k.target==='age' ? (parseInt(v)||'') : v);
+        return {...k, value: v};
+      });
+      return;
+    }
+    setKb(k => {
+      const v = (k.value || '') + ch;
+      window.__sampleFormSetValue?.(k.target, k.target==='age' ? (parseInt(v)||v) : v);
+      return {...k, value: v};
+    });
+  };
+
+  const openKb = (target, value) => {
+    const mode = (target === 'age' || target === 'sampleId') ? 'num' : 'abc';
+    setKb({ target, mode, value: String(value || '') });
+  };
+
+  // Device
+  const handleStart = () => {
+    if (pendingCardCount > 0) {
+      showToast(`仍需加载 ${pendingCardCount} 张试剂卡`, 'warn');
+      setModal('addCard');
+      return;
+    }
+    if (scheduledCount === 0) { showToast('无待检测样本', 'warn'); return; }
+    setDevice('running');
+    setTickerMsg('启动中... 开始样本检测流程');
+    showToast('设备已启动', 'ok');
+  };
+  const handlePause = () => {
+    setDevice('paused');
+    setTickerMsg('设备已暂停');
+  };
+
+  // Add card
+  const handleConfirmCards = (qtys) => {
+    setLoadedCards(prev => {
+      const next = {...prev};
+      Object.keys(qtys).forEach(c => { next[c] = (next[c]||0) + qtys[c]; });
+      return next;
+    });
+    setCards(prev => prev.map(c => qtys[c.code] ? {...c, remaining: c.remaining - qtys[c.code]} : c));
+    setModal(null);
+    showToast(`已加载 ${Object.values(qtys).reduce((a,b)=>a+b,0)} 张试剂卡`, 'ok');
+  };
+
+  // Alerts
+  const handleAlertHandle = (id) => {
+    setAlerts(prev => prev.map(a => a.id===id ? {...a, handled:true} : a));
+  };
+  const handleResetSystem = () => {
+    setDevice('idle');
+    setAlerts(prev => prev.map(a => ({...a, handled:true})));
+    showToast('系统已复位', 'ok');
+  };
+  const handleEstop = () => {
+    setDevice('idle');
+    showToast('急停已触发', 'err');
+  };
+  const handleClearAll = () => {
+    setAlerts(prev => prev.filter(a => !a.handled));
+  };
+
+  // Consumable replace
+  const handleReplace = (type) => setModal('replace:'+type);
+  const handleConfirmReplace = (qty) => {
+    const type = modal.split(':')[1];
+    setConsumables(prev => ({
+      ...prev,
+      [type]: { ...prev[type], qty, lotNo: 'NEW-'+Date.now().toString().slice(-6) },
+    }));
+    setModal(null);
+    showToast(`${consumables[type].name}已更换`, 'ok');
+  };
+
+  // Dilution
+  const handleLoadDilution = (idx, action) => {
+    setConsumables(prev => {
+      const next = {...prev, dilutions: [...prev.dilutions]};
+      if (action === 'load') {
+        next.dilutions[idx] = {...next.dilutions[idx], qty: next.dilutions[idx].capacity};
+      } else {
+        next.dilutions[idx] = {...next.dilutions[idx], qty: 0};
+      }
+      return next;
+    });
+    showToast(action==='load' ? '稀释液已装载' : '稀释液已卸载', 'ok');
+  };
+
+  if (!user) return <Login onLogin={u => setUser(u.user)} />;
+
+  return (
+    <div style={{height:'100%', display:'flex', flexDirection:'column'}}>
+      <TopBar
+        tab={tab} onTab={setTab}
+        device={device} temp={temp} message={tickerMsg}
+        alerts={alerts} onAlerts={() => setModal('alerts')}
+        user={user}
+      />
+
+      {tab === 'detect' && (
+        <DetectPage
+          slots={slots}
+          activeSlotId={activeSlotId}
+          onSelectSlot={handleSelectSlot}
+          selected={selected}
+          onToggleSelect={handleToggleSelect}
+          onSelectAll={handleSelectAll}
+          view={view} setView={setView}
+          onSubmitForm={handleSubmitForm}
+          onCancelForm={handleCancelForm}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          onNew={handleNew}
+          onKeyboard={openKb}
+          keyboardTarget={kb?.target}
+          editing={editing}
+          nextSeq={editing ? slots.filter(s => s.status !== 'empty').findIndex(s => s.id === editing.id) + 1 : slots.filter(s => s.status !== 'empty').length + 1}
+          onRackChange={inserted => setTickerMsg(inserted ? '样本架已就位' : '样本架已取出')}
+        />
+      )}
+
+      {tab === 'results' && <ResultsPage results={results}/>}
+
+      {tab === 'consumables' && (
+        <ConsumablesPage
+          consumables={consumables}
+          cards={cards}
+          onReplace={handleReplace}
+          onLoadDilution={handleLoadDilution}
+        />
+      )}
+
+      <BottomBar
+        consumables={consumables}
+        device={device}
+        onStart={handleStart}
+        onPause={handlePause}
+        scheduledCount={scheduledCount}
+        runningCount={runningCount}
+        pendingCardCount={pendingCardCount}
+        onAddCard={() => { if(pendingCardCount>0) setModal('addCard'); else showToast('无需加卡','info'); }}
+        onOpenConsumable={(k) => setModal('replace:'+k)}
+        onOpenDilutions={(i) => { setTab('consumables'); }}
+        message={tickerMsg}
+      />
+
+      {kb && (
+        <Keyboard
+          mode={kb.mode}
+          target={kb.target}
+          value={kb.value}
+          onInput={onKeyboardInput}
+          onClose={() => setKb(null)}
+        />
+      )}
+
+      {modal === 'addCard' && (
+        <AddCardModal
+          cards={cards}
+          neededByCode={Object.fromEntries(Object.entries(neededByCode).filter(([,v])=>v>0))}
+          onClose={() => setModal(null)}
+          onConfirm={handleConfirmCards}
+        />
+      )}
+
+      {modal === 'alerts' && (
+        <AlertsModal
+          alerts={alerts}
+          onClose={() => setModal(null)}
+          onHandle={handleAlertHandle}
+          onResetSystem={handleResetSystem}
+          onEstop={handleEstop}
+          onClearAll={handleClearAll}
+        />
+      )}
+
+      {modal && modal.startsWith('replace:') && (
+        <ReplaceModal
+          type={modal.split(':')[1]}
+          consumables={consumables}
+          onClose={() => setModal(null)}
+          onConfirm={handleConfirmReplace}
+        />
+      )}
+
+      {toast && <Toast msg={toast.msg} type={toast.type}/>}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('stage')).render(<App/>);
+</script>
+</body></html>
