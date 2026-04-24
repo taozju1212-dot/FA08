@@ -1,0 +1,33 @@
+<RCC>
+  <qresource prefix="/">
+    <file>styles/app.qss</file>
+    <file>icons/play.svg</file>
+    <file>icons/pause.svg</file>
+    <file>icons/stop.svg</file>
+    <file>icons/bell.svg</file>
+    <file>icons/alert.svg</file>
+    <file>icons/flask.svg</file>
+    <file>icons/flask_small.svg</file>
+    <file>icons/chart.svg</file>
+    <file>icons/plate.svg</file>
+    <file>icons/settings.svg</file>
+    <file>icons/card.svg</file>
+    <file>icons/tip.svg</file>
+    <file>icons/therm.svg</file>
+    <file>icons/check.svg</file>
+    <file>icons/close.svg</file>
+    <file>icons/edit.svg</file>
+    <file>icons/trash.svg</file>
+    <file>icons/print.svg</file>
+    <file>icons/add.svg</file>
+    <file>icons/user.svg</file>
+    <file>icons/scan.svg</file>
+    <file>icons/lis.svg</file>
+    <file>icons/signal4g.svg</file>
+    <file>icons/refresh.svg</file>
+    <file>icons/export.svg</file>
+    <file>icons/chevron_down.svg</file>
+    <file>icons/chevron_right.svg</file>
+    <file>icons/eye.svg</file>
+  </qresource>
+</RCC>
