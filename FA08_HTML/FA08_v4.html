@@ -1554,9 +1554,17 @@ const SettingsPage = () => {
   const [brightness, setBrightness] = React.useState(80);
   const [autoPrint, setAutoPrint] = React.useState(false);
   const [printCopies, setPrintCopies] = React.useState('1');
+  const [printerType, setPrinterType] = React.useState('internal'); // 'internal' | 'external'
+  const [printContent, setPrintContent] = React.useState({sampleInfo:true,testResult:true,refRange:true,inspector:true,patientName:true});
+  const [extPrinterName, setExtPrinterName] = React.useState('');
+  const [printTemplate, setPrintTemplate] = React.useState('');
   const [lisEnabled, setLisEnabled] = React.useState(false);
   const [lisIp, setLisIp] = React.useState('192.168.1.100');
   const [lisPort, setLisPort] = React.useState('8080');
+  const [commMode, setCommMode] = React.useState('network'); // 'network' | 'serial'
+  const [localIp, setLocalIp] = React.useState('192.168.1.200');
+  const [lisDir, setLisDir] = React.useState('one'); // 'one' | 'two'
+  const [lisAbnormal, setLisAbnormal] = React.useState(false);
 
   // ─── 仪器功能 state ───
   const funcKeys = ['样本扫码','样本液探','样本ID自动生成','启用恒温孵育','样本架01启用','样本架02启用'];
@@ -1564,6 +1572,10 @@ const SettingsPage = () => {
     '样本扫码':true,'样本液探':true,'样本ID自动生成':false,
     '启用恒温孵育':true,'样本架01启用':true,'样本架02启用':false,
   });
+  const [showIncubModal, setShowIncubModal] = React.useState(false);
+  const [incubTemp, setIncubTemp] = React.useState('37');
+  const [showRackModal, setShowRackModal] = React.useState(null); // null | 'rack01' | 'rack02'
+  const [rackType, setRackType] = React.useState({'rack01':'采血管样本架','rack02':'采血管样本架'});
 
   // ─── 项目设置 state ───
   const projList = [
@@ -1576,6 +1588,22 @@ const SettingsPage = () => {
   ];
   const [selProj, setSelProj] = React.useState('TnI');
   const [projDigits, setProjDigits] = React.useState({TnI:2,Myo:2,CKMB:2,NTproBNP:1,Ddimer:2,CRP:1});
+  const [projResultTab, setProjResultTab] = React.useState('结果1');
+  const [projResultCfg, setProjResultCfg] = React.useState(() => {
+    const defRefs = () => ([
+      {id:1,gender:'男',ageAll:false,ageMin:'18',ageMax:'60',low:'0',high:'0.04',concl1:'低于参考范围',concl2:'正常',concl3:'高于参考范围'},
+      {id:2,gender:'女',ageAll:false,ageMin:'18',ageMax:'60',low:'0',high:'0.03',concl1:'低于参考范围',concl2:'正常',concl3:'高于参考范围'},
+    ]);
+    const tmpl = () => ({decimals:2,unit:'ng/mL',convUnit:'',convK:'1',convB:'0',useCustomRules:false,refs:defRefs()});
+    const m = {};
+    ['TnI','Myo','CKMB','NTproBNP','Ddimer','CRP'].forEach(c => {
+      m[c] = {'结果1':tmpl(),'结果2':tmpl(),'结果3':tmpl()};
+    });
+    return m;
+  });
+  const emptyRef = {gender:'全部',ageAll:true,ageMin:'',ageMax:'',low:'',high:'',concl1:'低于参考范围',concl2:'正常',concl3:'高于参考范围'};
+  const [refForm, setRefForm] = React.useState(emptyRef);
+  const [showRefForm, setShowRefForm] = React.useState(false);
 
   // ─── 用户设置 state ───
   const PERM_LIST = ['记录查找','记录修改','记录删除','记录清空','导入记录','导出记录','记录打印','记录上传','软件更新','日志导出','厂家模式'];
@@ -1618,20 +1646,29 @@ const SettingsPage = () => {
   const [qcFormMode, setQcFormMode] = React.useState('new');
   const emptyQcForm = {barcode:'',proj:'TnI',product:'',lot:'',level:'1',target:'',upper:'',lower:'',unit:'',expiry:''};
   const [qcForm, setQcForm] = React.useState(emptyQcForm);
+  const [qcTab, setQcTab] = React.useState('info'); // 'chart' | 'rules' | 'info'
+  const [qcChartProj, setQcChartProj] = React.useState('TnI');
+  const [wcRules, setWcRules] = React.useState({
+    '1-2s':{desc:'单个值超过 ±2SD',type:'警告',enabled:true},
+    '1-3s':{desc:'单个值超过 ±3SD',type:'拒绝',enabled:true},
+    '2-2s':{desc:'连续2个值超过同侧 ±2SD',type:'拒绝',enabled:true},
+    'R-4s':{desc:'同批内2个值差值超过 4SD',type:'拒绝',enabled:true},
+    '4-1s':{desc:'连续4个值超过同侧 ±1SD',type:'拒绝',enabled:true},
+    '10x' :{desc:'连续10个值在均值同侧',type:'拒绝',enabled:false},
+  });
 
   // ─── 关于仪器 state ───
-  const aboutKeys = ['仪器名称','仪器型号','软件发布版本','软件完整版本','仪器序列号'];
+  const aboutKeys = ['仪器名称','仪器型号','软件发布版本','软件完整版本','仪器序列号','ICCID'];
   const softList = [
     {label:'用户程序',ver:'v1.0.0.0',hasBtn:true},
     {label:'控制板程序',ver:'v2.1.3',hasBtn:true},
     {label:'移液器程序',ver:'v1.0.0',hasBtn:false},
-    {label:'ICCID',ver:'89860...4321',hasBtn:false},
-    {label:'序列号',ver:'—',hasBtn:false},
+    {label:'通道程序版本号',ver:'v1.0.0',hasBtn:false},
     {label:'通用参数版本',ver:'v1.0',hasBtn:false},
   ];
   const [devInfo, setDevInfo] = React.useState({
     '仪器名称':'干式荧光免疫分析仪','仪器型号':'FIC-FA08',
-    '软件发布版本':'v1.0','软件完整版本':'v1.0.0.0','仪器序列号':'',
+    '软件发布版本':'v1.0','软件完整版本':'v1.0.0.0','仪器序列号':'','ICCID':'89860...4321',
   });
   const [showUpdateModal, setShowUpdateModal] = React.useState(false);
   const [updateProgress, setUpdateProgress] = React.useState(0);
@@ -1664,8 +1701,9 @@ const SettingsPage = () => {
   // ─── Menu ───
   const menuItems = [
     {key:'仪器设置',icon:'flask'},
-    {key:'项目设置',icon:'plate'},
     {key:'质控设置',icon:'chart'},
+    {key:'项目设置',icon:'plate'},
+    {key:'打印设置',icon:'print'},
     {key:'用户设置',icon:'user'},
     {key:'系统设置',icon:'settings'},
     {key:'关于仪器',icon:'eye'},
@@ -1687,41 +1725,215 @@ const SettingsPage = () => {
         <input type="range" min={10} max={100} value={brightness} onChange={e=>setBrightness(Number(e.target.value))} style={{width:140,accentColor:'var(--blue-700)'}}/>
         <span style={{fontSize:12,color:'var(--ink-600)',minWidth:34}}>{brightness}%</span>
       </SettingRow>
-      <SecTitle>打印设置</SecTitle>
-      <SettingRow label="自动打印"><SettingToggle val={autoPrint} onChange={setAutoPrint}/></SettingRow>
-      <SettingRow label="打印份数">
-        <input type="number" min={1} max={9} value={printCopies} onChange={e=>setPrintCopies(e.target.value)} style={{...ssi,width:60}}/>
-        <span style={{fontSize:11,color:'var(--ink-400)'}}>份</span>
-      </SettingRow>
       <SecTitle>通讯设置（LIS）</SecTitle>
       <SettingRow label="启用LIS"><SettingToggle val={lisEnabled} onChange={setLisEnabled}/></SettingRow>
-      <SettingRow label="服务器 IP">
-        <input value={lisIp} onChange={e=>setLisIp(e.target.value)} style={{...ssi,width:140}}/>
+      <SettingRow label="接口类型">
+        <div style={{display:'flex',gap:0,borderRadius:4,overflow:'hidden',border:'1px solid var(--border)'}}>
+          {['network','serial'].map((m,i)=>(
+            <button key={m} onClick={()=>setCommMode(m)} style={{
+              height:26,padding:'0 14px',fontSize:12,border:'none',cursor:'pointer',
+              borderLeft:i>0?'1px solid var(--border)':'none',
+              background:commMode===m?'var(--blue-700)':'#fff',
+              color:commMode===m?'#fff':'var(--ink-700)',fontWeight:commMode===m?600:400,
+            }}>{m==='network'?'网口':'串口'}</button>
+          ))}
+        </div>
       </SettingRow>
-      <SettingRow label="端口号">
-        <input value={lisPort} onChange={e=>setLisPort(e.target.value)} style={{...ssi,width:80}}/>
-      </SettingRow>
-      <div style={{marginTop:16,paddingBottom:16,display:'flex',justifyContent:'flex-end'}}>
+      {commMode==='network' && (
+        <div>
+          <SettingRow label="服务器 IP">
+            <input value={lisIp} onChange={e=>setLisIp(e.target.value)} style={{...ssi,width:140}}/>
+          </SettingRow>
+          <SettingRow label="端口号">
+            <input value={lisPort} onChange={e=>setLisPort(e.target.value)} style={{...ssi,width:80}}/>
+          </SettingRow>
+          <SettingRow label="本机 IP">
+            <input value={localIp} onChange={e=>setLocalIp(e.target.value)} style={{...ssi,width:140}}/>
+          </SettingRow>
+        </div>
+      )}
+      {commMode==='serial' && (
+        <SettingRow label="串口号">
+          <select style={{...ssi,width:100}}>
+            <option>COM1</option><option>COM2</option><option>COM3</option><option>COM4</option>
+          </select>
+        </SettingRow>
+      )}
+      <div style={{marginTop:4}}>
+        <SettingRow label="上传方式">
+          <div style={{display:'flex',gap:16,alignItems:'center'}}>
+            <label style={{display:'flex',alignItems:'center',gap:5,fontSize:12,cursor:'pointer'}}>
+              <input type="radio" name="lisDir" checked={lisDir==='one'} onChange={()=>setLisDir('one')} style={{accentColor:'var(--blue-700)'}}/>
+              单向LIS
+            </label>
+            <label style={{display:'flex',alignItems:'center',gap:5,fontSize:12,cursor:'pointer'}}>
+              <input type="radio" name="lisDir" checked={lisDir==='two'} onChange={()=>setLisDir('two')} style={{accentColor:'var(--blue-700)'}}/>
+              双向LIS
+            </label>
+          </div>
+        </SettingRow>
+        <SettingRow label="异常结果上传">
+          <SettingToggle val={lisAbnormal} onChange={setLisAbnormal}/>
+          <span style={{fontSize:11,marginLeft:8,color:'var(--ink-400)'}}>仅上传超出参考范围的结果</span>
+        </SettingRow>
+      </div>
+      <div style={{marginTop:8,display:'flex',gap:8,justifyContent:'flex-end',paddingBottom:16}}>
+        <button className="btn" style={{height:28,padding:'0 16px',fontSize:12}}>测试连接</button>
         <button className="btn primary" style={{height:28,padding:'0 20px',fontSize:12}}>保存设置</button>
       </div>
     </div>
   );
 
-  // ─── Panel: 仪器功能 ───
+  // ─── Panel: 仪器设置 ───
   const panelFunc = () => (
     <div style={{padding:'4px 14px',overflowY:'auto',height:'100%'}}>
-      {funcKeys.map(k => (
-        <div key={k} style={{display:'flex',alignItems:'center',padding:'10px 0',borderBottom:'1px solid #f0f2f5'}}>
-          <span style={{flex:1,fontSize:12,color:'var(--ink-700)'}}>{k}</span>
-          <span style={{fontSize:11,marginRight:10,color:funcs[k]?'var(--ok)':'var(--ink-300)'}}>{funcs[k]?'已启用':'已关闭'}</span>
-          <SettingToggle val={funcs[k]} onChange={v=>setFuncs(prev=>({...prev,[k]:v}))}/>
-        </div>
-      ))}
+      {funcKeys.map(k => {
+        const isIncub = k === '启用恒温孵育';
+        const isR01   = k === '样本架01启用';
+        const isR02   = k === '样本架02启用';
+        const rKey    = isR01 ? 'rack01' : isR02 ? 'rack02' : null;
+        return (
+          <div key={k} style={{display:'flex',alignItems:'center',padding:'10px 0',borderBottom:'1px solid #f0f2f5'}}>
+            <span style={{flex:1,fontSize:12,color:'var(--ink-700)'}}>{k}</span>
+            {isIncub && funcs[k] && (
+              <span onClick={()=>setShowIncubModal(true)}
+                style={{fontSize:11,marginRight:10,color:'var(--blue-700)',cursor:'pointer',
+                  background:'var(--blue-050)',padding:'1px 8px',borderRadius:10,border:'1px solid #c3dafe'}}>
+                {incubTemp}℃ 点击修改
+              </span>
+            )}
+            {rKey && funcs[k] && (
+              <span onClick={()=>setShowRackModal(rKey)}
+                style={{fontSize:11,marginRight:10,color:'var(--blue-700)',cursor:'pointer',
+                  background:'var(--blue-050)',padding:'1px 8px',borderRadius:10,border:'1px solid #c3dafe'}}>
+                {rackType[rKey]} 点击修改
+              </span>
+            )}
+            <span style={{fontSize:11,marginRight:10,color:funcs[k]?'var(--ok)':'var(--ink-300)'}}>{funcs[k]?'已启用':'已关闭'}</span>
+            <SettingToggle val={funcs[k]} onChange={v=>{
+              setFuncs(prev=>({...prev,[k]:v}));
+              if(v && isIncub) setShowIncubModal(true);
+              if(v && rKey)   setShowRackModal(rKey);
+            }}/>
+          </div>
+        );
+      })}
     </div>
   );
 
   // ─── Panel: 质控设置 ───
   const panelQC = () => {
+    // ── Tab header ──
+    const QcTabBar = () => (
+      <div style={{display:'flex',borderBottom:'1px solid var(--border)',background:'var(--surface-alt)',flexShrink:0}}>
+        {[['chart','质控图谱'],['rules','质控规则'],['info','质控品信息']].map(([t,label])=>(
+          <button key={t} onClick={()=>setQcTab(t)} style={{
+            height:32,padding:'0 18px',border:'none',cursor:'pointer',background:'transparent',fontSize:12,
+            borderBottom:qcTab===t?'2px solid var(--blue-700)':'2px solid transparent',
+            color:qcTab===t?'var(--blue-700)':'var(--ink-600)',fontWeight:qcTab===t?600:400,
+          }}>{label}</button>
+        ))}
+      </div>
+    );
+
+    // ── 质控图谱 ──
+    if (qcTab === 'chart') {
+      const chartItem = qcItems.find(x=>x.proj===qcChartProj) || qcItems[0];
+      const mean = chartItem ? Number(chartItem.target) : 1;
+      const sd   = mean * 0.08;
+      // 15 pseudo-random data points
+      const pts = Array.from({length:15}, (_,i) => {
+        const s = (i*137+qcChartProj.charCodeAt(0)*31) % 1000;
+        return mean + ((s/1000)*6 - 3) * sd * 0.9;
+      });
+      const W=380, H=160, ML=48, MT=16, MB=28, plotW=W-ML-12, plotH=H-MT-MB;
+      const ys = (val) => MT + plotH/2 - ((val-mean)/sd)*plotH/6;
+      const xs = (i) => ML + i*(plotW/14);
+      const sdLine = (n, color, dash) => (
+        <line x1={ML} x2={ML+plotW} y1={ys(mean+n*sd)} y2={ys(mean+n*sd)}
+          stroke={color} strokeWidth={n===0?1.5:0.8} strokeDasharray={dash||'none'} opacity={0.7}/>
+      );
+      return (
+        <div style={{display:'flex',flexDirection:'column',height:'100%'}}>
+          <QcTabBar/>
+          <div style={{padding:'10px 14px',flex:1,overflowY:'auto'}}>
+            <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:10}}>
+              <span style={{fontSize:12,color:'var(--ink-600)'}}>质控项目</span>
+              <select value={qcChartProj} onChange={e=>setQcChartProj(e.target.value)} style={{...ssi,width:120}}>
+                {projList.map(p=>(<option key={p.code} value={p.code}>{p.name}</option>))}
+              </select>
+              {chartItem && <span style={{fontSize:11,color:'var(--ink-400)'}}>靶值: {chartItem.target} {chartItem.unit}　SD: ±{(mean*0.08).toFixed(3)}</span>}
+            </div>
+            <svg width={W} height={H} style={{background:'#fafbfc',borderRadius:4,border:'1px solid var(--border)'}}>
+              {/* SD zones */}
+              <rect x={ML} y={ys(mean+2*sd)} width={plotW} height={ys(mean-2*sd)-ys(mean+2*sd)} fill="#fffbe6" opacity={0.6}/>
+              <rect x={ML} y={ys(mean+3*sd)} width={plotW} height={ys(mean-3*sd)-ys(mean+3*sd)-( ys(mean-2*sd)-ys(mean+2*sd) )} fill="#fff1f0" opacity={0.4}/>
+              {/* SD lines */}
+              {sdLine(3,'#ff4d4f','4 2')}{sdLine(2,'#fa8c16','4 2')}{sdLine(1,'#fadb14','4 2')}
+              {sdLine(0,'#52c41a',undefined)}
+              {sdLine(-1,'#fadb14','4 2')}{sdLine(-2,'#fa8c16','4 2')}{sdLine(-3,'#ff4d4f','4 2')}
+              {/* Y axis labels */}
+              {[3,2,1,0,-1,-2,-3].map(n=>(
+                <text key={n} x={ML-4} y={ys(mean+n*sd)+4} textAnchor="end" fontSize={9} fill="#888">
+                  {n>0?'+':''}{n}SD
+                </text>
+              ))}
+              {/* X axis */}
+              <line x1={ML} x2={ML+plotW} y1={MT+plotH} y2={MT+plotH} stroke="#ccc" strokeWidth={0.8}/>
+              {pts.map((_,i)=>(
+                <text key={i} x={xs(i)} y={MT+plotH+10} textAnchor="middle" fontSize={8} fill="#aaa">{i+1}</text>
+              ))}
+              {/* Data line */}
+              <polyline fill="none" stroke="var(--blue-700)" strokeWidth={1.4}
+                points={pts.map((v,i)=>`${xs(i)},${ys(v)}`).join(' ')}/>
+              {/* Data points */}
+              {pts.map((v,i)=>(
+                <circle key={i} cx={xs(i)} cy={ys(v)} r={3}
+                  fill={Math.abs(v-mean)>2*sd?'#ff4d4f':Math.abs(v-mean)>1*sd?'#fa8c16':'var(--blue-700)'}/>
+              ))}
+            </svg>
+            <div style={{display:'flex',gap:16,marginTop:8,fontSize:11,color:'var(--ink-500)'}}>
+              <span><span style={{display:'inline-block',width:10,height:10,borderRadius:5,background:'var(--blue-700)',marginRight:4}}/>正常</span>
+              <span><span style={{display:'inline-block',width:10,height:10,borderRadius:5,background:'#fa8c16',marginRight:4}}/>警告 (&gt;1SD)</span>
+              <span><span style={{display:'inline-block',width:10,height:10,borderRadius:5,background:'#ff4d4f',marginRight:4}}/>失控 (&gt;2SD)</span>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ── 质控规则 ──
+    if (qcTab === 'rules') {
+      return (
+        <div style={{display:'flex',flexDirection:'column',height:'100%'}}>
+          <QcTabBar/>
+          <div style={{padding:'10px 14px',flex:1,overflowY:'auto'}}>
+            <div style={{fontSize:11,color:'var(--ink-500)',marginBottom:10,padding:'6px 8px',background:'#f0f7ff',borderRadius:4,border:'1px solid #c3dafe'}}>
+              Westgard 质控规则 — 同时满足任意拒绝规则时，本批次质控结果将被标记为失控
+            </div>
+            {Object.entries(wcRules).map(([key,r])=>(
+              <div key={key} style={{display:'flex',alignItems:'center',padding:'9px 0',borderBottom:'1px solid #f0f2f5',gap:10}}>
+                <div style={{width:42,flexShrink:0}}>
+                  <span style={{fontSize:13,fontWeight:700,fontFamily:'monospace',color:r.type==='拒绝'?'var(--err)':'#d48806'}}>{key}</span>
+                </div>
+                <div style={{flex:1}}>
+                  <div style={{fontSize:12,color:'var(--ink-700)'}}>{r.desc}</div>
+                </div>
+                <span style={{padding:'1px 7px',borderRadius:10,fontSize:10,flexShrink:0,
+                  background:r.type==='拒绝'?'#fff1f0':'#fffbe6',
+                  color:r.type==='拒绝'?'var(--err)':'#d48806',
+                  border:'1px solid',borderColor:r.type==='拒绝'?'#ffccc7':'#ffe58f'}}>
+                  {r.type}
+                </span>
+                <SettingToggle val={r.enabled} onChange={v=>setWcRules(prev=>({...prev,[key]:{...prev[key],enabled:v}}))}/>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    // ── 质控品信息（原有内容） ──
     const PAGE_SIZE = 5;
     const totalPg = Math.ceil(qcItems.length / PAGE_SIZE);
     const pgItems = qcItems.slice(qcPage * PAGE_SIZE, (qcPage + 1) * PAGE_SIZE);
@@ -1821,6 +2033,7 @@ const SettingsPage = () => {
     // ── List view ──
     return (
       <div style={{display:'flex',flexDirection:'column',height:'100%'}}>
+        <QcTabBar/>
         <div style={{display:'flex',background:'var(--surface-alt)',borderBottom:'1px solid var(--border)',padding:'0 6px',flexShrink:0}}>
           <div style={{width:28,flexShrink:0,padding:'6px 4px'}}/>
           {[{l:'质控项目',w:90},{l:'质控品批号',w:100},{l:'水平值',w:46},{l:'靶值',w:70},{l:'质控范围',w:110}].map(c=>(
@@ -1856,6 +2069,7 @@ const SettingsPage = () => {
         <div style={{padding:'6px 8px',borderTop:'1px solid var(--border)',display:'flex',gap:6,alignItems:'center',flexShrink:0}}>
           <button className="btn primary sm" style={{height:26,padding:'0 10px',fontSize:11}} onClick={()=>{setQcForm(emptyQcForm);setQcFormMode('new');setQcView('form');}}>新增</button>
           <button className="btn sm" style={{height:26,padding:'0 10px',fontSize:11}}>U盘导入</button>
+          <button className="btn sm" style={{height:26,padding:'0 10px',fontSize:11}}>扫码导入</button>
           <button className="btn sm" style={{height:26,padding:'0 10px',fontSize:11}} disabled={!qcSel} onClick={()=>{
             const it=qcItems.find(x=>x.id===qcSel);
             if(it){setQcForm({barcode:'',proj:it.proj,product:it.product,lot:it.lot,level:String(it.level),target:String(it.target),upper:String(it.upper),lower:String(it.lower),unit:it.unit,expiry:it.expiry});setQcFormMode('edit');setQcView('form');}
@@ -1873,9 +2087,42 @@ const SettingsPage = () => {
 
   // ─── Panel: 项目设置 ───
   const panelProj = () => {
-    const cp = projList.find(p=>p.code===selProj)||projList[0];
+    const RESULT_TABS = ['结果1','结果2','结果3'];
+    const cfg = projResultCfg[selProj]||{};
+    const tabCfg = cfg[projResultTab]||{decimals:2,unit:'',convUnit:'',convK:'1',convB:'0',refs:[]};
+
+    const updTabCfg = (field, val) => setProjResultCfg(prev => ({
+      ...prev,
+      [selProj]: {...prev[selProj], [projResultTab]: {...prev[selProj][projResultTab], [field]:val}}
+    }));
+    const addRef = () => {
+      setProjResultCfg(prev => ({
+        ...prev,
+        [selProj]: {
+          ...prev[selProj],
+          [projResultTab]: {
+            ...prev[selProj][projResultTab],
+            refs: [...(prev[selProj][projResultTab].refs||[]), {...refForm, id:Date.now()}]
+          }
+        }
+      }));
+      setShowRefForm(false);
+      setRefForm(emptyRef);
+    };
+    const delRef = (id) => setProjResultCfg(prev => ({
+      ...prev,
+      [selProj]: {
+        ...prev[selProj],
+        [projResultTab]: {
+          ...prev[selProj][projResultTab],
+          refs: (prev[selProj][projResultTab].refs||[]).filter(r=>r.id!==id)
+        }
+      }
+    }));
+
     return (
       <div style={{display:'flex',height:'100%'}}>
+        {/* Left: project list */}
         <div style={{width:148,flexShrink:0,display:'flex',flexDirection:'column',borderRight:'1px solid var(--border)'}}>
           <div style={{padding:'5px 6px',borderBottom:'1px solid var(--border)',flexShrink:0}}>
             <button className="btn sm" style={{width:'100%',height:24,fontSize:11,display:'flex',alignItems:'center',justifyContent:'center',gap:4}}>
@@ -1899,21 +2146,205 @@ const SettingsPage = () => {
             <button className="btn sm" style={{flex:1,height:24,fontSize:11,padding:0,color:'var(--err)'}}>删除</button>
           </div>
         </div>
-        <div style={{flex:1,padding:'10px 16px',overflowY:'auto'}}>
-          <div style={{fontSize:13,fontWeight:700,color:'var(--ink-700)',marginBottom:10}}>{cp.name}</div>
-          <SettingRow label="项目编号">
-            <input value={cp.num} readOnly style={{...ssi,width:80,background:'#f8f9fb'}}/>
-          </SettingRow>
-          <SettingRow label="结果位数">
-            <input type="number" min={0} max={4} value={projDigits[selProj]||2}
-              onChange={e=>setProjDigits(prev=>({...prev,[selProj]:Number(e.target.value)}))}
-              style={{...ssi,width:60}}/>
-            <span style={{fontSize:11,color:'var(--ink-400)'}}>小数位数</span>
-          </SettingRow>
-          <div style={{marginTop:14,display:'flex',justifyContent:'flex-end'}}>
-            <button className="btn primary" style={{height:28,padding:'0 18px',fontSize:12}}>保存</button>
+
+        {/* Right: result tabs */}
+        <div style={{flex:1,display:'flex',flexDirection:'column',overflow:'hidden'}}>
+          {/* Result tab bar */}
+          <div style={{display:'flex',borderBottom:'1px solid var(--border)',background:'var(--surface-alt)',flexShrink:0}}>
+            {RESULT_TABS.map(t=>(
+              <button key={t} onClick={()=>setProjResultTab(t)} style={{
+                height:30,padding:'0 20px',border:'none',cursor:'pointer',background:'transparent',fontSize:12,
+                borderBottom:projResultTab===t?'2px solid var(--blue-700)':'2px solid transparent',
+                color:projResultTab===t?'var(--blue-700)':'var(--ink-600)',fontWeight:projResultTab===t?600:400,
+              }}>{t}</button>
+            ))}
+          </div>
+
+          {/* Tab content */}
+          <div style={{flex:1,overflowY:'auto',padding:'8px 14px'}}>
+            {/* Row 1: 小数位数 + 当前浓度单位 */}
+            <div style={{display:'flex',alignItems:'center',padding:'7px 0',borderBottom:'1px solid #f0f2f5',gap:10}}>
+              <span style={{width:90,flexShrink:0,fontSize:12,color:'var(--ink-600)'}}>小数位数</span>
+              <select value={tabCfg.decimals||2} onChange={e=>updTabCfg('decimals',Number(e.target.value))} style={{...ssi,width:68}}>
+                <option value={1}>1 位</option>
+                <option value={2}>2 位</option>
+                <option value={3}>3 位</option>
+              </select>
+              <span style={{width:4}}/>
+              <span style={{fontSize:12,color:'var(--ink-600)'}}>浓度单位</span>
+              <input value={tabCfg.unit||''} onChange={e=>updTabCfg('unit',e.target.value)} style={{...ssi,width:90}}/>
+            </div>
+            {/* Row 2: 换算浓度单位 + K + B + 保存 */}
+            <div style={{display:'flex',alignItems:'center',padding:'7px 0',borderBottom:'1px solid #f0f2f5',gap:10}}>
+              <span style={{width:90,flexShrink:0,fontSize:12,color:'var(--ink-600)'}}>换算浓度单位</span>
+              <input value={tabCfg.convUnit||''} onChange={e=>updTabCfg('convUnit',e.target.value)} style={{...ssi,width:76}} placeholder="手工输入"/>
+              <span style={{fontSize:12,color:'var(--ink-600)'}}>系数 K</span>
+              <input value={tabCfg.convK||'1'} onChange={e=>updTabCfg('convK',e.target.value)} style={{...ssi,width:50}}/>
+              <span style={{fontSize:12,color:'var(--ink-600)'}}>系数 B</span>
+              <input value={tabCfg.convB||'0'} onChange={e=>updTabCfg('convB',e.target.value)} style={{...ssi,width:50}}/>
+              <button className="btn primary" style={{height:26,padding:'0 14px',fontSize:11,flexShrink:0}}>保存</button>
+            </div>
+
+            {/* ── 参考范围 ── */}
+            <div style={{marginTop:4,marginBottom:6,display:'flex',alignItems:'center',gap:8}}>
+              <span style={{fontSize:12,fontWeight:700,color:'var(--ink-700)'}}>参考范围规则</span>
+              <div style={{flex:1}}/>
+              {/* 自定义规则开关 */}
+              <div style={{display:'flex',alignItems:'center',gap:6,marginRight:6}}>
+                <span style={{fontSize:11,color:'var(--ink-600)'}}>自定义规则用于结论计算</span>
+                <SettingToggle val={!!(tabCfg.useCustomRules)} onChange={v=>updTabCfg('useCustomRules',v)}/>
+              </div>
+              <button className="btn primary sm" style={{height:24,padding:'0 10px',fontSize:11}}
+                onClick={()=>{setRefForm(emptyRef);setShowRefForm(true);}}>+ 自定义范围</button>
+            </div>
+
+            {/* Default range */}
+            <div style={{background:'#f0f4ff',border:'1px solid #c3dafe',borderRadius:4,padding:'6px 10px',marginBottom:8}}>
+              <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:6}}>
+                <span style={{fontSize:11,fontWeight:600,color:'var(--blue-700)'}}>默认参考范围</span>
+                <span style={{fontSize:11,color:'var(--ink-500)'}}>适用于所有未匹配自定义规则的样本</span>
+              </div>
+              <div style={{display:'flex',gap:12,alignItems:'center'}}>
+                <span style={{fontSize:11,color:'var(--ink-600)'}}>下限</span>
+                <input placeholder="—" style={{...ssi,width:70,height:22,fontSize:11}}/>
+                <span style={{fontSize:11,color:'var(--ink-600)'}}>上限</span>
+                <input placeholder="—" style={{...ssi,width:70,height:22,fontSize:11}}/>
+                <span style={{fontSize:11,color:'var(--ink-400)'}}>单位: {tabCfg.unit||'—'}</span>
+              </div>
+            </div>
+
+            {/* Custom range rules */}
+            {(tabCfg.refs||[]).map((ref,idx)=>(
+              <div key={ref.id||idx} style={{border:'1px solid var(--border)',borderRadius:6,marginBottom:8,overflow:'hidden'}}>
+                <div style={{display:'flex',alignItems:'center',background:'var(--surface-alt)',padding:'5px 8px',gap:6}}>
+                  <span style={{fontSize:11,padding:'1px 7px',borderRadius:10,background:'#e8f0fe',color:'var(--blue-700)',border:'1px solid #c3dafe'}}>{ref.gender}</span>
+                  <span style={{fontSize:11,padding:'1px 7px',borderRadius:10,background:'#e8f5e9',color:'#2a7c3f',border:'1px solid #b7dfc4'}}>
+                    {ref.ageAll?'全年龄':ref.ageMin+'~'+ref.ageMax+'岁'}
+                  </span>
+                  <div style={{flex:1}}/>
+                  <button onClick={()=>delRef(ref.id||idx)} style={{background:'none',border:'none',cursor:'pointer',color:'var(--ink-400)',fontSize:12,padding:'0 4px'}}>✕</button>
+                </div>
+                {/* Style A (idx=0): value labels row above color bar */}
+                {idx===0 ? (
+                  <div style={{padding:'8px 10px'}}>
+                    <div style={{display:'flex',marginBottom:4}}>
+                      <div style={{flex:1,textAlign:'center',fontSize:13,fontWeight:700,color:'#1d4ed8'}}>&lt; {ref.low||'—'}</div>
+                      <div style={{flex:2,textAlign:'center',fontSize:13,fontWeight:700,color:'#15803d'}}>{ref.low||'—'} ~ {ref.high||'—'}</div>
+                      <div style={{flex:1,textAlign:'center',fontSize:13,fontWeight:700,color:'#b91c1c'}}>&gt; {ref.high||'—'}</div>
+                    </div>
+                    <div style={{display:'flex',alignItems:'stretch',borderRadius:4,overflow:'hidden',height:24}}>
+                      <div style={{flex:1,background:'#dbeafe',display:'flex',alignItems:'center',justifyContent:'center',color:'#1d4ed8',fontSize:11,fontWeight:600}}>{ref.concl1}</div>
+                      <div style={{width:2,background:'#93c5fd'}}/>
+                      <div style={{flex:2,background:'#dcfce7',display:'flex',alignItems:'center',justifyContent:'center',color:'#15803d',fontSize:11,fontWeight:600}}>{ref.concl2}</div>
+                      <div style={{width:2,background:'#86efac'}}/>
+                      <div style={{flex:1,background:'#fee2e2',display:'flex',alignItems:'center',justifyContent:'center',color:'#b91c1c',fontSize:11,fontWeight:600}}>{ref.concl3}</div>
+                    </div>
+                  </div>
+                ) : (
+                  /* Style B (idx≥1): larger text inside taller bar, value + conclusion together */
+                  <div style={{padding:'8px 10px'}}>
+                    <div style={{display:'flex',alignItems:'stretch',borderRadius:4,overflow:'hidden',height:42}}>
+                      <div style={{flex:1,background:'#dbeafe',display:'flex',alignItems:'center',justifyContent:'center',
+                        color:'#1d4ed8',flexDirection:'column',gap:2,padding:'0 6px',textAlign:'center'}}>
+                        <span style={{fontSize:12,fontWeight:700}}>&lt; {ref.low||'—'}</span>
+                        <span style={{fontSize:10,fontWeight:500,opacity:.9}}>{ref.concl1}</span>
+                      </div>
+                      <div style={{width:2,background:'#93c5fd'}}/>
+                      <div style={{flex:2,background:'#dcfce7',display:'flex',alignItems:'center',justifyContent:'center',
+                        color:'#15803d',flexDirection:'column',gap:2,padding:'0 6px',textAlign:'center'}}>
+                        <span style={{fontSize:12,fontWeight:700}}>{ref.low||'—'} ~ {ref.high||'—'}</span>
+                        <span style={{fontSize:10,fontWeight:500,opacity:.9}}>{ref.concl2}</span>
+                      </div>
+                      <div style={{width:2,background:'#86efac'}}/>
+                      <div style={{flex:1,background:'#fee2e2',display:'flex',alignItems:'center',justifyContent:'center',
+                        color:'#b91c1c',flexDirection:'column',gap:2,padding:'0 6px',textAlign:'center'}}>
+                        <span style={{fontSize:12,fontWeight:700}}>&gt; {ref.high||'—'}</span>
+                        <span style={{fontSize:10,fontWeight:500,opacity:.9}}>{ref.concl3}</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+
+            {(tabCfg.refs||[]).length===0 && (
+              <div style={{textAlign:'center',padding:'16px 0',color:'var(--ink-300)',fontSize:11}}>暂无自定义范围，点击"+ 自定义范围"添加</div>
+            )}
           </div>
         </div>
+
+        {/* Add ref-range modal */}
+        {showRefForm && (
+          <div className="overlay" onClick={e=>{if(e.target===e.currentTarget)setShowRefForm(false);}}>
+            <div className="modal" style={{width:400}}>
+              <div className="modal-hd">
+                <span>新增自定义范围</span>
+                <button onClick={()=>setShowRefForm(false)} style={{background:'none',border:'none',cursor:'pointer',padding:2}}><Icon name="close" size={14}/></button>
+              </div>
+              <div className="modal-bd" style={{padding:'12px 18px'}}>
+                <SettingRow label="性别" w={80}>
+                  <div style={{display:'flex',gap:0,borderRadius:4,overflow:'hidden',border:'1px solid var(--border)'}}>
+                    {['全部','男','女'].map((g,i)=>(
+                      <button key={g} onClick={()=>setRefForm(p=>({...p,gender:g}))} style={{
+                        height:26,padding:'0 14px',border:'none',cursor:'pointer',
+                        borderLeft:i>0?'1px solid var(--border)':'none',
+                        background:refForm.gender===g?'var(--blue-700)':'#fff',
+                        color:refForm.gender===g?'#fff':'var(--ink-700)',fontSize:12,
+                      }}>{g}</button>
+                    ))}
+                  </div>
+                </SettingRow>
+                <SettingRow label="年龄" w={80}>
+                  <label style={{display:'flex',alignItems:'center',gap:4,fontSize:12,cursor:'pointer'}}>
+                    <input type="checkbox" checked={refForm.ageAll} onChange={e=>setRefForm(p=>({...p,ageAll:e.target.checked}))} style={{accentColor:'var(--blue-700)'}}/>
+                    全年龄
+                  </label>
+                  {!refForm.ageAll && (
+                    <div style={{display:'flex',alignItems:'center',gap:6,marginLeft:8}}>
+                      <input type="number" value={refForm.ageMin} onChange={e=>setRefForm(p=>({...p,ageMin:e.target.value}))} style={{...ssi,width:55}} placeholder="最小"/>
+                      <span style={{fontSize:12,color:'var(--ink-400)'}}>~</span>
+                      <input type="number" value={refForm.ageMax} onChange={e=>setRefForm(p=>({...p,ageMax:e.target.value}))} style={{...ssi,width:55}} placeholder="最大"/>
+                      <span style={{fontSize:11,color:'var(--ink-400)'}}>岁</span>
+                    </div>
+                  )}
+                </SettingRow>
+                <div style={{display:'flex',gap:12}}>
+                  <SettingRow label="参考下限" w={70}>
+                    <input type="number" value={refForm.low} onChange={e=>setRefForm(p=>({...p,low:e.target.value}))} style={{...ssi,width:80}}/>
+                  </SettingRow>
+                  <SettingRow label="参考上限" w={70}>
+                    <input type="number" value={refForm.high} onChange={e=>setRefForm(p=>({...p,high:e.target.value}))} style={{...ssi,width:80}}/>
+                  </SettingRow>
+                </div>
+                {/* Visual preview */}
+                <div style={{display:'flex',alignItems:'stretch',borderRadius:4,overflow:'hidden',height:36,fontSize:11,marginTop:8}}>
+                  <div style={{flex:1,background:'#dbeafe',display:'flex',alignItems:'center',justifyContent:'center',color:'#1d4ed8',flexDirection:'column',gap:1}}>
+                    <span style={{fontSize:10}}>&lt; {refForm.low||'—'}</span>
+                    <input value={refForm.concl1} onChange={e=>setRefForm(p=>({...p,concl1:e.target.value}))}
+                      style={{border:'none',background:'transparent',textAlign:'center',fontSize:11,fontWeight:600,color:'#1d4ed8',width:'100%',outline:'none'}}/>
+                  </div>
+                  <div style={{width:2,background:'#93c5fd'}}/>
+                  <div style={{flex:2,background:'#dcfce7',display:'flex',alignItems:'center',justifyContent:'center',color:'#15803d',flexDirection:'column',gap:1}}>
+                    <span style={{fontSize:10}}>{refForm.low||'—'} ~ {refForm.high||'—'}</span>
+                    <input value={refForm.concl2} onChange={e=>setRefForm(p=>({...p,concl2:e.target.value}))}
+                      style={{border:'none',background:'transparent',textAlign:'center',fontSize:11,fontWeight:600,color:'#15803d',width:'100%',outline:'none'}}/>
+                  </div>
+                  <div style={{width:2,background:'#86efac'}}/>
+                  <div style={{flex:1,background:'#fee2e2',display:'flex',alignItems:'center',justifyContent:'center',color:'#b91c1c',flexDirection:'column',gap:1}}>
+                    <span style={{fontSize:10}}>&gt; {refForm.high||'—'}</span>
+                    <input value={refForm.concl3} onChange={e=>setRefForm(p=>({...p,concl3:e.target.value}))}
+                      style={{border:'none',background:'transparent',textAlign:'center',fontSize:11,fontWeight:600,color:'#b91c1c',width:'100%',outline:'none'}}/>
+                  </div>
+                </div>
+                <div style={{fontSize:10,color:'var(--ink-400)',textAlign:'center',marginTop:4}}>点击结论文字可直接编辑</div>
+              </div>
+              <div className="modal-ft">
+                <button className="btn" onClick={()=>setShowRefForm(false)} style={{height:28,padding:'0 14px',fontSize:12}}>取消</button>
+                <button className="btn primary" onClick={addRef} style={{height:28,padding:'0 14px',fontSize:12}}>确认添加</button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   };
@@ -1921,27 +2352,27 @@ const SettingsPage = () => {
   // ─── Panel: 用户设置 ───
   const panelUsers = () => (
     <div style={{display:'flex',flexDirection:'column',height:'100%'}}>
-      <div style={{display:'flex',background:'var(--surface-alt)',borderBottom:'1px solid var(--border)',padding:'0 6px',flexShrink:0}}>
-        {[{l:'序号',w:36},{l:'用户名',w:90},{l:'用户组',w:72},{l:'最后登录时间',w:130}].map(c=>(
-          <div key={c.l} style={{width:c.w,flexShrink:0,padding:'6px 4px',fontSize:11,fontWeight:600,color:'var(--ink-600)'}}>{c.l}</div>
+      <div style={{display:'flex',background:'var(--surface-alt)',borderBottom:'1px solid var(--border)',padding:'0 8px',flexShrink:0}}>
+        {[{l:'序号',w:46},{l:'用户名',w:130},{l:'用户组',w:90},{l:'最后登录时间',w:150}].map(c=>(
+          <div key={c.l} style={{width:c.w,flexShrink:0,padding:'8px 6px',fontSize:12,fontWeight:600,color:'var(--ink-600)'}}>{c.l}</div>
         ))}
       </div>
       <div style={{flex:1,overflowY:'auto'}}>
         {users.map((u,i)=>(
           <div key={u.id} onClick={()=>setSelUser(selUser===u.id?null:u.id)} style={{
-            display:'flex',padding:'0 6px',cursor:'pointer',
-            borderBottom:'1px solid #f5f7fa',
+            display:'flex',padding:'0 8px',cursor:'pointer',
+            borderBottom:'1px solid #f0f2f5',
             background:selUser===u.id?'var(--blue-050)':'transparent',
           }}>
-            <div style={{width:36,flexShrink:0,padding:'7px 4px',fontSize:12,color:'var(--ink-500)'}}>{i+1}</div>
-            <div style={{width:90,flexShrink:0,padding:'7px 4px',fontSize:12,color:'var(--ink-800)'}}>{u.name}</div>
-            <div style={{width:72,flexShrink:0,padding:'7px 4px',fontSize:12}}>
-              <span style={{padding:'1px 6px',borderRadius:10,fontSize:11,
+            <div style={{width:46,flexShrink:0,padding:'11px 6px',fontSize:13,color:'var(--ink-500)'}}>{i+1}</div>
+            <div style={{width:130,flexShrink:0,padding:'11px 6px',fontSize:13,color:'var(--ink-800)',fontWeight:500}}>{u.name}</div>
+            <div style={{width:90,flexShrink:0,padding:'11px 6px',fontSize:13,display:'flex',alignItems:'center'}}>
+              <span style={{padding:'2px 9px',borderRadius:10,fontSize:12,
                 background:u.group==='工程师'?'#fce8e8':u.group==='管理员'?'#e8f0fe':'#e8f5e9',
                 color:u.group==='工程师'?'#c00':u.group==='管理员'?'var(--blue-700)':'#2a7c3f',
               }}>{u.group}</span>
             </div>
-            <div style={{width:130,flexShrink:0,padding:'7px 4px',fontSize:11,color:'var(--ink-400)'}}>{u.lastLogin}</div>
+            <div style={{width:150,flexShrink:0,padding:'11px 6px',fontSize:12,color:'var(--ink-400)'}}>{u.lastLogin}</div>
           </div>
         ))}
       </div>
@@ -1966,10 +2397,6 @@ const SettingsPage = () => {
   // ─── Panel: 关于仪器 ───
   const panelAbout = () => (
     <div style={{padding:'4px 14px',height:'100%',overflowY:'auto'}}>
-      <div style={{fontSize:11,color:'#7a5c00',background:'#fffbe6',border:'1px solid #ffe58f',
-        borderRadius:4,padding:'6px 10px',marginBottom:10,lineHeight:1.7}}>
-        提示：长按文字标签（≥0.8秒）可修改对应内容
-      </div>
       {aboutKeys.map(k=>(
         <div key={k} style={{display:'flex',alignItems:'center',padding:'8px 0',borderBottom:'1px solid #f0f2f5',gap:10}}>
           <span
@@ -1992,6 +2419,91 @@ const SettingsPage = () => {
     </div>
   );
 
+  // ─── Panel: 打印设置 ───
+  const panelPrint = () => (
+    <div style={{padding:'4px 14px',overflowY:'auto',height:'100%'}}>
+
+      {/* ── 基本设置 ── */}
+      <SecTitle>基本设置</SecTitle>
+
+      {/* 自动打印 — toggle on right like 仪器设置 */}
+      <div style={{display:'flex',alignItems:'center',padding:'10px 0',borderBottom:'1px solid #f0f2f5'}}>
+        <span style={{flex:1,fontSize:12,color:'var(--ink-700)'}}>检测完成后自动打印结果</span>
+        <span style={{fontSize:11,marginRight:10,color:autoPrint?'var(--ok)':'var(--ink-300)'}}>{autoPrint?'已启用':'已关闭'}</span>
+        <SettingToggle val={autoPrint} onChange={setAutoPrint}/>
+      </div>
+
+      {/* 打印机类型选择 */}
+      <div style={{display:'flex',alignItems:'center',padding:'10px 0',borderBottom:'1px solid #f0f2f5'}}>
+        <span style={{flex:1,fontSize:12,color:'var(--ink-700)'}}>打印机类型</span>
+        <div style={{display:'flex',gap:0,borderRadius:4,overflow:'hidden',border:'1px solid var(--border)'}}>
+          {[['internal','内置打印机'],['external','外置打印机']].map(([v,label],i)=>(
+            <button key={v} onClick={()=>setPrinterType(v)} style={{
+              height:26,padding:'0 14px',fontSize:12,border:'none',cursor:'pointer',
+              borderLeft:i>0?'1px solid var(--border)':'none',
+              background:printerType===v?'var(--blue-700)':'#fff',
+              color:printerType===v?'#fff':'var(--ink-700)',fontWeight:printerType===v?600:400,
+            }}>{label}</button>
+          ))}
+        </div>
+      </div>
+
+      {/* ── 内置打印机：打印内容选择 ── */}
+      {printerType==='internal' && (() => {
+        const items = [
+          ['sampleInfo','样本信息'],
+          ['testResult','检测结果'],
+          ['refRange','参考范围'],
+          ['inspector','检验人员'],
+          ['patientName','病人姓名'],
+        ];
+        return (
+          <React.Fragment>
+            <SecTitle>打印内容</SecTitle>
+            {items.map(([k,label])=>(
+              <div key={k} style={{display:'flex',alignItems:'center',padding:'10px 0',borderBottom:'1px solid #f0f2f5'}}>
+                <span style={{flex:1,fontSize:12,color:'var(--ink-700)'}}>{label}</span>
+                <span style={{fontSize:11,marginRight:10,color:printContent[k]?'var(--ok)':'var(--ink-300)'}}>{printContent[k]?'已启用':'已关闭'}</span>
+                <SettingToggle val={printContent[k]} onChange={v=>setPrintContent(p=>({...p,[k]:v}))}/>
+              </div>
+            ))}
+          </React.Fragment>
+        );
+      })()}
+
+      {/* ── 外置打印机：打印机设置 + 导入模板 ── */}
+      {printerType==='external' && (() => (
+        <React.Fragment>
+          <SecTitle>外置打印机设置</SecTitle>
+          <SettingRow label="打印机名称" w={90}>
+            <input value={extPrinterName} onChange={e=>setExtPrinterName(e.target.value)}
+              placeholder="输入打印机名称或端口" style={{...ssi,width:200}}/>
+          </SettingRow>
+          <SettingRow label="打印模板" w={90}>
+            <div style={{display:'flex',alignItems:'center',gap:8}}>
+              <input readOnly value={printTemplate||''} placeholder="未导入模板"
+                style={{...ssi,width:160,color:printTemplate?'var(--ink-800)':'var(--ink-300)',cursor:'default'}}/>
+              <button className="btn" style={{height:26,padding:'0 12px',fontSize:11,flexShrink:0}}
+                onClick={()=>setPrintTemplate('template_v1.rpt')}>
+                导入模板
+              </button>
+              {printTemplate && (
+                <button onClick={()=>setPrintTemplate('')} style={{background:'none',border:'none',cursor:'pointer',color:'var(--ink-400)',fontSize:12,padding:'0 2px'}}>✕</button>
+              )}
+            </div>
+          </SettingRow>
+        </React.Fragment>
+      ))()}
+
+      {/* ── 打印测试 ── */}
+      <div style={{marginTop:16,paddingBottom:16,display:'flex',alignItems:'center',gap:10,justifyContent:'flex-end'}}>
+        <button className="btn" style={{height:28,padding:'0 16px',fontSize:12}}>打印测试</button>
+        <button className="btn primary" style={{height:28,padding:'0 20px',fontSize:12}}>保存设置</button>
+      </div>
+
+    </div>
+  );
+
   // ─── Panel: 厂家模式 ───
   const panelFactory = () => (
     <div style={{display:'flex',alignItems:'center',justifyContent:'center',height:'100%',flexDirection:'column',gap:8,color:'var(--ink-400)'}}>
@@ -2001,8 +2513,9 @@ const SettingsPage = () => {
   );
 
   const panelMap = {
-    '仪器设置':panelFunc,'项目设置':panelProj,'质控设置':panelQC,
-    '用户设置':panelUsers,'系统设置':panelSys,'关于仪器':panelAbout,'厂家模式':panelFactory,
+    '仪器设置':panelFunc,'质控设置':panelQC,'项目设置':panelProj,
+    '打印设置':panelPrint,'用户设置':panelUsers,'系统设置':panelSys,
+    '关于仪器':panelAbout,'厂家模式':panelFactory,
   };
 
   return (
@@ -2130,11 +2643,10 @@ const SettingsPage = () => {
             </div>
             <div className="modal-bd" style={{padding:'12px 16px'}}>
               <div style={{fontSize:11,color:'#5a4500',background:'#fffbe6',border:'1px solid #ffe58f',
-                borderRadius:4,padding:'8px 10px',marginBottom:12,lineHeight:1.8}}>
-                选择U盘 update 目录下更新包文件，更新相应的程序。<br/>
-                选择 <b>.bin</b> 文件更新控制板程序；选择 <b>.tar</b> 文件更新用户程序。<br/>
+                borderRadius:4,padding:'8px 10px',marginBottom:12,lineHeight:1.9}}>
+                请将需要更新的程序包放到U盘 update 文件夹下，点击更新。<br/>
                 等待更新包发送完成，仪器校验成功后会自动重启完成更新。<br/>
-                <span style={{color:'var(--err)',fontWeight:600}}>更新过程中不要操作仪器。</span>
+                <span style={{color:'var(--err)',fontWeight:600}}>更新过程中禁止操作仪器或关闭电源。</span>
               </div>
               <div style={{border:'1px solid var(--border)',borderRadius:4,overflow:'hidden',marginBottom:12}}>
                 <div style={{display:'flex',background:'var(--surface-alt)',borderBottom:'1px solid var(--border)',padding:'5px 8px'}}>
@@ -2147,8 +2659,7 @@ const SettingsPage = () => {
                     <span style={{flex:1,fontSize:12,color:'var(--ink-800)'}}>{s.label}</span>
                     <span style={{width:120,fontSize:11,color:'var(--ink-500)'}}>{s.ver}</span>
                     <div style={{width:106,display:'flex',gap:4}}>
-                      {s.hasBtn && (<button className="btn sm" disabled={updating} style={{height:22,padding:'0 5px',fontSize:10}}>U盘导入</button>)}
-                      {s.hasBtn && (<button className="btn primary sm" onClick={startUpdate} disabled={updating} style={{height:22,padding:'0 5px',fontSize:10}}>更新</button>)}
+                      {s.hasBtn && (<button className="btn primary sm" onClick={startUpdate} disabled={updating} style={{height:22,padding:'0 8px',fontSize:10}}>更新</button>)}
                     </div>
                   </div>
                 ))}
@@ -2168,6 +2679,66 @@ const SettingsPage = () => {
             <div className="modal-ft">
               {updating && (<button className="btn" onClick={cancelUpdate} style={{height:28,padding:'0 14px',fontSize:12}}>取消更新</button>)}
               {!updating && (<button className="btn" onClick={()=>setShowUpdateModal(false)} style={{height:28,padding:'0 14px',fontSize:12}}>关闭</button>)}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ══ 孵育温度 modal ══ */}
+      {showIncubModal && (
+        <div className="overlay" onClick={e=>{if(e.target===e.currentTarget)setShowIncubModal(false);}}>
+          <div className="modal" style={{width:280}}>
+            <div className="modal-hd">
+              <span>设置孵育温度</span>
+              <button onClick={()=>setShowIncubModal(false)} style={{background:'none',border:'none',cursor:'pointer',padding:2}}><Icon name="close" size={14}/></button>
+            </div>
+            <div className="modal-bd" style={{padding:'16px 20px'}}>
+              <SettingRow label="孵育温度" w={70}>
+                <input type="number" min={20} max={38} value={incubTemp}
+                  onChange={e=>setIncubTemp(String(Math.min(38,Math.max(20,Number(e.target.value)))))}
+                  style={{...ssi,width:70}}/>
+                <span style={{fontSize:12,color:'var(--ink-600)',marginLeft:4}}>℃（最大 38℃）</span>
+              </SettingRow>
+              <input type="range" min={20} max={38} value={incubTemp}
+                onChange={e=>setIncubTemp(e.target.value)}
+                style={{width:'100%',marginTop:8,accentColor:'var(--blue-700)'}}/>
+            </div>
+            <div className="modal-ft">
+              <button className="btn" onClick={()=>setShowIncubModal(false)} style={{height:28,padding:'0 14px',fontSize:12}}>取消</button>
+              <button className="btn primary" onClick={()=>setShowIncubModal(false)} style={{height:28,padding:'0 14px',fontSize:12}}>确认</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ══ 样本架类型 modal ══ */}
+      {showRackModal && (
+        <div className="overlay" onClick={e=>{if(e.target===e.currentTarget)setShowRackModal(null);}}>
+          <div className="modal" style={{width:300}}>
+            <div className="modal-hd">
+              <span>选择样本架类型 · {showRackModal==='rack01'?'架01':'架02'}</span>
+              <button onClick={()=>setShowRackModal(null)} style={{background:'none',border:'none',cursor:'pointer',padding:2}}><Icon name="close" size={14}/></button>
+            </div>
+            <div className="modal-bd" style={{padding:'14px 20px',display:'flex',flexDirection:'column',gap:8}}>
+              {['采血管样本架','末梢血样本架'].map(t=>(
+                <div key={t} onClick={()=>setRackType(prev=>({...prev,[showRackModal]:t}))}
+                  style={{
+                    padding:'10px 14px',borderRadius:6,cursor:'pointer',
+                    border:'2px solid',fontSize:13,
+                    borderColor:rackType[showRackModal]===t?'var(--blue-700)':'var(--border)',
+                    background:rackType[showRackModal]===t?'var(--blue-050)':'#fff',
+                    color:rackType[showRackModal]===t?'var(--blue-700)':'var(--ink-700)',
+                    fontWeight:rackType[showRackModal]===t?600:400,
+                    display:'flex',alignItems:'center',gap:10,
+                  }}>
+                  <Icon name="plate" size={18} color={rackType[showRackModal]===t?'var(--blue-700)':undefined}/>
+                  {t}
+                </div>
+              ))}
+            </div>
+            <div className="modal-ft">
+              <button className="btn" onClick={()=>setShowRackModal(null)} style={{height:28,padding:'0 14px',fontSize:12}}>取消</button>
+              <button className="btn primary" onClick={()=>setShowRackModal(null)} style={{height:28,padding:'0 14px',fontSize:12}}>确认</button>
             </div>
           </div>
         </div>
@@ -2267,6 +2838,7 @@ const RESULT_PAGE_SIZE = 10;
 const ResultsPage = ({ results }) => {
   const [selectedIds, setSelectedIds] = React.useState([]);
   const [date, setDate] = React.useState('2026-04-18');
+  const [resultType, setResultType] = React.useState('sample'); // 'sample' | 'qc'
   const [detailRow, setDetailRow] = React.useState(null); // { seq, sample, item, tcRatio, tVal, cVal }
   const [page, setPage] = React.useState(1);
 
@@ -2324,6 +2896,11 @@ const ResultsPage = ({ results }) => {
       {/* ── 筛选栏 ── */}
       <div style={{background:'#fff', border:'1px solid var(--border)', borderRadius:6,
         padding:'7px 10px', display:'flex', alignItems:'center', gap:8, flexShrink:0}}>
+        <select value={resultType} onChange={e=>setResultType(e.target.value)}
+          style={{height:28,padding:'0 8px',fontSize:12,border:'1px solid var(--border)',borderRadius:4,outline:'none',background:'#fff',color:'var(--ink-800)',minWidth:84}}>
+          <option value="sample">样本结果</option>
+          <option value="qc">质控结果</option>
+        </select>
         <div style={{display:'flex', alignItems:'center', gap:6, fontSize:12}}>
           <span style={{color:'var(--ink-500)'}}>日期</span>
           <input type="date" className="input" style={{width:132, height:28, fontSize:12}}
