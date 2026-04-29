@@ -16,83 +16,83 @@ CXX           = g++
 DEFINES       = -DUNICODE -D_UNICODE -DWIN32 -DMINGW_HAS_SECURE_API=1 -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_SVG_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN
 CFLAGS        = -fno-keep-inline-dllexport -O2 -Wall -Wextra -Wextra $(DEFINES)
 CXXFLAGS      = -fno-keep-inline-dllexport -O2 -std=gnu++1y -Wall -Wextra -Wextra -fexceptions -mthreads $(DEFINES)
-INCPATH       = -I. -Isrc -IC:\Qt\5.14.2\mingw73_32\include -IC:\Qt\5.14.2\mingw73_32\include\QtSvg -IC:\Qt\5.14.2\mingw73_32\include\QtWidgets -IC:\Qt\5.14.2\mingw73_32\include\QtGui -IC:\Qt\5.14.2\mingw73_32\include\QtANGLE -IC:\Qt\5.14.2\mingw73_32\include\QtCore -Irelease -I. -IC:\Qt\5.14.2\mingw73_32\mkspecs\win32-g++ 
+INCPATH       = -I. -Isrc -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -Irelease -I. -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ 
 LINKER      =        g++
 LFLAGS        =        -Wl,-s -Wl,-subsystem,windows -mthreads
-LIBS        =        C:\Qt\5.14.2\mingw73_32\lib\libQt5Svg.a C:\Qt\5.14.2\mingw73_32\lib\libQt5Widgets.a C:\Qt\5.14.2\mingw73_32\lib\libQt5Gui.a C:\Qt\5.14.2\mingw73_32\lib\libQt5Core.a  -lmingw32 C:\Qt\5.14.2\mingw73_32\lib\libqtmain.a -LC:\openssl\lib -LC:\Utils\my_sql\mysql-5.7.25-win32\lib -LC:\Utils\postgresql\pgsql\lib -lshell32 
-QMAKE         = C:\Qt\5.14.2\mingw73_32\bin\qmake.exe
-DEL_FILE      = del
-CHK_DIR_EXISTS= if not exist
-MKDIR         = mkdir
-COPY          = copy /y
-COPY_FILE     = copy /y
-COPY_DIR      = xcopy /s /q /y /i
-INSTALL_FILE  = copy /y
-INSTALL_PROGRAM = copy /y
-INSTALL_DIR   = xcopy /s /q /y /i
-QINSTALL      = C:\Qt\5.14.2\mingw73_32\bin\qmake.exe -install qinstall
-QINSTALL_PROGRAM = C:\Qt\5.14.2\mingw73_32\bin\qmake.exe -install qinstall -exe
-DEL_FILE      = del
+LIBS        =        C:/Qt/5.14.2/mingw73_32/lib/libQt5Svg.a C:/Qt/5.14.2/mingw73_32/lib/libQt5Widgets.a C:/Qt/5.14.2/mingw73_32/lib/libQt5Gui.a C:/Qt/5.14.2/mingw73_32/lib/libQt5Core.a  -lmingw32 C:/Qt/5.14.2/mingw73_32/lib/libqtmain.a -LC:/openssl/lib -LC:/Utils/my_sql/mysql-5.7.25-win32/lib -LC:/Utils/postgresql/pgsql/lib -lshell32 
+QMAKE         = C:/Qt/5.14.2/mingw73_32/bin/qmake.exe
+DEL_FILE      = rm -f
+CHK_DIR_EXISTS= test -d
+MKDIR         = mkdir -p
+COPY          = cp -f
+COPY_FILE     = cp -f
+COPY_DIR      = cp -f -R
+INSTALL_FILE  = cp -f
+INSTALL_PROGRAM = cp -f
+INSTALL_DIR   = cp -f -R
+QINSTALL      = C:/Qt/5.14.2/mingw73_32/bin/qmake.exe -install qinstall
+QINSTALL_PROGRAM = C:/Qt/5.14.2/mingw73_32/bin/qmake.exe -install qinstall -exe
+DEL_FILE      = rm -f
 SYMLINK       = $(QMAKE) -install ln -f -s
 DEL_DIR       = rmdir
-MOVE          = move
+MOVE          = mv -f
 IDC           = idc
 IDL           = midl
-ZIP           = zip -r -9
+ZIP           = 
 DEF_FILE      = 
 RES_FILE      = 
-SED           = $(QMAKE) -install sed
-MOVE          = move
+SED           = sed
+MOVE          = mv -f
 
 ####### Output directory
 
-OBJECTS_DIR   = release
+OBJECTS_DIR   = release/
 
 ####### Files
 
-SOURCES       = src\main.cpp \
-		src\ui\LoginWindow.cpp \
-		src\ui\MainWindow.cpp \
-		src\ui\widgets\SvgIcon.cpp \
-		src\ui\widgets\StatusPill.cpp \
-		src\ui\widgets\CircularProgress.cpp \
-		src\ui\widgets\VirtualKeyboard.cpp \
-		src\ui\widgets\TopBar.cpp \
-		src\ui\widgets\BottomBar.cpp \
-		src\ui\widgets\SlotCard.cpp \
-		src\ui\widgets\DilutionCard.cpp \
-		src\ui\widgets\ConsumableItemCard.cpp \
-		src\ui\tabs\DetectTab.cpp \
-		src\ui\tabs\SampleSlotGrid.cpp \
-		src\ui\tabs\SampleListPanel.cpp \
-		src\ui\tabs\SampleFormPanel.cpp \
-		src\ui\tabs\ResultsTab.cpp \
-		src\ui\tabs\ConsumablesTab.cpp \
-		src\ui\tabs\SettingsTab.cpp \
-		src\modals\AddCardModal.cpp \
-		src\modals\AlertsModal.cpp \
-		src\modals\AssayConfigModal.cpp release\qrc_resources.cpp \
-		release\moc_LoginWindow.cpp \
-		release\moc_MainWindow.cpp \
-		release\moc_SvgIcon.cpp \
-		release\moc_StatusPill.cpp \
-		release\moc_CircularProgress.cpp \
-		release\moc_VirtualKeyboard.cpp \
-		release\moc_TopBar.cpp \
-		release\moc_BottomBar.cpp \
-		release\moc_SlotCard.cpp \
-		release\moc_DilutionCard.cpp \
-		release\moc_ConsumableItemCard.cpp \
-		release\moc_DetectTab.cpp \
-		release\moc_SampleSlotGrid.cpp \
-		release\moc_SampleListPanel.cpp \
-		release\moc_SampleFormPanel.cpp \
-		release\moc_ResultsTab.cpp \
-		release\moc_ConsumablesTab.cpp \
-		release\moc_SettingsTab.cpp \
-		release\moc_AddCardModal.cpp \
-		release\moc_AlertsModal.cpp \
-		release\moc_AssayConfigModal.cpp
+SOURCES       = src/main.cpp \
+		src/ui/LoginWindow.cpp \
+		src/ui/MainWindow.cpp \
+		src/ui/widgets/SvgIcon.cpp \
+		src/ui/widgets/StatusPill.cpp \
+		src/ui/widgets/CircularProgress.cpp \
+		src/ui/widgets/VirtualKeyboard.cpp \
+		src/ui/widgets/TopBar.cpp \
+		src/ui/widgets/BottomBar.cpp \
+		src/ui/widgets/SlotCard.cpp \
+		src/ui/widgets/DilutionCard.cpp \
+		src/ui/widgets/ConsumableItemCard.cpp \
+		src/ui/tabs/DetectTab.cpp \
+		src/ui/tabs/SampleSlotGrid.cpp \
+		src/ui/tabs/SampleListPanel.cpp \
+		src/ui/tabs/SampleFormPanel.cpp \
+		src/ui/tabs/ResultsTab.cpp \
+		src/ui/tabs/ConsumablesTab.cpp \
+		src/ui/tabs/SettingsTab.cpp \
+		src/modals/AddCardModal.cpp \
+		src/modals/AlertsModal.cpp \
+		src/modals/AssayConfigModal.cpp release/qrc_resources.cpp \
+		release/moc_LoginWindow.cpp \
+		release/moc_MainWindow.cpp \
+		release/moc_SvgIcon.cpp \
+		release/moc_StatusPill.cpp \
+		release/moc_CircularProgress.cpp \
+		release/moc_VirtualKeyboard.cpp \
+		release/moc_TopBar.cpp \
+		release/moc_BottomBar.cpp \
+		release/moc_SlotCard.cpp \
+		release/moc_DilutionCard.cpp \
+		release/moc_ConsumableItemCard.cpp \
+		release/moc_DetectTab.cpp \
+		release/moc_SampleSlotGrid.cpp \
+		release/moc_SampleListPanel.cpp \
+		release/moc_SampleFormPanel.cpp \
+		release/moc_ResultsTab.cpp \
+		release/moc_ConsumablesTab.cpp \
+		release/moc_SettingsTab.cpp \
+		release/moc_AddCardModal.cpp \
+		release/moc_AlertsModal.cpp \
+		release/moc_AssayConfigModal.cpp
 OBJECTS       = release/main.o \
 		release/LoginWindow.o \
 		release/MainWindow.o \
@@ -138,53 +138,53 @@ OBJECTS       = release/main.o \
 		release/moc_AlertsModal.o \
 		release/moc_AssayConfigModal.o
 
-DIST          =  src\data\AppData.h \
-		src\ui\LoginWindow.h \
-		src\ui\MainWindow.h \
-		src\ui\widgets\SvgIcon.h \
-		src\ui\widgets\StatusPill.h \
-		src\ui\widgets\CircularProgress.h \
-		src\ui\widgets\VirtualKeyboard.h \
-		src\ui\widgets\TopBar.h \
-		src\ui\widgets\BottomBar.h \
-		src\ui\widgets\SlotCard.h \
-		src\ui\widgets\DilutionCard.h \
-		src\ui\widgets\ConsumableItemCard.h \
-		src\ui\tabs\DetectTab.h \
-		src\ui\tabs\SampleSlotGrid.h \
-		src\ui\tabs\SampleListPanel.h \
-		src\ui\tabs\SampleFormPanel.h \
-		src\ui\tabs\ResultsTab.h \
-		src\ui\tabs\ConsumablesTab.h \
-		src\ui\tabs\SettingsTab.h \
-		src\modals\AddCardModal.h \
-		src\modals\AlertsModal.h \
-		src\modals\AssayConfigModal.h src\main.cpp \
-		src\ui\LoginWindow.cpp \
-		src\ui\MainWindow.cpp \
-		src\ui\widgets\SvgIcon.cpp \
-		src\ui\widgets\StatusPill.cpp \
-		src\ui\widgets\CircularProgress.cpp \
-		src\ui\widgets\VirtualKeyboard.cpp \
-		src\ui\widgets\TopBar.cpp \
-		src\ui\widgets\BottomBar.cpp \
-		src\ui\widgets\SlotCard.cpp \
-		src\ui\widgets\DilutionCard.cpp \
-		src\ui\widgets\ConsumableItemCard.cpp \
-		src\ui\tabs\DetectTab.cpp \
-		src\ui\tabs\SampleSlotGrid.cpp \
-		src\ui\tabs\SampleListPanel.cpp \
-		src\ui\tabs\SampleFormPanel.cpp \
-		src\ui\tabs\ResultsTab.cpp \
-		src\ui\tabs\ConsumablesTab.cpp \
-		src\ui\tabs\SettingsTab.cpp \
-		src\modals\AddCardModal.cpp \
-		src\modals\AlertsModal.cpp \
-		src\modals\AssayConfigModal.cpp
+DIST          =  src/data/AppData.h \
+		src/ui/LoginWindow.h \
+		src/ui/MainWindow.h \
+		src/ui/widgets/SvgIcon.h \
+		src/ui/widgets/StatusPill.h \
+		src/ui/widgets/CircularProgress.h \
+		src/ui/widgets/VirtualKeyboard.h \
+		src/ui/widgets/TopBar.h \
+		src/ui/widgets/BottomBar.h \
+		src/ui/widgets/SlotCard.h \
+		src/ui/widgets/DilutionCard.h \
+		src/ui/widgets/ConsumableItemCard.h \
+		src/ui/tabs/DetectTab.h \
+		src/ui/tabs/SampleSlotGrid.h \
+		src/ui/tabs/SampleListPanel.h \
+		src/ui/tabs/SampleFormPanel.h \
+		src/ui/tabs/ResultsTab.h \
+		src/ui/tabs/ConsumablesTab.h \
+		src/ui/tabs/SettingsTab.h \
+		src/modals/AddCardModal.h \
+		src/modals/AlertsModal.h \
+		src/modals/AssayConfigModal.h src/main.cpp \
+		src/ui/LoginWindow.cpp \
+		src/ui/MainWindow.cpp \
+		src/ui/widgets/SvgIcon.cpp \
+		src/ui/widgets/StatusPill.cpp \
+		src/ui/widgets/CircularProgress.cpp \
+		src/ui/widgets/VirtualKeyboard.cpp \
+		src/ui/widgets/TopBar.cpp \
+		src/ui/widgets/BottomBar.cpp \
+		src/ui/widgets/SlotCard.cpp \
+		src/ui/widgets/DilutionCard.cpp \
+		src/ui/widgets/ConsumableItemCard.cpp \
+		src/ui/tabs/DetectTab.cpp \
+		src/ui/tabs/SampleSlotGrid.cpp \
+		src/ui/tabs/SampleListPanel.cpp \
+		src/ui/tabs/SampleFormPanel.cpp \
+		src/ui/tabs/ResultsTab.cpp \
+		src/ui/tabs/ConsumablesTab.cpp \
+		src/ui/tabs/SettingsTab.cpp \
+		src/modals/AddCardModal.cpp \
+		src/modals/AlertsModal.cpp \
+		src/modals/AssayConfigModal.cpp
 QMAKE_TARGET  = FA08Qt
-DESTDIR        = release\ #avoid trailing-slash linebreak
+DESTDIR        = release/ #avoid trailing-slash linebreak
 TARGET         = FA08Qt.exe
-DESTDIR_TARGET = release\FA08Qt.exe
+DESTDIR_TARGET = release/FA08Qt.exe
 
 ####### Build rules
 
@@ -195,15 +195,15 @@ release/FA08Qt.exe: C:/Qt/5.14.2/mingw73_32/lib/libQt5Svg.a C:/Qt/5.14.2/mingw73
 	$(LINKER) $(LFLAGS) -o $(DESTDIR_TARGET) @object_script.FA08Qt.Release  $(LIBS)
 
 qmake: FORCE
-	@$(QMAKE) -o Makefile.Release FA08Qt.pro -spec win32-g++ "CONFIG+=release"
+	@$(QMAKE) -o Makefile.Release FA08Qt.pro
 
 qmake_all: FORCE
 
 dist:
-	$(ZIP) FA08Qt.zip $(SOURCES) $(DIST) FA08Qt.pro C:\Qt\5.14.2\mingw73_32\mkspecs\features\spec_pre.prf C:\Qt\5.14.2\mingw73_32\mkspecs\qdevice.pri C:\Qt\5.14.2\mingw73_32\mkspecs\features\device_config.prf C:\Qt\5.14.2\mingw73_32\mkspecs\common\sanitize.conf C:\Qt\5.14.2\mingw73_32\mkspecs\common\gcc-base.conf C:\Qt\5.14.2\mingw73_32\mkspecs\common\g++-base.conf C:\Qt\5.14.2\mingw73_32\mkspecs\common\angle.conf C:\Qt\5.14.2\mingw73_32\mkspecs\features\win32\windows_vulkan_sdk.prf C:\Qt\5.14.2\mingw73_32\mkspecs\common\windows-vulkan.conf C:\Qt\5.14.2\mingw73_32\mkspecs\common\g++-win32.conf C:\Qt\5.14.2\mingw73_32\mkspecs\common\windows-desktop.conf C:\Qt\5.14.2\mingw73_32\mkspecs\qconfig.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_3danimation.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_3danimation_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_3dcore.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_3dcore_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_3dextras.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_3dextras_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_3dinput.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_3dinput_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_3dlogic.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_3dlogic_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_3dquick.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_3dquick_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_3dquickanimation.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_3dquickanimation_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_3dquickextras.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_3dquickextras_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_3dquickinput.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_3dquickinput_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_3dquickrender.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_3dquickrender_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_3dquickscene2d.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_3dquickscene2d_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_3drender.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_3drender_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_accessibility_support_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_axbase.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_axbase_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_axcontainer.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_axcontainer_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_axserver.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_axserver_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_bluetooth.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_bluetooth_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_bootstrap_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_concurrent.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_concurrent_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_core.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_core_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_dbus.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_dbus_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_designer.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_designer_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_designercomponents_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_devicediscovery_support_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_edid_support_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_egl_support_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_eventdispatcher_support_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_fb_support_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_fontdatabase_support_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_gamepad.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_gamepad_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_gui.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_gui_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_help.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_help_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_location.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_location_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_multimedia.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_multimedia_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_multimediawidgets.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_multimediawidgets_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_network.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_network_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_nfc.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_nfc_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_opengl.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_opengl_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_openglextensions.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_openglextensions_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_packetprotocol_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_platformcompositor_support_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_positioning.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_positioning_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_positioningquick.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_positioningquick_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_printsupport.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_printsupport_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_qml.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_qml_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_qmldebug_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_qmldevtools_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_qmlmodels.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_qmlmodels_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_qmltest.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_qmltest_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_qmlworkerscript.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_qmlworkerscript_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_qtmultimediaquicktools_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_quick.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_quick_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_quickcontrols2.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_quickcontrols2_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_quickparticles_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_quickshapes_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_quicktemplates2.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_quicktemplates2_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_quickwidgets.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_quickwidgets_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_remoteobjects.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_remoteobjects_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_repparser.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_repparser_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_scxml.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_scxml_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_sensors.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_sensors_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_serialbus.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_serialbus_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_serialport.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_serialport_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_sql.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_sql_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_svg.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_svg_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_testlib.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_testlib_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_texttospeech.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_texttospeech_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_theme_support_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_uiplugin.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_uitools.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_uitools_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_webchannel.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_webchannel_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_websockets.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_websockets_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_widgets.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_widgets_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_windowsuiautomation_support_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_winextras.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_winextras_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_xml.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_xml_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_xmlpatterns.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_xmlpatterns_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\modules\qt_lib_zlib_private.pri C:\Qt\5.14.2\mingw73_32\mkspecs\features\qt_functions.prf C:\Qt\5.14.2\mingw73_32\mkspecs\features\qt_config.prf C:\Qt\5.14.2\mingw73_32\mkspecs\win32-g++\qmake.conf C:\Qt\5.14.2\mingw73_32\mkspecs\features\spec_post.prf .qmake.stash C:\Qt\5.14.2\mingw73_32\mkspecs\features\exclusive_builds.prf C:\Qt\5.14.2\mingw73_32\mkspecs\features\toolchain.prf C:\Qt\5.14.2\mingw73_32\mkspecs\features\default_pre.prf C:\Qt\5.14.2\mingw73_32\mkspecs\features\win32\default_pre.prf C:\Qt\5.14.2\mingw73_32\mkspecs\features\resolve_config.prf C:\Qt\5.14.2\mingw73_32\mkspecs\features\exclusive_builds_post.prf C:\Qt\5.14.2\mingw73_32\mkspecs\features\default_post.prf C:\Qt\5.14.2\mingw73_32\mkspecs\features\build_pass.prf C:\Qt\5.14.2\mingw73_32\mkspecs\features\precompile_header.prf C:\Qt\5.14.2\mingw73_32\mkspecs\features\warn_on.prf C:\Qt\5.14.2\mingw73_32\mkspecs\features\qt.prf C:\Qt\5.14.2\mingw73_32\mkspecs\features\resources_functions.prf C:\Qt\5.14.2\mingw73_32\mkspecs\features\resources.prf C:\Qt\5.14.2\mingw73_32\mkspecs\features\moc.prf C:\Qt\5.14.2\mingw73_32\mkspecs\features\win32\opengl.prf C:\Qt\5.14.2\mingw73_32\mkspecs\features\uic.prf C:\Qt\5.14.2\mingw73_32\mkspecs\features\qmake_use.prf C:\Qt\5.14.2\mingw73_32\mkspecs\features\file_copies.prf C:\Qt\5.14.2\mingw73_32\mkspecs\features\win32\windows.prf C:\Qt\5.14.2\mingw73_32\mkspecs\features\testcase_targets.prf C:\Qt\5.14.2\mingw73_32\mkspecs\features\exceptions.prf C:\Qt\5.14.2\mingw73_32\mkspecs\features\yacc.prf C:\Qt\5.14.2\mingw73_32\mkspecs\features\lex.prf FA08Qt.pro resources\resources.qrc C:\Qt\5.14.2\mingw73_32\lib\Qt5Svg.prl C:\Qt\5.14.2\mingw73_32\lib\Qt5Widgets.prl C:\Qt\5.14.2\mingw73_32\lib\Qt5Gui.prl C:\Qt\5.14.2\mingw73_32\lib\Qt5Core.prl C:\Qt\5.14.2\mingw73_32\lib\qtmain.prl   resources\resources.qrc C:\Qt\5.14.2\mingw73_32\mkspecs\features\data\dummy.cpp src\data\AppData.h src\ui\LoginWindow.h src\ui\MainWindow.h src\ui\widgets\SvgIcon.h src\ui\widgets\StatusPill.h src\ui\widgets\CircularProgress.h src\ui\widgets\VirtualKeyboard.h src\ui\widgets\TopBar.h src\ui\widgets\BottomBar.h src\ui\widgets\SlotCard.h src\ui\widgets\DilutionCard.h src\ui\widgets\ConsumableItemCard.h src\ui\tabs\DetectTab.h src\ui\tabs\SampleSlotGrid.h src\ui\tabs\SampleListPanel.h src\ui\tabs\SampleFormPanel.h src\ui\tabs\ResultsTab.h src\ui\tabs\ConsumablesTab.h src\ui\tabs\SettingsTab.h src\modals\AddCardModal.h src\modals\AlertsModal.h src\modals\AssayConfigModal.h  src\main.cpp src\ui\LoginWindow.cpp src\ui\MainWindow.cpp src\ui\widgets\SvgIcon.cpp src\ui\widgets\StatusPill.cpp src\ui\widgets\CircularProgress.cpp src\ui\widgets\VirtualKeyboard.cpp src\ui\widgets\TopBar.cpp src\ui\widgets\BottomBar.cpp src\ui\widgets\SlotCard.cpp src\ui\widgets\DilutionCard.cpp src\ui\widgets\ConsumableItemCard.cpp src\ui\tabs\DetectTab.cpp src\ui\tabs\SampleSlotGrid.cpp src\ui\tabs\SampleListPanel.cpp src\ui\tabs\SampleFormPanel.cpp src\ui\tabs\ResultsTab.cpp src\ui\tabs\ConsumablesTab.cpp src\ui\tabs\SettingsTab.cpp src\modals\AddCardModal.cpp src\modals\AlertsModal.cpp src\modals\AssayConfigModal.cpp src\ui\tabs\SampleSlotGrid.ui src\ui\tabs\ConsumablesTab.ui    
+	$(ZIP) FA08Qt.zip $(SOURCES) $(DIST) FA08Qt.pro C:/Qt/5.14.2/mingw73_32/mkspecs/features/spec_pre.prf C:/Qt/5.14.2/mingw73_32/mkspecs/qdevice.pri C:/Qt/5.14.2/mingw73_32/mkspecs/features/device_config.prf C:/Qt/5.14.2/mingw73_32/mkspecs/common/sanitize.conf C:/Qt/5.14.2/mingw73_32/mkspecs/common/gcc-base.conf C:/Qt/5.14.2/mingw73_32/mkspecs/common/g++-base.conf C:/Qt/5.14.2/mingw73_32/mkspecs/common/angle.conf C:/Qt/5.14.2/mingw73_32/mkspecs/features/win32/windows_vulkan_sdk.prf C:/Qt/5.14.2/mingw73_32/mkspecs/common/windows-vulkan.conf C:/Qt/5.14.2/mingw73_32/mkspecs/common/g++-win32.conf C:/Qt/5.14.2/mingw73_32/mkspecs/common/windows-desktop.conf C:/Qt/5.14.2/mingw73_32/mkspecs/qconfig.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_3danimation.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_3danimation_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_3dcore.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_3dcore_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_3dextras.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_3dextras_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_3dinput.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_3dinput_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_3dlogic.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_3dlogic_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_3dquick.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_3dquick_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_3dquickanimation.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_3dquickanimation_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_3dquickextras.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_3dquickextras_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_3dquickinput.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_3dquickinput_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_3dquickrender.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_3dquickrender_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_3dquickscene2d.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_3dquickscene2d_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_3drender.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_3drender_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_accessibility_support_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_axbase.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_axbase_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_axcontainer.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_axcontainer_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_axserver.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_axserver_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_bluetooth.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_bluetooth_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_bootstrap_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_concurrent.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_concurrent_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_core.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_core_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_dbus.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_dbus_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_designer.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_designer_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_designercomponents_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_devicediscovery_support_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_edid_support_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_egl_support_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_eventdispatcher_support_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_fb_support_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_fontdatabase_support_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_gamepad.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_gamepad_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_gui.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_gui_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_help.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_help_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_location.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_location_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_multimedia.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_multimedia_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_multimediawidgets.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_multimediawidgets_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_network.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_network_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_nfc.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_nfc_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_opengl.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_opengl_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_openglextensions.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_openglextensions_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_packetprotocol_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_platformcompositor_support_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_positioning.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_positioning_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_positioningquick.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_positioningquick_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_printsupport.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_printsupport_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_qml.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_qml_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_qmldebug_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_qmldevtools_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_qmlmodels.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_qmlmodels_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_qmltest.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_qmltest_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_qmlworkerscript.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_qmlworkerscript_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_qtmultimediaquicktools_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_quick.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_quick_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_quickcontrols2.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_quickcontrols2_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_quickparticles_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_quickshapes_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_quicktemplates2.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_quicktemplates2_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_quickwidgets.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_quickwidgets_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_remoteobjects.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_remoteobjects_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_repparser.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_repparser_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_scxml.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_scxml_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_sensors.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_sensors_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_serialbus.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_serialbus_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_serialport.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_serialport_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_sql.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_sql_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_svg.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_svg_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_testlib.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_testlib_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_texttospeech.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_texttospeech_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_theme_support_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_uiplugin.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_uitools.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_uitools_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_webchannel.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_webchannel_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_websockets.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_websockets_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_widgets.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_widgets_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_windowsuiautomation_support_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_winextras.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_winextras_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_xml.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_xml_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_xmlpatterns.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_xmlpatterns_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/modules/qt_lib_zlib_private.pri C:/Qt/5.14.2/mingw73_32/mkspecs/features/qt_functions.prf C:/Qt/5.14.2/mingw73_32/mkspecs/features/qt_config.prf C:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++/qmake.conf C:/Qt/5.14.2/mingw73_32/mkspecs/features/spec_post.prf .qmake.stash C:/Qt/5.14.2/mingw73_32/mkspecs/features/exclusive_builds.prf C:/Qt/5.14.2/mingw73_32/mkspecs/features/toolchain.prf C:/Qt/5.14.2/mingw73_32/mkspecs/features/default_pre.prf C:/Qt/5.14.2/mingw73_32/mkspecs/features/win32/default_pre.prf C:/Qt/5.14.2/mingw73_32/mkspecs/features/resolve_config.prf C:/Qt/5.14.2/mingw73_32/mkspecs/features/exclusive_builds_post.prf C:/Qt/5.14.2/mingw73_32/mkspecs/features/default_post.prf C:/Qt/5.14.2/mingw73_32/mkspecs/features/build_pass.prf C:/Qt/5.14.2/mingw73_32/mkspecs/features/precompile_header.prf C:/Qt/5.14.2/mingw73_32/mkspecs/features/warn_on.prf C:/Qt/5.14.2/mingw73_32/mkspecs/features/qt.prf C:/Qt/5.14.2/mingw73_32/mkspecs/features/resources_functions.prf C:/Qt/5.14.2/mingw73_32/mkspecs/features/resources.prf C:/Qt/5.14.2/mingw73_32/mkspecs/features/moc.prf C:/Qt/5.14.2/mingw73_32/mkspecs/features/win32/opengl.prf C:/Qt/5.14.2/mingw73_32/mkspecs/features/uic.prf C:/Qt/5.14.2/mingw73_32/mkspecs/features/qmake_use.prf C:/Qt/5.14.2/mingw73_32/mkspecs/features/file_copies.prf C:/Qt/5.14.2/mingw73_32/mkspecs/features/win32/windows.prf C:/Qt/5.14.2/mingw73_32/mkspecs/features/testcase_targets.prf C:/Qt/5.14.2/mingw73_32/mkspecs/features/exceptions.prf C:/Qt/5.14.2/mingw73_32/mkspecs/features/yacc.prf C:/Qt/5.14.2/mingw73_32/mkspecs/features/lex.prf FA08Qt.pro resources/resources.qrc C:/Qt/5.14.2/mingw73_32/lib/Qt5Svg.prl C:/Qt/5.14.2/mingw73_32/lib/Qt5Widgets.prl C:/Qt/5.14.2/mingw73_32/lib/Qt5Gui.prl C:/Qt/5.14.2/mingw73_32/lib/Qt5Core.prl C:/Qt/5.14.2/mingw73_32/lib/qtmain.prl   resources/resources.qrc C:/Qt/5.14.2/mingw73_32/mkspecs/features/data/dummy.cpp src/data/AppData.h src/ui/LoginWindow.h src/ui/MainWindow.h src/ui/widgets/SvgIcon.h src/ui/widgets/StatusPill.h src/ui/widgets/CircularProgress.h src/ui/widgets/VirtualKeyboard.h src/ui/widgets/TopBar.h src/ui/widgets/BottomBar.h src/ui/widgets/SlotCard.h src/ui/widgets/DilutionCard.h src/ui/widgets/ConsumableItemCard.h src/ui/tabs/DetectTab.h src/ui/tabs/SampleSlotGrid.h src/ui/tabs/SampleListPanel.h src/ui/tabs/SampleFormPanel.h src/ui/tabs/ResultsTab.h src/ui/tabs/ConsumablesTab.h src/ui/tabs/SettingsTab.h src/modals/AddCardModal.h src/modals/AlertsModal.h src/modals/AssayConfigModal.h  src/main.cpp src/ui/LoginWindow.cpp src/ui/MainWindow.cpp src/ui/widgets/SvgIcon.cpp src/ui/widgets/StatusPill.cpp src/ui/widgets/CircularProgress.cpp src/ui/widgets/VirtualKeyboard.cpp src/ui/widgets/TopBar.cpp src/ui/widgets/BottomBar.cpp src/ui/widgets/SlotCard.cpp src/ui/widgets/DilutionCard.cpp src/ui/widgets/ConsumableItemCard.cpp src/ui/tabs/DetectTab.cpp src/ui/tabs/SampleSlotGrid.cpp src/ui/tabs/SampleListPanel.cpp src/ui/tabs/SampleFormPanel.cpp src/ui/tabs/ResultsTab.cpp src/ui/tabs/ConsumablesTab.cpp src/ui/tabs/SettingsTab.cpp src/modals/AddCardModal.cpp src/modals/AlertsModal.cpp src/modals/AssayConfigModal.cpp src/ui/tabs/SampleSlotGrid.ui src/ui/tabs/ConsumablesTab.ui    
 
 clean: compiler_clean 
-	-$(DEL_FILE) release\main.o release\LoginWindow.o release\MainWindow.o release\SvgIcon.o release\StatusPill.o release\CircularProgress.o release\VirtualKeyboard.o release\TopBar.o release\BottomBar.o release\SlotCard.o release\DilutionCard.o release\ConsumableItemCard.o release\DetectTab.o release\SampleSlotGrid.o release\SampleListPanel.o release\SampleFormPanel.o release\ResultsTab.o release\ConsumablesTab.o release\SettingsTab.o release\AddCardModal.o release\AlertsModal.o release\AssayConfigModal.o release\qrc_resources.o release\moc_LoginWindow.o release\moc_MainWindow.o release\moc_SvgIcon.o release\moc_StatusPill.o release\moc_CircularProgress.o release\moc_VirtualKeyboard.o release\moc_TopBar.o release\moc_BottomBar.o release\moc_SlotCard.o release\moc_DilutionCard.o release\moc_ConsumableItemCard.o release\moc_DetectTab.o release\moc_SampleSlotGrid.o release\moc_SampleListPanel.o release\moc_SampleFormPanel.o release\moc_ResultsTab.o release\moc_ConsumablesTab.o release\moc_SettingsTab.o release\moc_AddCardModal.o release\moc_AlertsModal.o release\moc_AssayConfigModal.o
+	-$(DEL_FILE) release/main.o release/LoginWindow.o release/MainWindow.o release/SvgIcon.o release/StatusPill.o release/CircularProgress.o release/VirtualKeyboard.o release/TopBar.o release/BottomBar.o release/SlotCard.o release/DilutionCard.o release/ConsumableItemCard.o release/DetectTab.o release/SampleSlotGrid.o release/SampleListPanel.o release/SampleFormPanel.o release/ResultsTab.o release/ConsumablesTab.o release/SettingsTab.o release/AddCardModal.o release/AlertsModal.o release/AssayConfigModal.o release/qrc_resources.o release/moc_LoginWindow.o release/moc_MainWindow.o release/moc_SvgIcon.o release/moc_StatusPill.o release/moc_CircularProgress.o release/moc_VirtualKeyboard.o release/moc_TopBar.o release/moc_BottomBar.o release/moc_SlotCard.o release/moc_DilutionCard.o release/moc_ConsumableItemCard.o release/moc_DetectTab.o release/moc_SampleSlotGrid.o release/moc_SampleListPanel.o release/moc_SampleFormPanel.o release/moc_ResultsTab.o release/moc_ConsumablesTab.o release/moc_SettingsTab.o release/moc_AddCardModal.o release/moc_AlertsModal.o release/moc_AssayConfigModal.o
 
 distclean: clean 
 	-$(DEL_FILE) .qmake.stash
@@ -222,7 +222,7 @@ compiler_no_pch_compiler_make_all:
 compiler_no_pch_compiler_clean:
 compiler_rcc_make_all: release/qrc_resources.cpp
 compiler_rcc_clean:
-	-$(DEL_FILE) release\qrc_resources.cpp
+	-$(DEL_FILE) release/qrc_resources.cpp
 release/qrc_resources.cpp: resources/resources.qrc \
 		C:/Qt/5.14.2/mingw73_32/bin/rcc.exe \
 		resources/styles/app.qss \
@@ -254,17 +254,17 @@ release/qrc_resources.cpp: resources/resources.qrc \
 		resources/icons/card.svg \
 		resources/icons/print.svg \
 		resources/icons/chevron_down.svg
-	C:\Qt\5.14.2\mingw73_32\bin\rcc.exe -name resources resources\resources.qrc -o release\qrc_resources.cpp
+	'C:\Qt\5.14.2\mingw73_32\bin\rcc.exe' -name resources resources/resources.qrc -o release/qrc_resources.cpp
 
 compiler_moc_predefs_make_all: release/moc_predefs.h
 compiler_moc_predefs_clean:
-	-$(DEL_FILE) release\moc_predefs.h
+	-$(DEL_FILE) release/moc_predefs.h
 release/moc_predefs.h: C:/Qt/5.14.2/mingw73_32/mkspecs/features/data/dummy.cpp
-	g++ -fno-keep-inline-dllexport -O2 -std=gnu++1y -Wall -Wextra -Wextra -dM -E -o release\moc_predefs.h C:\Qt\5.14.2\mingw73_32\mkspecs\features\data\dummy.cpp
+	g++ -fno-keep-inline-dllexport -O2 -std=gnu++1y -Wall -Wextra -Wextra -dM -E -o release/moc_predefs.h C:/Qt/5.14.2/mingw73_32/mkspecs/features/data/dummy.cpp
 
 compiler_moc_header_make_all: release/moc_LoginWindow.cpp release/moc_MainWindow.cpp release/moc_SvgIcon.cpp release/moc_StatusPill.cpp release/moc_CircularProgress.cpp release/moc_VirtualKeyboard.cpp release/moc_TopBar.cpp release/moc_BottomBar.cpp release/moc_SlotCard.cpp release/moc_DilutionCard.cpp release/moc_ConsumableItemCard.cpp release/moc_DetectTab.cpp release/moc_SampleSlotGrid.cpp release/moc_SampleListPanel.cpp release/moc_SampleFormPanel.cpp release/moc_ResultsTab.cpp release/moc_ConsumablesTab.cpp release/moc_SettingsTab.cpp release/moc_AddCardModal.cpp release/moc_AlertsModal.cpp release/moc_AssayConfigModal.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) release\moc_LoginWindow.cpp release\moc_MainWindow.cpp release\moc_SvgIcon.cpp release\moc_StatusPill.cpp release\moc_CircularProgress.cpp release\moc_VirtualKeyboard.cpp release\moc_TopBar.cpp release\moc_BottomBar.cpp release\moc_SlotCard.cpp release\moc_DilutionCard.cpp release\moc_ConsumableItemCard.cpp release\moc_DetectTab.cpp release\moc_SampleSlotGrid.cpp release\moc_SampleListPanel.cpp release\moc_SampleFormPanel.cpp release\moc_ResultsTab.cpp release\moc_ConsumablesTab.cpp release\moc_SettingsTab.cpp release\moc_AddCardModal.cpp release\moc_AlertsModal.cpp release\moc_AssayConfigModal.cpp
+	-$(DEL_FILE) release/moc_LoginWindow.cpp release/moc_MainWindow.cpp release/moc_SvgIcon.cpp release/moc_StatusPill.cpp release/moc_CircularProgress.cpp release/moc_VirtualKeyboard.cpp release/moc_TopBar.cpp release/moc_BottomBar.cpp release/moc_SlotCard.cpp release/moc_DilutionCard.cpp release/moc_ConsumableItemCard.cpp release/moc_DetectTab.cpp release/moc_SampleSlotGrid.cpp release/moc_SampleListPanel.cpp release/moc_SampleFormPanel.cpp release/moc_ResultsTab.cpp release/moc_ConsumablesTab.cpp release/moc_SettingsTab.cpp release/moc_AddCardModal.cpp release/moc_AlertsModal.cpp release/moc_AssayConfigModal.cpp
 release/moc_LoginWindow.cpp: src/ui/LoginWindow.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QWidget \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qwidget.h \
@@ -387,7 +387,7 @@ release/moc_LoginWindow.cpp: src/ui/LoginWindow.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qcheckbox.h \
 		release/moc_predefs.h \
 		C:/Qt/5.14.2/mingw73_32/bin/moc.exe
-	C:\Qt\5.14.2\mingw73_32\bin\moc.exe $(DEFINES) --include E:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src\ui\LoginWindow.h -o release\moc_LoginWindow.cpp
+	'C:\Qt\5.14.2\mingw73_32\bin\moc.exe' $(DEFINES) --include E:/Agent/Github_local/HMI-Design-HM/FA08_QT/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src/ui/LoginWindow.h -o release/moc_LoginWindow.cpp
 
 release/moc_MainWindow.cpp: src/ui/MainWindow.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QMainWindow \
@@ -512,7 +512,7 @@ release/moc_MainWindow.cpp: src/ui/MainWindow.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtCore/QStringList \
 		release/moc_predefs.h \
 		C:/Qt/5.14.2/mingw73_32/bin/moc.exe
-	C:\Qt\5.14.2\mingw73_32\bin\moc.exe $(DEFINES) --include E:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src\ui\MainWindow.h -o release\moc_MainWindow.cpp
+	'C:\Qt\5.14.2\mingw73_32\bin\moc.exe' $(DEFINES) --include E:/Agent/Github_local/HMI-Design-HM/FA08_QT/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src/ui/MainWindow.h -o release/moc_MainWindow.cpp
 
 release/moc_SvgIcon.cpp: src/ui/widgets/SvgIcon.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QWidget \
@@ -627,7 +627,7 @@ release/moc_SvgIcon.cpp: src/ui/widgets/SvgIcon.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qframe.h \
 		release/moc_predefs.h \
 		C:/Qt/5.14.2/mingw73_32/bin/moc.exe
-	C:\Qt\5.14.2\mingw73_32\bin\moc.exe $(DEFINES) --include E:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src\ui\widgets\SvgIcon.h -o release\moc_SvgIcon.cpp
+	'C:\Qt\5.14.2\mingw73_32\bin\moc.exe' $(DEFINES) --include E:/Agent/Github_local/HMI-Design-HM/FA08_QT/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src/ui/widgets/SvgIcon.h -o release/moc_SvgIcon.cpp
 
 release/moc_StatusPill.cpp: src/ui/widgets/StatusPill.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QWidget \
@@ -737,7 +737,7 @@ release/moc_StatusPill.cpp: src/ui/widgets/StatusPill.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtCore/QString \
 		release/moc_predefs.h \
 		C:/Qt/5.14.2/mingw73_32/bin/moc.exe
-	C:\Qt\5.14.2\mingw73_32\bin\moc.exe $(DEFINES) --include E:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src\ui\widgets\StatusPill.h -o release\moc_StatusPill.cpp
+	'C:\Qt\5.14.2\mingw73_32\bin\moc.exe' $(DEFINES) --include E:/Agent/Github_local/HMI-Design-HM/FA08_QT/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src/ui/widgets/StatusPill.h -o release/moc_StatusPill.cpp
 
 release/moc_CircularProgress.cpp: src/ui/widgets/CircularProgress.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QWidget \
@@ -847,7 +847,7 @@ release/moc_CircularProgress.cpp: src/ui/widgets/CircularProgress.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtCore/QString \
 		release/moc_predefs.h \
 		C:/Qt/5.14.2/mingw73_32/bin/moc.exe
-	C:\Qt\5.14.2\mingw73_32\bin\moc.exe $(DEFINES) --include E:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src\ui\widgets\CircularProgress.h -o release\moc_CircularProgress.cpp
+	'C:\Qt\5.14.2\mingw73_32\bin\moc.exe' $(DEFINES) --include E:/Agent/Github_local/HMI-Design-HM/FA08_QT/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src/ui/widgets/CircularProgress.h -o release/moc_CircularProgress.cpp
 
 release/moc_VirtualKeyboard.cpp: src/ui/widgets/VirtualKeyboard.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QWidget \
@@ -958,7 +958,7 @@ release/moc_VirtualKeyboard.cpp: src/ui/widgets/VirtualKeyboard.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtCore/QList \
 		release/moc_predefs.h \
 		C:/Qt/5.14.2/mingw73_32/bin/moc.exe
-	C:\Qt\5.14.2\mingw73_32\bin\moc.exe $(DEFINES) --include E:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src\ui\widgets\VirtualKeyboard.h -o release\moc_VirtualKeyboard.cpp
+	'C:\Qt\5.14.2\mingw73_32\bin\moc.exe' $(DEFINES) --include E:/Agent/Github_local/HMI-Design-HM/FA08_QT/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src/ui/widgets/VirtualKeyboard.h -o release/moc_VirtualKeyboard.cpp
 
 release/moc_TopBar.cpp: src/ui/widgets/TopBar.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QWidget \
@@ -1084,7 +1084,7 @@ release/moc_TopBar.cpp: src/ui/widgets/TopBar.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtCore/QStringList \
 		release/moc_predefs.h \
 		C:/Qt/5.14.2/mingw73_32/bin/moc.exe
-	C:\Qt\5.14.2\mingw73_32\bin\moc.exe $(DEFINES) --include E:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src\ui\widgets\TopBar.h -o release\moc_TopBar.cpp
+	'C:\Qt\5.14.2\mingw73_32\bin\moc.exe' $(DEFINES) --include E:/Agent/Github_local/HMI-Design-HM/FA08_QT/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src/ui/widgets/TopBar.h -o release/moc_TopBar.cpp
 
 release/moc_BottomBar.cpp: src/ui/widgets/BottomBar.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QWidget \
@@ -1208,7 +1208,7 @@ release/moc_BottomBar.cpp: src/ui/widgets/BottomBar.h \
 		src/ui/widgets/CircularProgress.h \
 		release/moc_predefs.h \
 		C:/Qt/5.14.2/mingw73_32/bin/moc.exe
-	C:\Qt\5.14.2\mingw73_32\bin\moc.exe $(DEFINES) --include E:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src\ui\widgets\BottomBar.h -o release\moc_BottomBar.cpp
+	'C:\Qt\5.14.2\mingw73_32\bin\moc.exe' $(DEFINES) --include E:/Agent/Github_local/HMI-Design-HM/FA08_QT/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src/ui/widgets/BottomBar.h -o release/moc_BottomBar.cpp
 
 release/moc_SlotCard.cpp: src/ui/widgets/SlotCard.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QWidget \
@@ -1331,7 +1331,7 @@ release/moc_SlotCard.cpp: src/ui/widgets/SlotCard.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtCore/QStringList \
 		release/moc_predefs.h \
 		C:/Qt/5.14.2/mingw73_32/bin/moc.exe
-	C:\Qt\5.14.2\mingw73_32\bin\moc.exe $(DEFINES) --include E:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src\ui\widgets\SlotCard.h -o release\moc_SlotCard.cpp
+	'C:\Qt\5.14.2\mingw73_32\bin\moc.exe' $(DEFINES) --include E:/Agent/Github_local/HMI-Design-HM/FA08_QT/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src/ui/widgets/SlotCard.h -o release/moc_SlotCard.cpp
 
 release/moc_DilutionCard.cpp: src/ui/widgets/DilutionCard.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QFrame \
@@ -1443,6 +1443,21 @@ release/moc_DilutionCard.cpp: src/ui/widgets/DilutionCard.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qlabel.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QProgressBar \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qprogressbar.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QLineEdit \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qlineedit.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qtextcursor.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qtextformat.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qpen.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qtextoption.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QPushButton \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qpushbutton.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qabstractbutton.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qicon.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QVBoxLayout \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qboxlayout.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qlayout.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qlayoutitem.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qgridlayout.h \
 		src/data/AppData.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtCore/QString \
 		C:/Qt/5.14.2/mingw73_32/include/QtCore/QList \
@@ -1452,7 +1467,7 @@ release/moc_DilutionCard.cpp: src/ui/widgets/DilutionCard.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtCore/QStringList \
 		release/moc_predefs.h \
 		C:/Qt/5.14.2/mingw73_32/bin/moc.exe
-	C:\Qt\5.14.2\mingw73_32\bin\moc.exe $(DEFINES) --include E:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src\ui\widgets\DilutionCard.h -o release\moc_DilutionCard.cpp
+	'C:\Qt\5.14.2\mingw73_32\bin\moc.exe' $(DEFINES) --include E:/Agent/Github_local/HMI-Design-HM/FA08_QT/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src/ui/widgets/DilutionCard.h -o release/moc_DilutionCard.cpp
 
 release/moc_ConsumableItemCard.cpp: src/ui/widgets/ConsumableItemCard.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QFrame \
@@ -1564,9 +1579,24 @@ release/moc_ConsumableItemCard.cpp: src/ui/widgets/ConsumableItemCard.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qlabel.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QProgressBar \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qprogressbar.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QLineEdit \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qlineedit.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qtextcursor.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qtextformat.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qpen.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qtextoption.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QPushButton \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qpushbutton.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qabstractbutton.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qicon.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QVBoxLayout \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qboxlayout.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qlayout.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qlayoutitem.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qgridlayout.h \
 		release/moc_predefs.h \
 		C:/Qt/5.14.2/mingw73_32/bin/moc.exe
-	C:\Qt\5.14.2\mingw73_32\bin\moc.exe $(DEFINES) --include E:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src\ui\widgets\ConsumableItemCard.h -o release\moc_ConsumableItemCard.cpp
+	'C:\Qt\5.14.2\mingw73_32\bin\moc.exe' $(DEFINES) --include E:/Agent/Github_local/HMI-Design-HM/FA08_QT/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src/ui/widgets/ConsumableItemCard.h -o release/moc_ConsumableItemCard.cpp
 
 release/moc_DetectTab.cpp: src/ui/tabs/DetectTab.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QWidget \
@@ -1719,7 +1749,7 @@ release/moc_DetectTab.cpp: src/ui/tabs/DetectTab.h \
 		src/ui/widgets/VirtualKeyboard.h \
 		release/moc_predefs.h \
 		C:/Qt/5.14.2/mingw73_32/bin/moc.exe
-	C:\Qt\5.14.2\mingw73_32\bin\moc.exe $(DEFINES) --include E:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src\ui\tabs\DetectTab.h -o release\moc_DetectTab.cpp
+	'C:\Qt\5.14.2\mingw73_32\bin\moc.exe' $(DEFINES) --include E:/Agent/Github_local/HMI-Design-HM/FA08_QT/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src/ui/tabs/DetectTab.h -o release/moc_DetectTab.cpp
 
 release/moc_SampleSlotGrid.cpp: src/ui/tabs/SampleSlotGrid.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QWidget \
@@ -1835,7 +1865,7 @@ release/moc_SampleSlotGrid.cpp: src/ui/tabs/SampleSlotGrid.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtCore/QStringList \
 		release/moc_predefs.h \
 		C:/Qt/5.14.2/mingw73_32/bin/moc.exe
-	C:\Qt\5.14.2\mingw73_32\bin\moc.exe $(DEFINES) --include E:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src\ui\tabs\SampleSlotGrid.h -o release\moc_SampleSlotGrid.cpp
+	'C:\Qt\5.14.2\mingw73_32\bin\moc.exe' $(DEFINES) --include E:/Agent/Github_local/HMI-Design-HM/FA08_QT/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src/ui/tabs/SampleSlotGrid.h -o release/moc_SampleSlotGrid.cpp
 
 release/moc_SampleListPanel.cpp: src/ui/tabs/SampleListPanel.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QWidget \
@@ -1974,7 +2004,7 @@ release/moc_SampleListPanel.cpp: src/ui/tabs/SampleListPanel.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtCore/QStringList \
 		release/moc_predefs.h \
 		C:/Qt/5.14.2/mingw73_32/bin/moc.exe
-	C:\Qt\5.14.2\mingw73_32\bin\moc.exe $(DEFINES) --include E:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src\ui\tabs\SampleListPanel.h -o release\moc_SampleListPanel.cpp
+	'C:\Qt\5.14.2\mingw73_32\bin\moc.exe' $(DEFINES) --include E:/Agent/Github_local/HMI-Design-HM/FA08_QT/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src/ui/tabs/SampleListPanel.h -o release/moc_SampleListPanel.cpp
 
 release/moc_SampleFormPanel.cpp: src/ui/tabs/SampleFormPanel.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QWidget \
@@ -2118,7 +2148,7 @@ release/moc_SampleFormPanel.cpp: src/ui/tabs/SampleFormPanel.h \
 		src/ui/widgets/VirtualKeyboard.h \
 		release/moc_predefs.h \
 		C:/Qt/5.14.2/mingw73_32/bin/moc.exe
-	C:\Qt\5.14.2\mingw73_32\bin\moc.exe $(DEFINES) --include E:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src\ui\tabs\SampleFormPanel.h -o release\moc_SampleFormPanel.cpp
+	'C:\Qt\5.14.2\mingw73_32\bin\moc.exe' $(DEFINES) --include E:/Agent/Github_local/HMI-Design-HM/FA08_QT/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src/ui/tabs/SampleFormPanel.h -o release/moc_SampleFormPanel.cpp
 
 release/moc_ResultsTab.cpp: src/ui/tabs/ResultsTab.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QWidget \
@@ -2254,7 +2284,7 @@ release/moc_ResultsTab.cpp: src/ui/tabs/ResultsTab.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtCore/QStringList \
 		release/moc_predefs.h \
 		C:/Qt/5.14.2/mingw73_32/bin/moc.exe
-	C:\Qt\5.14.2\mingw73_32\bin\moc.exe $(DEFINES) --include E:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src\ui\tabs\ResultsTab.h -o release\moc_ResultsTab.cpp
+	'C:\Qt\5.14.2\mingw73_32\bin\moc.exe' $(DEFINES) --include E:/Agent/Github_local/HMI-Design-HM/FA08_QT/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src/ui/tabs/ResultsTab.h -o release/moc_ResultsTab.cpp
 
 release/moc_ConsumablesTab.cpp: src/ui/tabs/ConsumablesTab.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QWidget \
@@ -2390,7 +2420,7 @@ release/moc_ConsumablesTab.cpp: src/ui/tabs/ConsumablesTab.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtCore/QStringList \
 		release/moc_predefs.h \
 		C:/Qt/5.14.2/mingw73_32/bin/moc.exe
-	C:\Qt\5.14.2\mingw73_32\bin\moc.exe $(DEFINES) --include E:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src\ui\tabs\ConsumablesTab.h -o release\moc_ConsumablesTab.cpp
+	'C:\Qt\5.14.2\mingw73_32\bin\moc.exe' $(DEFINES) --include E:/Agent/Github_local/HMI-Design-HM/FA08_QT/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src/ui/tabs/ConsumablesTab.h -o release/moc_ConsumablesTab.cpp
 
 release/moc_SettingsTab.cpp: src/ui/tabs/SettingsTab.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QWidget \
@@ -2497,9 +2527,57 @@ release/moc_SettingsTab.cpp: src/ui/tabs/SettingsTab.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtCore/qfiledevice.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtGui/qvector2d.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtGui/qtouchdevice.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QStackedWidget \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qstackedwidget.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qframe.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QPushButton \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qpushbutton.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qabstractbutton.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qicon.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QLabel \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qlabel.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QLineEdit \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qlineedit.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qtextcursor.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qtextformat.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qpen.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qtextoption.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QSlider \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qslider.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qabstractslider.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QComboBox \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qcombobox.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qabstractitemdelegate.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qstyleoption.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qabstractspinbox.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qvalidator.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtCore/qregularexpression.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qstyle.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qtabbar.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qtabwidget.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qrubberband.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtCore/qabstractitemmodel.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QDateEdit \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qdatetimeedit.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtCore/qdatetime.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtCore/qcalendar.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QTimeEdit \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QTableWidget \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qtablewidget.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qtableview.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qabstractitemview.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qabstractscrollarea.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtCore/qitemselectionmodel.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QRadioButton \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qradiobutton.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QCheckBox \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qcheckbox.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QTabWidget \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QScrollArea \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qscrollarea.h \
 		release/moc_predefs.h \
 		C:/Qt/5.14.2/mingw73_32/bin/moc.exe
-	C:\Qt\5.14.2\mingw73_32\bin\moc.exe $(DEFINES) --include E:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src\ui\tabs\SettingsTab.h -o release\moc_SettingsTab.cpp
+	'C:\Qt\5.14.2\mingw73_32\bin\moc.exe' $(DEFINES) --include E:/Agent/Github_local/HMI-Design-HM/FA08_QT/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src/ui/tabs/SettingsTab.h -o release/moc_SettingsTab.cpp
 
 release/moc_AddCardModal.cpp: src/modals/AddCardModal.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QDialog \
@@ -2628,7 +2706,7 @@ release/moc_AddCardModal.cpp: src/modals/AddCardModal.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtCore/QStringList \
 		release/moc_predefs.h \
 		C:/Qt/5.14.2/mingw73_32/bin/moc.exe
-	C:\Qt\5.14.2\mingw73_32\bin\moc.exe $(DEFINES) --include E:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src\modals\AddCardModal.h -o release\moc_AddCardModal.cpp
+	'C:\Qt\5.14.2\mingw73_32\bin\moc.exe' $(DEFINES) --include E:/Agent/Github_local/HMI-Design-HM/FA08_QT/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src/modals/AddCardModal.h -o release/moc_AddCardModal.cpp
 
 release/moc_AlertsModal.cpp: src/modals/AlertsModal.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QDialog \
@@ -2765,7 +2843,7 @@ release/moc_AlertsModal.cpp: src/modals/AlertsModal.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtCore/QStringList \
 		release/moc_predefs.h \
 		C:/Qt/5.14.2/mingw73_32/bin/moc.exe
-	C:\Qt\5.14.2\mingw73_32\bin\moc.exe $(DEFINES) --include E:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src\modals\AlertsModal.h -o release\moc_AlertsModal.cpp
+	'C:\Qt\5.14.2\mingw73_32\bin\moc.exe' $(DEFINES) --include E:/Agent/Github_local/HMI-Design-HM/FA08_QT/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src/modals/AlertsModal.h -o release/moc_AlertsModal.cpp
 
 release/moc_AssayConfigModal.cpp: src/modals/AssayConfigModal.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QDialog \
@@ -2904,7 +2982,7 @@ release/moc_AssayConfigModal.cpp: src/modals/AssayConfigModal.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtCore/QStringList \
 		release/moc_predefs.h \
 		C:/Qt/5.14.2/mingw73_32/bin/moc.exe
-	C:\Qt\5.14.2\mingw73_32\bin\moc.exe $(DEFINES) --include E:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt -IE:/Agent/Code/FA08/FA08Qt-updated/FA08Qt/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src\modals\AssayConfigModal.h -o release\moc_AssayConfigModal.cpp
+	'C:\Qt\5.14.2\mingw73_32\bin\moc.exe' $(DEFINES) --include E:/Agent/Github_local/HMI-Design-HM/FA08_QT/release/moc_predefs.h -IC:/Qt/5.14.2/mingw73_32/mkspecs/win32-g++ -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT -IE:/Agent/Github_local/HMI-Design-HM/FA08_QT/src -IC:/Qt/5.14.2/mingw73_32/include -IC:/Qt/5.14.2/mingw73_32/include/QtSvg -IC:/Qt/5.14.2/mingw73_32/include/QtWidgets -IC:/Qt/5.14.2/mingw73_32/include/QtGui -IC:/Qt/5.14.2/mingw73_32/include/QtANGLE -IC:/Qt/5.14.2/mingw73_32/include/QtCore -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++ -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/i686-w64-mingw32 -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include/c++/backward -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include -IC:/Qt/Tools/mingw730_32/lib/gcc/i686-w64-mingw32/7.3.0/include-fixed -IC:/Qt/Tools/mingw730_32/i686-w64-mingw32/include src/modals/AssayConfigModal.h -o release/moc_AssayConfigModal.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -2915,11 +2993,11 @@ compiler_uic_clean:
 	-$(DEL_FILE) ui_SampleSlotGrid.h ui_ConsumablesTab.h
 ui_SampleSlotGrid.h: src/ui/tabs/SampleSlotGrid.ui \
 		C:/Qt/5.14.2/mingw73_32/bin/uic.exe
-	C:\Qt\5.14.2\mingw73_32\bin\uic.exe src\ui\tabs\SampleSlotGrid.ui -o ui_SampleSlotGrid.h
+	'C:\Qt\5.14.2\mingw73_32\bin\uic.exe' src/ui/tabs/SampleSlotGrid.ui -o ui_SampleSlotGrid.h
 
 ui_ConsumablesTab.h: src/ui/tabs/ConsumablesTab.ui \
 		C:/Qt/5.14.2/mingw73_32/bin/uic.exe
-	C:\Qt\5.14.2\mingw73_32\bin\uic.exe src\ui\tabs\ConsumablesTab.ui -o ui_ConsumablesTab.h
+	'C:\Qt\5.14.2\mingw73_32\bin\uic.exe' src/ui/tabs/ConsumablesTab.ui -o ui_ConsumablesTab.h
 
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:
@@ -3063,7 +3141,7 @@ release/main.o: src/main.cpp C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QApplicat
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qlabel.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QCheckBox \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qcheckbox.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\main.o src\main.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/main.o src/main.cpp
 
 release/LoginWindow.o: src/ui/LoginWindow.cpp src/ui/LoginWindow.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QWidget \
@@ -3225,7 +3303,7 @@ release/LoginWindow.o: src/ui/LoginWindow.cpp src/ui/LoginWindow.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtCore/QSize \
 		C:/Qt/5.14.2/mingw73_32/include/QtCore/QSizeF \
 		C:/Qt/5.14.2/mingw73_32/include/QtGui/QTransform
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\LoginWindow.o src\ui\LoginWindow.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/LoginWindow.o src/ui/LoginWindow.cpp
 
 release/MainWindow.o: src/ui/MainWindow.cpp src/ui/MainWindow.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QMainWindow \
@@ -3390,6 +3468,18 @@ release/MainWindow.o: src/ui/MainWindow.cpp src/ui/MainWindow.h \
 		src/ui/tabs/ResultsTab.h \
 		src/ui/tabs/ConsumablesTab.h \
 		src/ui/tabs/SettingsTab.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QSlider \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QDateEdit \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qdatetimeedit.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtCore/qcalendar.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QTimeEdit \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QRadioButton \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qradiobutton.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QCheckBox \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qcheckbox.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QTabWidget \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QScrollArea \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qscrollarea.h \
 		src/modals/AddCardModal.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QDialog \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qdialog.h \
@@ -3418,7 +3508,7 @@ release/MainWindow.o: src/ui/MainWindow.cpp src/ui/MainWindow.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtGui/QTransform \
 		C:/Qt/5.14.2/mingw73_32/include/QtCore/QRandomGenerator \
 		C:/Qt/5.14.2/mingw73_32/include/QtCore/qrandom.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\MainWindow.o src\ui\MainWindow.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/MainWindow.o src/ui/MainWindow.cpp
 
 release/SvgIcon.o: src/ui/widgets/SvgIcon.cpp src/ui/widgets/SvgIcon.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QWidget \
@@ -3542,7 +3632,7 @@ release/SvgIcon.o: src/ui/widgets/SvgIcon.cpp src/ui/widgets/SvgIcon.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtCore/QFile \
 		C:/Qt/5.14.2/mingw73_32/include/QtGui/QIcon \
 		C:/Qt/5.14.2/mingw73_32/include/QtGui/qicon.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\SvgIcon.o src\ui\widgets\SvgIcon.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/SvgIcon.o src/ui/widgets/SvgIcon.cpp
 
 release/StatusPill.o: src/ui/widgets/StatusPill.cpp src/ui/widgets/StatusPill.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QWidget \
@@ -3655,7 +3745,7 @@ release/StatusPill.o: src/ui/widgets/StatusPill.cpp src/ui/widgets/StatusPill.h 
 		C:/Qt/5.14.2/mingw73_32/include/QtGui/qtextoption.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtGui/qpen.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtGui/QFontMetrics
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\StatusPill.o src\ui\widgets\StatusPill.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/StatusPill.o src/ui/widgets/StatusPill.cpp
 
 release/CircularProgress.o: src/ui/widgets/CircularProgress.cpp src/ui/widgets/CircularProgress.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QWidget \
@@ -3769,7 +3859,7 @@ release/CircularProgress.o: src/ui/widgets/CircularProgress.cpp src/ui/widgets/C
 		C:/Qt/5.14.2/mingw73_32/include/QtGui/qpen.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtGui/QPen \
 		C:/Qt/5.14.2/mingw73_32/include/QtCore/QRectF
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\CircularProgress.o src\ui\widgets\CircularProgress.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/CircularProgress.o src/ui/widgets/CircularProgress.cpp
 
 release/VirtualKeyboard.o: src/ui/widgets/VirtualKeyboard.cpp src/ui/widgets/VirtualKeyboard.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QWidget \
@@ -3892,7 +3982,7 @@ release/VirtualKeyboard.o: src/ui/widgets/VirtualKeyboard.cpp src/ui/widgets/Vir
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qlabel.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qframe.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QFrame
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\VirtualKeyboard.o src\ui\widgets\VirtualKeyboard.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/VirtualKeyboard.o src/ui/widgets/VirtualKeyboard.cpp
 
 release/TopBar.o: src/ui/widgets/TopBar.cpp src/ui/widgets/TopBar.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QWidget \
@@ -4033,7 +4123,7 @@ release/TopBar.o: src/ui/widgets/TopBar.cpp src/ui/widgets/TopBar.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtCore/QVariant \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QStyle \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qstyle.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\TopBar.o src\ui\widgets\TopBar.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/TopBar.o src/ui/widgets/TopBar.cpp
 
 release/BottomBar.o: src/ui/widgets/BottomBar.cpp src/ui/widgets/BottomBar.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QWidget \
@@ -4165,7 +4255,7 @@ release/BottomBar.o: src/ui/widgets/BottomBar.cpp src/ui/widgets/BottomBar.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qgridlayout.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QVBoxLayout \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QFrame
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\BottomBar.o src\ui\widgets\BottomBar.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/BottomBar.o src/ui/widgets/BottomBar.cpp
 
 release/SlotCard.o: src/ui/widgets/SlotCard.cpp src/ui/widgets/SlotCard.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QWidget \
@@ -4300,7 +4390,7 @@ release/SlotCard.o: src/ui/widgets/SlotCard.cpp src/ui/widgets/SlotCard.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtGui/qtextoption.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtGui/qpen.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtGui/QMouseEvent
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\SlotCard.o src\ui\widgets\SlotCard.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/SlotCard.o src/ui/widgets/SlotCard.cpp
 
 release/DilutionCard.o: src/ui/widgets/DilutionCard.cpp src/ui/widgets/DilutionCard.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QFrame \
@@ -4412,6 +4502,21 @@ release/DilutionCard.o: src/ui/widgets/DilutionCard.cpp src/ui/widgets/DilutionC
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qlabel.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QProgressBar \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qprogressbar.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QLineEdit \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qlineedit.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qtextcursor.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qtextformat.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qpen.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qtextoption.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QPushButton \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qpushbutton.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qabstractbutton.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qicon.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QVBoxLayout \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qboxlayout.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qlayout.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qlayoutitem.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qgridlayout.h \
 		src/data/AppData.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtCore/QString \
 		C:/Qt/5.14.2/mingw73_32/include/QtCore/QList \
@@ -4423,17 +4528,8 @@ release/DilutionCard.o: src/ui/widgets/DilutionCard.cpp src/ui/widgets/DilutionC
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QWidget \
 		C:/Qt/5.14.2/mingw73_32/include/QtGui/QPixmap \
 		C:/Qt/5.14.2/mingw73_32/include/QtGui/QColor \
-		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QHBoxLayout \
-		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qboxlayout.h \
-		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qlayout.h \
-		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qlayoutitem.h \
-		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qgridlayout.h \
-		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QVBoxLayout \
-		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QPushButton \
-		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qpushbutton.h \
-		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qabstractbutton.h \
-		C:/Qt/5.14.2/mingw73_32/include/QtGui/qicon.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\DilutionCard.o src\ui\widgets\DilutionCard.cpp
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QHBoxLayout
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/DilutionCard.o src/ui/widgets/DilutionCard.cpp
 
 release/ConsumableItemCard.o: src/ui/widgets/ConsumableItemCard.cpp src/ui/widgets/ConsumableItemCard.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QFrame \
@@ -4545,22 +4641,31 @@ release/ConsumableItemCard.o: src/ui/widgets/ConsumableItemCard.cpp src/ui/widge
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qlabel.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QProgressBar \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qprogressbar.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QLineEdit \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qlineedit.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qtextcursor.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qtextformat.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qpen.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qtextoption.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QPushButton \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qpushbutton.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qabstractbutton.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qicon.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QVBoxLayout \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qboxlayout.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qlayout.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qlayoutitem.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qgridlayout.h \
 		src/ui/widgets/SvgIcon.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QWidget \
 		C:/Qt/5.14.2/mingw73_32/include/QtGui/QPixmap \
 		C:/Qt/5.14.2/mingw73_32/include/QtGui/QColor \
 		C:/Qt/5.14.2/mingw73_32/include/QtCore/QString \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QHBoxLayout \
-		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qboxlayout.h \
-		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qlayout.h \
-		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qlayoutitem.h \
-		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qgridlayout.h \
-		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QVBoxLayout \
-		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QPushButton \
-		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qpushbutton.h \
-		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qabstractbutton.h \
-		C:/Qt/5.14.2/mingw73_32/include/QtGui/qicon.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\ConsumableItemCard.o src\ui\widgets\ConsumableItemCard.cpp
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/QIntValidator \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qvalidator.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtCore/qregularexpression.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/ConsumableItemCard.o src/ui/widgets/ConsumableItemCard.cpp
 
 release/DetectTab.o: src/ui/tabs/DetectTab.cpp src/ui/tabs/DetectTab.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QWidget \
@@ -4717,7 +4822,7 @@ release/DetectTab.o: src/ui/tabs/DetectTab.cpp src/ui/tabs/DetectTab.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qlayoutitem.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qgridlayout.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QFrame
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\DetectTab.o src\ui\tabs\DetectTab.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/DetectTab.o src/ui/tabs/DetectTab.cpp
 
 release/SampleSlotGrid.o: src/ui/tabs/SampleSlotGrid.cpp src/ui/tabs/SampleSlotGrid.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QWidget \
@@ -4832,15 +4937,33 @@ release/SampleSlotGrid.o: src/ui/tabs/SampleSlotGrid.cpp src/ui/tabs/SampleSlotG
 		C:/Qt/5.14.2/mingw73_32/include/QtCore/QMap \
 		C:/Qt/5.14.2/mingw73_32/include/QtCore/QStringList \
 		ui_SampleSlotGrid.h \
-		src/ui/widgets/SlotCard.h \
-		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QLabel \
-		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qlabel.h \
-		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qframe.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtCore/QVariant \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QApplication \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qapplication.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtCore/qcoreapplication.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtCore/qeventloop.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qdesktopwidget.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qguiapplication.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qinputmethod.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QCheckBox \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qcheckbox.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qabstractbutton.h \
-		C:/Qt/5.14.2/mingw73_32/include/QtGui/qicon.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\SampleSlotGrid.o src\ui\tabs\SampleSlotGrid.cpp
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qicon.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QHBoxLayout \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qboxlayout.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qlayout.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qlayoutitem.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qgridlayout.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QLabel \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qlabel.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qframe.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QScrollArea \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qscrollarea.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qabstractscrollarea.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QSpacerItem \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QVBoxLayout \
+		src/ui/widgets/SlotCard.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/SampleSlotGrid.o src/ui/tabs/SampleSlotGrid.cpp
 
 release/SampleListPanel.o: src/ui/tabs/SampleListPanel.cpp src/ui/tabs/SampleListPanel.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QWidget \
@@ -4993,7 +5116,7 @@ release/SampleListPanel.o: src/ui/tabs/SampleListPanel.cpp src/ui/tabs/SampleLis
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qheaderview.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtGui/QFont \
 		C:/Qt/5.14.2/mingw73_32/include/QtCore/QSet
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\SampleListPanel.o src\ui\tabs\SampleListPanel.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/SampleListPanel.o src/ui/tabs/SampleListPanel.cpp
 
 release/SampleFormPanel.o: src/ui/tabs/SampleFormPanel.cpp src/ui/tabs/SampleFormPanel.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QWidget \
@@ -5150,7 +5273,7 @@ release/SampleFormPanel.o: src/ui/tabs/SampleFormPanel.cpp src/ui/tabs/SampleFor
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QGridLayout \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QFrame \
 		C:/Qt/5.14.2/mingw73_32/include/QtCore/QEvent
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\SampleFormPanel.o src\ui\tabs\SampleFormPanel.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/SampleFormPanel.o src/ui/tabs/SampleFormPanel.cpp
 
 release/ResultsTab.o: src/ui/tabs/ResultsTab.cpp src/ui/tabs/ResultsTab.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QWidget \
@@ -5300,7 +5423,7 @@ release/ResultsTab.o: src/ui/tabs/ResultsTab.cpp src/ui/tabs/ResultsTab.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QPushButton \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qpushbutton.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qabstractbutton.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\ResultsTab.o src\ui\tabs\ResultsTab.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/ResultsTab.o src/ui/tabs/ResultsTab.cpp
 
 release/ConsumablesTab.o: src/ui/tabs/ConsumablesTab.cpp src/ui/tabs/ConsumablesTab.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QWidget \
@@ -5435,28 +5558,48 @@ release/ConsumablesTab.o: src/ui/tabs/ConsumablesTab.cpp src/ui/tabs/Consumables
 		C:/Qt/5.14.2/mingw73_32/include/QtCore/QMap \
 		C:/Qt/5.14.2/mingw73_32/include/QtCore/QStringList \
 		ui_ConsumablesTab.h \
-		src/ui/widgets/DilutionCard.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtCore/QVariant \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QApplication \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qapplication.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtCore/qcoreapplication.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtCore/qeventloop.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qdesktopwidget.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qguiapplication.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qinputmethod.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QFrame \
-		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QLabel \
-		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qlabel.h \
-		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QProgressBar \
-		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qprogressbar.h \
-		src/ui/widgets/ConsumableItemCard.h \
-		src/ui/widgets/SvgIcon.h \
-		C:/Qt/5.14.2/mingw73_32/include/QtGui/QPixmap \
-		C:/Qt/5.14.2/mingw73_32/include/QtGui/QColor \
-		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QHeaderView \
-		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qheaderview.h \
-		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QTableWidgetItem \
-		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QCheckBox \
-		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qcheckbox.h \
-		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qabstractbutton.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QHBoxLayout \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qboxlayout.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qlayout.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qlayoutitem.h \
-		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qgridlayout.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\ConsumablesTab.o src\ui\tabs\ConsumablesTab.cpp
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qgridlayout.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QHeaderView \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qheaderview.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QLabel \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qlabel.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QPushButton \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qpushbutton.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qabstractbutton.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QScrollArea \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qscrollarea.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QSpacerItem \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QVBoxLayout \
+		src/ui/widgets/DilutionCard.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QProgressBar \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qprogressbar.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QLineEdit \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qlineedit.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qtextcursor.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qtextformat.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qpen.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qtextoption.h \
+		src/ui/widgets/ConsumableItemCard.h \
+		src/ui/widgets/SvgIcon.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/QPixmap \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/QColor \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QTableWidgetItem \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QCheckBox \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qcheckbox.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/ConsumablesTab.o src/ui/tabs/ConsumablesTab.cpp
 
 release/SettingsTab.o: src/ui/tabs/SettingsTab.cpp src/ui/tabs/SettingsTab.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QWidget \
@@ -5563,19 +5706,77 @@ release/SettingsTab.o: src/ui/tabs/SettingsTab.cpp src/ui/tabs/SettingsTab.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtCore/qfiledevice.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtGui/qvector2d.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtGui/qtouchdevice.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QStackedWidget \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qstackedwidget.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qframe.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QPushButton \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qpushbutton.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qabstractbutton.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qicon.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QLabel \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qlabel.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QLineEdit \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qlineedit.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qtextcursor.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qtextformat.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qpen.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qtextoption.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QSlider \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qslider.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qabstractslider.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QComboBox \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qcombobox.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qabstractitemdelegate.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qstyleoption.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qabstractspinbox.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qvalidator.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtCore/qregularexpression.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qstyle.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qtabbar.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qtabwidget.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qrubberband.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtCore/qabstractitemmodel.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QDateEdit \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qdatetimeedit.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtCore/qdatetime.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtCore/qcalendar.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QTimeEdit \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QTableWidget \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qtablewidget.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qtableview.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qabstractitemview.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qabstractscrollarea.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtCore/qitemselectionmodel.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QRadioButton \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qradiobutton.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QCheckBox \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qcheckbox.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QTabWidget \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QScrollArea \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qscrollarea.h \
 		src/ui/widgets/SvgIcon.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtGui/QPixmap \
 		C:/Qt/5.14.2/mingw73_32/include/QtGui/QColor \
 		C:/Qt/5.14.2/mingw73_32/include/QtCore/QString \
-		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QLabel \
-		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qlabel.h \
-		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qframe.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QVBoxLayout \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qboxlayout.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qlayout.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qlayoutitem.h \
-		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qgridlayout.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\SettingsTab.o src\ui\tabs\SettingsTab.cpp
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qgridlayout.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QHBoxLayout \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/QPainter \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/qpainter.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/QMouseEvent \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QFrame \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QHeaderView \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qheaderview.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtCore/QDateTime \
+		C:/Qt/5.14.2/mingw73_32/include/QtGui/QFont \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QSplitter \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qsplitter.h \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QButtonGroup \
+		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qbuttongroup.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/SettingsTab.o src/ui/tabs/SettingsTab.cpp
 
 release/AddCardModal.o: src/modals/AddCardModal.cpp src/modals/AddCardModal.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QDialog \
@@ -5718,7 +5919,7 @@ release/AddCardModal.o: src/modals/AddCardModal.cpp src/modals/AddCardModal.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QFrame \
 		C:/Qt/5.14.2/mingw73_32/include/QtCore/QEvent \
 		C:/Qt/5.14.2/mingw73_32/include/QtCore/QVariant
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\AddCardModal.o src\modals\AddCardModal.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/AddCardModal.o src/modals/AddCardModal.cpp
 
 release/AlertsModal.o: src/modals/AlertsModal.cpp src/modals/AlertsModal.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QDialog \
@@ -5870,7 +6071,7 @@ release/AlertsModal.o: src/modals/AlertsModal.cpp src/modals/AlertsModal.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qabstractbutton.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QHeaderView \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qheaderview.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\AlertsModal.o src\modals\AlertsModal.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/AlertsModal.o src/modals/AlertsModal.cpp
 
 release/AssayConfigModal.o: src/modals/AssayConfigModal.cpp src/modals/AssayConfigModal.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QDialog \
@@ -6026,73 +6227,73 @@ release/AssayConfigModal.o: src/modals/AssayConfigModal.cpp src/modals/AssayConf
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/QScrollArea \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qscrollarea.h \
 		C:/Qt/5.14.2/mingw73_32/include/QtWidgets/qabstractscrollarea.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\AssayConfigModal.o src\modals\AssayConfigModal.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/AssayConfigModal.o src/modals/AssayConfigModal.cpp
 
 release/qrc_resources.o: release/qrc_resources.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\qrc_resources.o release\qrc_resources.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/qrc_resources.o release/qrc_resources.cpp
 
 release/moc_LoginWindow.o: release/moc_LoginWindow.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\moc_LoginWindow.o release\moc_LoginWindow.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/moc_LoginWindow.o release/moc_LoginWindow.cpp
 
 release/moc_MainWindow.o: release/moc_MainWindow.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\moc_MainWindow.o release\moc_MainWindow.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/moc_MainWindow.o release/moc_MainWindow.cpp
 
 release/moc_SvgIcon.o: release/moc_SvgIcon.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\moc_SvgIcon.o release\moc_SvgIcon.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/moc_SvgIcon.o release/moc_SvgIcon.cpp
 
 release/moc_StatusPill.o: release/moc_StatusPill.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\moc_StatusPill.o release\moc_StatusPill.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/moc_StatusPill.o release/moc_StatusPill.cpp
 
 release/moc_CircularProgress.o: release/moc_CircularProgress.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\moc_CircularProgress.o release\moc_CircularProgress.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/moc_CircularProgress.o release/moc_CircularProgress.cpp
 
 release/moc_VirtualKeyboard.o: release/moc_VirtualKeyboard.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\moc_VirtualKeyboard.o release\moc_VirtualKeyboard.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/moc_VirtualKeyboard.o release/moc_VirtualKeyboard.cpp
 
 release/moc_TopBar.o: release/moc_TopBar.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\moc_TopBar.o release\moc_TopBar.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/moc_TopBar.o release/moc_TopBar.cpp
 
 release/moc_BottomBar.o: release/moc_BottomBar.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\moc_BottomBar.o release\moc_BottomBar.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/moc_BottomBar.o release/moc_BottomBar.cpp
 
 release/moc_SlotCard.o: release/moc_SlotCard.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\moc_SlotCard.o release\moc_SlotCard.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/moc_SlotCard.o release/moc_SlotCard.cpp
 
 release/moc_DilutionCard.o: release/moc_DilutionCard.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\moc_DilutionCard.o release\moc_DilutionCard.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/moc_DilutionCard.o release/moc_DilutionCard.cpp
 
 release/moc_ConsumableItemCard.o: release/moc_ConsumableItemCard.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\moc_ConsumableItemCard.o release\moc_ConsumableItemCard.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/moc_ConsumableItemCard.o release/moc_ConsumableItemCard.cpp
 
 release/moc_DetectTab.o: release/moc_DetectTab.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\moc_DetectTab.o release\moc_DetectTab.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/moc_DetectTab.o release/moc_DetectTab.cpp
 
 release/moc_SampleSlotGrid.o: release/moc_SampleSlotGrid.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\moc_SampleSlotGrid.o release\moc_SampleSlotGrid.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/moc_SampleSlotGrid.o release/moc_SampleSlotGrid.cpp
 
 release/moc_SampleListPanel.o: release/moc_SampleListPanel.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\moc_SampleListPanel.o release\moc_SampleListPanel.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/moc_SampleListPanel.o release/moc_SampleListPanel.cpp
 
 release/moc_SampleFormPanel.o: release/moc_SampleFormPanel.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\moc_SampleFormPanel.o release\moc_SampleFormPanel.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/moc_SampleFormPanel.o release/moc_SampleFormPanel.cpp
 
 release/moc_ResultsTab.o: release/moc_ResultsTab.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\moc_ResultsTab.o release\moc_ResultsTab.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/moc_ResultsTab.o release/moc_ResultsTab.cpp
 
 release/moc_ConsumablesTab.o: release/moc_ConsumablesTab.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\moc_ConsumablesTab.o release\moc_ConsumablesTab.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/moc_ConsumablesTab.o release/moc_ConsumablesTab.cpp
 
 release/moc_SettingsTab.o: release/moc_SettingsTab.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\moc_SettingsTab.o release\moc_SettingsTab.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/moc_SettingsTab.o release/moc_SettingsTab.cpp
 
 release/moc_AddCardModal.o: release/moc_AddCardModal.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\moc_AddCardModal.o release\moc_AddCardModal.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/moc_AddCardModal.o release/moc_AddCardModal.cpp
 
 release/moc_AlertsModal.o: release/moc_AlertsModal.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\moc_AlertsModal.o release\moc_AlertsModal.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/moc_AlertsModal.o release/moc_AlertsModal.cpp
 
 release/moc_AssayConfigModal.o: release/moc_AssayConfigModal.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\moc_AssayConfigModal.o release\moc_AssayConfigModal.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/moc_AssayConfigModal.o release/moc_AssayConfigModal.cpp
 
 ####### Install
 
